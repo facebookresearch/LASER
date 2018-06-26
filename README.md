@@ -5,7 +5,7 @@ LASER is a library to calculate multilingual sentence embeddings.
 Currently, we include an encoder which supports nine European languages:
 * Germanic languages: English, German, Dutch, Danish
 * Romanic languages: French, Spanish, Italian, Portuguese
-* Uralic languages: Finish
+* Uralic languages: Finnish
 
 All these languages are encoded by the same BLSTM encoder, and there is no need
 to specify the input language (but tokenization is language specific).
@@ -22,7 +22,7 @@ be found in [1,3].
 
 ## Dependencies
 * Python 3 with [NumPy](http://www.numpy.org/)
-* [PyTorch](http://pytorch.org/)
+* [PyTorch 0.40](http://pytorch.org/)
 * [Faiss](https://github.com/facebookresearch/faiss) (for mining bitexts)
 * tokenization from the Moses encoder and byte-pair-encoding
 
