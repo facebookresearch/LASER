@@ -24,7 +24,6 @@ langs=("de" "en" "fr" "es" "it" )
 # parameters
 lbl="lbl"
 txt="txt"
-split_mode="a"          # ""=none "a"=add," "m=max
 maxlen=2500		# maxmimum number of words after sentence splitting and BPE
 mod="eparl20kj"		# which BLSTM model to use
 gpu=0			# which GPU to use, use -1 for CPU mode

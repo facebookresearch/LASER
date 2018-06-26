@@ -2,11 +2,11 @@
 
 This codes shows how to embed an N-way parallel corpus (we
 use the publicly available newstest2009 from WMT 2009), and
-to calculate the similarity search error rate for each language pair.
+how to calculate the similarity search error rate for each language pair.
 
-For each sentence in the source language, we calculate the closest sentence
-in the joint embedding space in the target language. If this sentence has the same index
-in the file, it is considered as correct, and as an error else wise.
+For each sentence in the source language, we calculate the closest sentence in
+the joint embedding space in the target language. If this sentence has the same
+index in the file, it is considered as correct, and as an error else wise.
 Therefore, the N-way parallel corpus should not contain duplicates.
 
 ## Installation

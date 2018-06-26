@@ -16,9 +16,9 @@ to several other languages without using any resource of that language
 ## Installation
 
 * The Reuters RCV2 corpus uses a particular copyright and must be obtained
-  [here](TODO)
-  The [English/German subset](TODO) and
-  [English/French + Spanish](TODO) must be obtained separately.
+  [here](https://trec.nist.gov/data/reuters/reuters.html).
+  The subsets used in the paper by Klementiev et al [1] and follow-up work
+  can be obtained directly [from the authors](mailto:titovian@gmail.com)
 * Calculate the multilingual sentence embeddings for all languages by
   running the script (please adapt the paths in the beginning of the script
   to your installation)
@@ -27,7 +27,7 @@ to several other languages without using any resource of that language
 ```
 * Train the classifier with the optimized settings
 ```bash
-./reuters_train.sh
+./reuters_train.sh && ./reuters_ana.sh
 ```
   it is also possible to rerun the optimization step if you want to try
   different settings (function OptimizeZeroShot())

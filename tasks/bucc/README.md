@@ -6,12 +6,15 @@ for parallel data in (huge) collections of monolingual data.
 The underlying idea is pretty simple:
 * embed the sentences in the two languages into the joint sentence space
 * calculate all pairwise distances between the sentences.
-  This is of complexity O(N\*M) and can be done very efficiently with the FAISS library [2]
-* all sentence pairs which have a distance below a threshold are considered as parallel
+  This is of complexity O(N\*M) and can be done very efficiently with
+  the FAISS library [2]
+* all sentence pairs which have a distance below a threshold
+  are considered as parallel
 
 Here, we apply this idea to the data provided by the shared task of the BUCC 
 [Workshop on Building and Using Comparable Corporo](https://comparable.limsi.fr/bucc2018/bucc2018-task.html).
-We provide results on the official language pairs English/French and English/German, respectively.
+We provide results on the official language pairs English/French and
+English/German, respectively.
 In addition, we use the same system to extract French/German parallel sentences.
 
 The same approach can be scaled up to huge collections of monolingual texts
@@ -27,12 +30,21 @@ The same approach can be scaled up to huge collections of monolingual texts
 ```bash
 ./bucc_embed.sh
 ```
-* Calculate all pairwise distance and extract parallel data
+* Calculate all pairwise distance and extract parallel data (this can take 1-2h)
 ```bash
 ./bucc_mine.sh
 ```
 
 ## Results
+
+Optimized on F-score on the training corpus
+(these results are slight improved with repect to [2]):
+
+| Languages | Threshold | precision | Recall | F-score |
+|-----------|-----------|-----------|--------|---------|
+|   fr-en   |   0.519   |   81.85   |  69.14 |  74.96  |
+|   de-en   |   0.499   |   82.71   |  70.56 |  76.16  |
+
 
 Below, we compare our approach to the [official results of the 2018 edition
 of the BUCC workshop](http://lrec-conf.org/workshops/lrec2018/W8/pdf/12_W8.pdf) [1].
@@ -45,7 +57,7 @@ More details on our approach are provided in [2].
 |  LIMSI'17 |    -  |    -  |
 |  VIC'18   |   81  |   86  |
 |   H2'18   |   76  |    -  |
-| LASER     |  75.8 |  76.9 |
+|   LASER   |  75.8 |  76.9 |
 
 All numbers are F1-scores on the test set.
 

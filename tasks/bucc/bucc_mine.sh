@@ -239,6 +239,6 @@ popd > /dev/null
 CalcDiffs "${edir}/${part}.${txt}.${tok}.enc" ${l1} ${l2}
 
 thresh=0.500
-ExtractBitext "${edir}/${part}.${txt}.${tok}.enc.cos.k${k}" ${l1} ${l2} ${thopt} \
+ExtractBitext "${edir}/${part}.${txt}.${tok}.enc.cos.k${k}" ${l1} ${l2} ${thresh} \
               "${ddir}/${l1}-${l0}/${l1}-${l0}.test.${l1}" \
               "${ddir}/${l2}-${l0}/${l2}-${l0}.test.${l2}" 

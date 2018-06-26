@@ -20,7 +20,7 @@ to several other languages without using any resource of that language
 ```
 * Train the classifier with the optimized settings
 ```bash
-./mldoc_embed.sh
+./mldoc_embed.sh && ./mldoc_ana.sh
 ```
   It is also possible to rerun the optimization step if you want to try
   different settings (function OptimizeZeroShot())
@@ -37,10 +37,10 @@ been improved since publication.
 | Train language |   Dev  |   En   |   De   |   Es   |   Fr   |   It   |
 |----------------|--------|--------|--------|--------|--------|--------|
 | German (de)    | 93.60% | 91.50% | 78.40% | 75.05% | 73.88% | 68.28% |
-| English (en)   | 88.70% | 83.20% | 88.25% | 74.17% | 78.17% | 68.55% |
-| Spanish (es)   | 84.70% | 75.33% | 67.55% | 85.38% | 72.00% | 65.17% |
-| French (fr)    | 90.60% | 83.53% | 77.92% | 76.53% | 89.03% | 67.92% |
-| Italian (it)   | 83.30% | 81.08% | 74.35% | 78.70% | 77.17% | 84.97% |
+| English (en)   | 88.70% | 83.20% | 88.25% | 74.18% | 78.18% | 68.55% |
+| Spanish (es)   | 84.70% | 75.33% | 67.55% | 85.38% | 72.00% | 65.18% |
+| French (fr)    | 90.60% | 83.53% | 77.93% | 76.53% | 89.03% | 67.93% |
+| Italian (it)   | 83.30% | 81.08% | 74.35% | 78.70% | 77.18% | 84.98% |
 
 All numbers are accuracies on the test set
 (except the column "Dev")

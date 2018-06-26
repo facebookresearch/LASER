@@ -64,7 +64,7 @@ class Net(nn.Module):
         else:
             modules.append(nn.Linear(idim, odim))
             print(" - mlp %d-%d" % (idim, odim))
-        # modules.append(nn.Softmax(dim=1))
+        # Softmax is included CrossEntropyLoss !
         self.mlp = nn.Sequential(*modules)
 
         if self.gpu >= 0:
@@ -80,48 +80,24 @@ class Net(nn.Module):
         corr = np.zeros(nlbl, dtype=np.int32)
         for data in dset:
             X, Y = data
+            Y = Y.long()
             if self.gpu >= 0:
                 X = X.cuda()
                 Y = Y.cuda()
             outputs = self.mlp(Variable(X))
             _, predicted = torch.max(outputs.data, 1)
             total += Y.size(0)
-            correct += (predicted == Y).sum()
+            correct += (predicted == Y).int().sum()
             for i in range(nlbl):
-                corr[i] += (predicted == i).sum()
+                corr[i] += (predicted == i).int().sum()
 
-        sys.stdout.write(" | %4s: %5.2f%%" % (name, 100.0 * correct / total))
+        sys.stdout.write(" | %4s: %5.2f%%"
+                         % (name, 100.0 * correct.float() / total))
         sys.stdout.write(" | classes:")
         for i in range(nlbl):
             sys.stdout.write(" %5.2f" % (100.0 * corr[i] / total))
 
         return correct, total
-
-
-################################################
-
-
-def Test(dset, nlbl=4):
-    correct = 0
-    total = 0
-    net.train(mode=False)
-    corr = np.zeros(nlbl, dtype=np.int32)
-    for data in dset:
-        X, Y = data
-        outputs = net(Variable(X))
-        _, predicted = torch.max(outputs.data, 1)
-        total += Y.size(0)
-        correct += (predicted == Y).sum()
-        for i in range(nlbl):
-            corr[i] += (predicted == i).sum()
-
-    sys.stdout.write(" - test:  %5d / %5d = %5.2f %%\t["
-                     % (correct, total, 100.0 * correct / total))
-    for i in range(nlbl):
-        sys.stdout.write(" %5.2f" % (100.0 * corr[i] / total))
-    print(" ]")
-
-    return correct, total
 
 
 ################################################
@@ -216,6 +192,7 @@ for epoch in range(args.nepoch):
     for i, data in enumerate(train_loader, 0):
         # get the inputs
         inputs, labels = data
+        labels = labels.long()
         if args.gpu >= 0:
             inputs = inputs.cuda()
             labels = labels.cuda()
@@ -232,7 +209,7 @@ for epoch in range(args.nepoch):
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
-        loss_epoch += loss.data[0]
+        loss_epoch += loss.data.item()
 
     sys.stdout.write(" | loss %e" % loss_epoch)
     sys.stdout.flush()
@@ -249,7 +226,8 @@ for epoch in range(args.nepoch):
 if 'net_best' in globals():
     if args.save != "":
         torch.save(net_best.cpu(), args.save)
-    print('Best Dev: %d = %5.2f%%' % (corr_best, 100.0 * corr_best / nbex))
+    print('Best Dev: %d = %5.2f%%'
+          % (corr_best, 100.0 * corr_best.float() / nbex))
 
     if args.gpu >= 0:
         net_best = net_best.cuda()
