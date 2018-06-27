@@ -43,10 +43,11 @@ We showcase several applications of multilingual sentence embeddings
 with code to reproduce our results (in the directory "tasks").
 
 * Cross-lingual document classification using the
-  [*Reuters*](https://github.com/fairinternal/mlenc/tree/master/tasks/reuters)
-   and [*MLdoc*](https://github.com/fairinternal/mlenc/tree/master/tasks/mldoc) corpus [2]
-* [*Mining parallel data*](https://github.com/fairinternal/mlenc/tree/master/tasks/bucc) in monolingual texts [3]
-* [*Multilingual similarity search*](https://github.com/fairinternal/mlenc/tree/master/tasks/similarity)
+  [*Reuters*](https://github.com/facebookresearch/LASER/tree/master/tasks/reuters)
+   and [*MLdoc*]https://github.com/facebookresearch/LASER/tree/master/tasks/mldoc) corpus [2]
+* [*Mining parallel data*]https://github.com/facebookresearch/LASER/tree/master/tasks/bucc)
+  in monolingual texts [3]
+* [*Multilingual similarity search*](https://github.com/facebookresearch/LASER/tree/master/tasks/similarity) 
 
 For all tasks, we use exactly the same multilingual encoder, without any task specific optimization.
 
