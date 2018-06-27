@@ -44,8 +44,8 @@ with code to reproduce our results (in the directory "tasks").
 
 * Cross-lingual document classification using the
   [*Reuters*](https://github.com/facebookresearch/LASER/tree/master/tasks/reuters)
-   and [*MLdoc*]https://github.com/facebookresearch/LASER/tree/master/tasks/mldoc) corpus [2]
-* [*Mining parallel data*]https://github.com/facebookresearch/LASER/tree/master/tasks/bucc)
+   and [*MLdoc*](https://github.com/facebookresearch/LASER/tree/master/tasks/mldoc) corpus [2]
+* [*Mining parallel data*](https://github.com/facebookresearch/LASER/tree/master/tasks/bucc)
   in monolingual texts [3]
 * [*Multilingual similarity search*](https://github.com/facebookresearch/LASER/tree/master/tasks/similarity) 
 
