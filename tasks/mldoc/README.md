@@ -20,7 +20,7 @@ to several other languages without using any resource of that language
 ```
 * Train the classifier with the optimized settings
 ```bash
-./mldoc_embed.sh && ./mldoc_ana.sh
+./mldoc_train.sh && ./mldoc_ana.sh
 ```
   It is also possible to rerun the optimization step if you want to try
   different settings (function OptimizeZeroShot())
@@ -34,7 +34,7 @@ You should get the following results for zero-short cross-lingual transfer
 These results are better than those reported in [1] since the system has
 been improved since publication.
 
-| Train language |   Dev  |   En   |   De   |   Es   |   Fr   |   It   |
+| Train language |   Dev  |   De   |   En   |   Es   |   Fr   |   It   |
 |----------------|--------|--------|--------|--------|--------|--------|
 | German (de)    | 93.60% | 91.50% | 78.40% | 75.05% | 73.88% | 68.28% |
 | English (en)   | 88.70% | 83.20% | 88.25% | 74.18% | 78.18% | 68.55% |
