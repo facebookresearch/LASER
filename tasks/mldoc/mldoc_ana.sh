@@ -18,7 +18,7 @@
 logdir="log"
 langs=("de" "en" "es" "fr" "it")
 
-echo -e "Dev\tde\ten\tfr\tes\tit\tParams"
+echo -e "Dev\tde\ten\tes\tfr\tit\tParams"
 for ltrn in ${langs[@]} ; do
   for ldev in $ltrn; do
 
