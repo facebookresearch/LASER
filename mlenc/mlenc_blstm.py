@@ -19,7 +19,6 @@ import torch
 import numpy as np
 import torch.nn as nn
 from torch.autograd import Variable
-from torch.utils.serialization import load_lua
 import mlenc_const as const
 
 
