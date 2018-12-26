@@ -2,6 +2,8 @@
 
 LASER is a library to calculate multilingual sentence embeddings.
 
+**we will update the code and provide a much more powerful model (all mayor languages) in a couple of days**
+
 Currently, we include an encoder which supports nine European languages:
 * Germanic languages: English, German, Dutch, Danish
 * Romanic languages: French, Spanish, Italian, Portuguese
