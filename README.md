@@ -4,6 +4,7 @@ LASER is a library to calculate multilingual sentence embeddings.
 
 
 **##### WE WILL UPDATE THE CODE AND PROVIDE A NEW MODEL IN A COUPLE OF DAYS #####**
+
 **#####              IT WILL COVER A LARGE NUMBER OF LANGUAGES              #####**
 
 
