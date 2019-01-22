@@ -1,6 +1,12 @@
 # LASER  Language-Agnostic SEntence Representations
 
+[![GitHub Issues](https://img.shields.io/github/issues/facebookresearch/LASER.svg)](https://github.com/facebookresearch/LASER/issues)
+[![Contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-brightgreen.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+
 LASER is a library to calculate and use multilingual sentence embeddings.
+
+---
 
 **MAJOR UPDATE:**
 * We now provide an encoder which was trained on [**93 languages**](#supported-languages), written in 23 different alphabets [6].
@@ -61,6 +67,10 @@ with code to reproduce our results (in the directory "tasks").
 
 This source code is licensed under the license found in the [`LICENSE`](LICENSE) file in the root directory of this source tree.
 
+## Contributing
+
+See guidelines for contributing [here.](CONTRIBUTING.md)
+
 ## Supported languages
 
 Our model was trained on the following languages:
@@ -70,7 +80,7 @@ Berber languages, Bosnian, Breton, Bulgarian, Burmese, Catalan, Central/Kadazan 
 Chavacano, Chinese, Coastal Kadazan, Cornish, Croatian, Czech, Danish, Dutch, Eastern Mari, English,
 Esperanto, Estonian, Finnish, French, Galician, Georgian, German, Greek, Hausa, Hebrew, Hindi,
 Hungarian, Icelandic, Ido, Indonesian, Interlingua, Interlingue, Irish, Italian, Japanese, Kabyle,
-Kazakh, Korean, Kurdish, Latavian, Latin, Lingua Franca Nova, Lithuanian, Low German/Saxon,
+Kazakh, Korean, Kurdish, Latvian, Latin, Lingua Franca Nova, Lithuanian, Low German/Saxon,
 Macedonian, Malagasy, Malay, Malayalam, Maldivian (Divehi), Marathi, Norwegian (Bokmål), Occitan,
 Persian (Farsi), Polish, Portuguese, Romanian, Russian, Serbian, Sindhi, Sinhala, Slovak, Slovenian,
 Somali, Spanish, Swahili, Swedish, Tagalog, Tajik, Tamil, Tatar, Telugu, Thai, Turkish, Uighur,
