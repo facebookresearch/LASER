@@ -15,59 +15,34 @@
 # This bash script installs sentence encoders from Amazon s3
 #
 
-if [ -z ${LASER+x} ] ; then 
+if [ -z ${LASER} ] ; then 
   echo "Please set the environment variable 'LASER'"
   exit
 fi
 
-bdir="${LASER}"
-mdir="${bdir}/models"
+mdir="${LASER}/models"
 
 # available encoders
-net_s3="https://s3.amazonaws.com/laser-toolkit/models/networks"
-net_local="${mdir}/networks"
-networks=("blstm.ep7.9langs-v1.bpej20k.model.py")
+s3="https://dl.fbaipublicfiles.com/laser/models"
+networks=("bilstm.eparl21.2018-11-19.pt" \
+          "eparl21.fcodes" "eparl21.fvocab" \
+          "bilstm.93langs.2018-12-26.pt" \
+          "93langs.fcodes" "93langs.fvocab")
 
-# corresponding BPE codes and binarization vocabularies
-bin_s3="https://s3.amazonaws.com/laser-toolkit/models/binarize"
-bin_local="${mdir}/binarize"
-binarize=("ep7.9langs-v1.bpej20k.bin.9xx" "ep7.9langs-v1.bpej20k.codes.9xx")
-
-
-#--------------------------------------
-
-MKDIR () {
-  df=$1
-  if [ ! -d ${df} ] ; then
-    echo " - creating directory ${df}"
-    mkdir -p ${df}
-  fi
-}
-
-#--------------------------------------
-
-echo "Downloading vocabularies"
-MKDIR ${bin_local}
-cd ${bin_local}
-for f in ${binarize[@]} ; do
-  if [ -f ${f} ] ; then
-    echo " - ${bin_local}/${f} already downloaded"
-  else
-    echo " - ${bin_local}/${f}"
-    wget -q ${bin_s3}/${f}
-  fi
-done
-
-#--------------------------------------
 
 echo "Downloading networks"
-MKDIR ${net_local}
-cd ${net_local}
+
+if [ ! -d ${mdir} ] ; then
+  echo " - creating directory ${mdir}"
+  mkdir -p ${mdir}
+fi
+
+cd ${mdir}
 for f in ${networks[@]} ; do
   if [ -f ${f} ] ; then
-    echo " - ${net_local}/${f} already downloaded"
+    echo " - ${mdir}/${f} already downloaded"
   else
-    echo " - ${net_local}/${f}"
-    wget -q ${net_s3}/${f}
+    echo " - ${f}"
+    wget -q ${s3}/${f}
   fi
 done
