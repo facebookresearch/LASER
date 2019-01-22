@@ -106,8 +106,8 @@ def Token(inp_fname, out_fname, lang='en',
 ###############################################################################
 #
 # Apply FastBPE for one line
-# This implementation is highly suboptimal since we have to spwan a new
-# process # and load the BPE codes for each line !!
+# This implementation is highly suboptimal since we have to spawn a new
+# process and load the BPE codes for each line !!
 #
 ###############################################################################
 
