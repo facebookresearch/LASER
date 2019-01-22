@@ -31,7 +31,7 @@ clear and has sufficient instructions to be able to reproduce the issue.
 * PEP8 formatting
 
 ## License
-By contributing to DensePose, you agree that your contributions will be licensed
+By contributing to LASER, you agree that your contributions will be licensed
 under the LICENSE file in the root directory of this source tree.
 
 
