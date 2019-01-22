@@ -16,6 +16,7 @@
 
 import os
 import pdb
+import sys
 import tempfile
 import numpy as np
 from subprocess import run, check_output, DEVNULL
