@@ -1,5 +1,7 @@
 # LASER: application to bitext mining
 
+** we will add the code for this task within the next days **
+
 This codes shows how to use the multilingual sentence embeddings to mine
 for parallel data in (huge) collections of monolingual data.
 
@@ -27,7 +29,6 @@ The same approach can be scaled up to huge collections of monolingual texts
   and install it the directory "downloaded"
 * run `./bucc.sh`
 ```
-** UPDATED on January 22nd 2018 **
 
 ## References
 
