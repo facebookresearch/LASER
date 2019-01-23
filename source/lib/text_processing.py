@@ -24,6 +24,7 @@ from subprocess import run, check_output, DEVNULL
 assert os.environ.get('LASER'), 'Please set the enviornment variable LASER'
 LASER = os.environ['LASER']
 
+FASTBPE = LASER + '/tools-external/fastBPE/fast'
 MOSES_BDIR = LASER + '/tools-external/moses-tokenizer/tokenizer/'
 MOSES_TOKENIZER = MOSES_BDIR + 'tokenizer.perl -q -no-escape -threads 20 -l '
 MOSES_LC = MOSES_BDIR + 'lowercase.perl'
@@ -105,8 +106,8 @@ def Token(inp_fname, out_fname, lang='en',
 ###############################################################################
 #
 # Apply FastBPE for one line
-# This implementation is highly suboptimal since we have to spwan a new
-# process # and load the BPE codes for each line !!
+# This implementation is highly suboptimal since we have to spawn a new
+# process and load the BPE codes for each line !!
 #
 ###############################################################################
 
@@ -120,7 +121,7 @@ def BPEfastApplyLine(line, bpe_codes):
         ofn = os.path.join(tmpdir, 'bpe')
         with open(ifn, 'w') as f:
             f.write('{}\n'.format(line))
-        run('fastBPE applybpe ' + ofn + ' ' + ifn
+        run(FASTBPE + ' applybpe ' + ofn + ' ' + ifn
             + ' ' + bpe_codes + ' ' + bpe_vocab,
             shell=True, stderr=DEVNULL)
         with open(ofn, 'r') as f:
@@ -139,7 +140,7 @@ def BPEfastApply(inp_fname, out_fname, bpe_codes,
         if not os.path.isfile(bpe_vocab):
             print(' - fast BPE: focab file not found {}'.format(bpe_vocab))
             bpe_vocab = ''
-        run('fastBPE applybpe '
+        run(FASTBPE + ' applybpe '
             + out_fname + ' ' + inp_fname
             + ' ' + bpe_codes
             + ' ' + bpe_vocab, shell=True, stderr=DEVNULL)
