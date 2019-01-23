@@ -32,10 +32,10 @@ def IndexCreate(dname, idx_type,
     print(' - embedding: {:s} {:d} examples of dim {:d}'
           .format(dname, nbex, dim))
     x.resize(nbex, dim)
-    faiss.normalize_L2(x)
     print(' - creating FAISS index')
+    idx = faiss.IndexFlatL2(dim)
     if normalize:
-        idx = faiss.IndexFlatL2(dim)
+        faiss.normalize_L2(x)
     idx.add(x)
     if save_index:
         iname = 'TODO'
