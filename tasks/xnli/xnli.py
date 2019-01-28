@@ -40,7 +40,7 @@ parser.add_argument('--data_dir', type=str, default='.',
     help='Base directory for created files')
 parser.add_argument('--bpe_codes', type=str, required=True,
     help='Directory of the tokenized data')
-parser.add_argument('--verbose', type=int, default=True,
+parser.add_argument('--verbose', action='store_true',
     help='Detailed output')
 
 # options for encoder

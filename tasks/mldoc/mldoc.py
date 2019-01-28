@@ -62,7 +62,7 @@ parser.add_argument(
     '--cpu', action='store_true',
     help='Use CPU instead of GPU')
 parser.add_argument(
-    '--verbose', type=int, default=True,
+    '--verbose', action='store_true',
     help='Detailed output')
 args = parser.parse_args()
 

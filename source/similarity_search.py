@@ -46,7 +46,7 @@ parser.add_argument(
 # preprocessing
 parser.add_argument('--bpe-codes', type=str, required=True,
     help='Fast BPPE codes and vocabulary')
-parser.add_argument('--verbose', type=int, default=True,
+parser.add_argument('--verbose', action='store_true',
     help='Detailed output')
 
 # options for encoder

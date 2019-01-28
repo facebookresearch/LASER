@@ -3,7 +3,7 @@
 This codes shows how to calculate sentence embeddings for
 an arbitrary text file:
 ```
-bash ./embed.sh INPUT-FILE LANGUGAE OUTPUT-FILE
+bash ./embed.sh INPUT-FILE LANGUAGE OUTPUT-FILE
 ```
 The input will be tokenized, using the mode of the specified language, BPE will be applied
 and the sentence embeddings will be calculated.

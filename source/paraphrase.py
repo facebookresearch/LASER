@@ -145,7 +145,7 @@ parser.add_argument('-T', '--threshold', type=float, default=0.9,
 parser.add_argument('--margin-k', type=int, default=4,
     help='Number of nearest neighbors for margin calculation')
 
-parser.add_argument('--verbose', type=int, default=True,
+parser.add_argument('--verbose', action='store_true',
     help='Detailed output')
 
 

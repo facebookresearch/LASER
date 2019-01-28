@@ -300,7 +300,15 @@ def EncodeFile(encoder, inp_fname, out_fname, buffer_size=10000, verbose=False, 
     elif not over_write and verbose:
         print(' - Encoder: {} exists already'.format(os.path.basename(out_fname)))
 
-    
+# Load existing embeddings
+def EmbedLoad(fname, dim=1024, verbose=False):
+    x = np.fromfile(fname, dtype=np.float32, count=-1)
+    x.resize(x.shape[0] // dim, dim)
+    if verbose:
+        print(' - Embeddings: {:s}, {:d}x{:d}'.format(fname, x.shape[0], dim))
+    return x
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='LASER: Embed sentences')
     parser.add_argument('--encoder', type=str, required=True,
@@ -309,7 +317,8 @@ if __name__ == '__main__':
         help="Perform tokenization with given language ('--' for no tokenization)")
     parser.add_argument('--bpe-codes', type=str, default=None,
         help='Apply BPE using specified codes')
-    parser.add_argument('-v', '--verbose', action='store_true')
+    parser.add_argument('-v', '--verbose', action='store_true',
+        help='Detailed output')
 
     parser.add_argument('-o', '--output', required=True,
         help='Output sentence embeddings')

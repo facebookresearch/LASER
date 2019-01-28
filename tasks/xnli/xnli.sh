@@ -136,7 +136,7 @@ ExtractMNLI
 
 # calculate embeddings
 export PYTHONPATH="$PYTHONPATH:$LASER/tools-external/jieba"
-python3 xnli.py --data_dir ${edir} --lang ${languages[@]} --bpe_codes ${bpe_codes} --encoder ${encoder}
+python3 xnli.py --data_dir ${edir} --lang ${languages[@]} --bpe_codes ${bpe_codes} --encoder ${encoder} --verbose
 
 echo -e "\nTraining the classifier (see ${edir}/xnli.log)"
 python3 ${LASER}/source/nli.py -b ${edir} \

@@ -38,4 +38,4 @@ python3 ${LASER}//source/similarity_search.py \
     --bpe-codes ${bpe_codes} --encoder ${encoder} \
     --base-dir . \
     --data dev/newstest2012 --output ${edir}/newstest2012 \
-    --lang cs de en es fr 
+    --lang cs de en es fr --verbose
