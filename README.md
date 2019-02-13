@@ -2,7 +2,7 @@
 
 LASER is a library to calculate and use multilingual sentence embeddings.
 
-** NEWS**
+**NEWS**
 * The code to perform nitext mining is [**now available**]()tasks/bucc
 
 **CURRENT VERSION:**
