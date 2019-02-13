@@ -67,11 +67,11 @@ This is also performed by the script bucc.sh
 
 Below the number of extracted parallel sentences for each language pair.
 
-|         | French | German | Russian | Chinese |
-|---------|------ -|--------|---------|---------|
+| src/trg | French | German | Russian | Chinese |
+|---------|--------|--------|---------|---------|
 | French  |  n/a   |  2795  |  3327   |  387    |
 | German  |  2795  |  n/a   |  3661   |  466    |
-| Russian |  3327  |  3661  |   n/a      664    |
+| Russian |  3327  |  3661  |   n/a   |  664    |
 | Chinese |   387  |   466  |   664   |  n/a    |
 
 
