@@ -153,7 +153,7 @@ parser.add_argument(
     "--dim", "-m", type=int, default=1024,
     help="Dimension of sentence embeddings")
 parser.add_argument(
-    '--nhid', '-n', type=int, default=0, nargs='+',
+    '--nhid', '-n', type=int, default=[0], nargs='+',
     help="List of hidden layer(s) dimensions")
 parser.add_argument(
     "--nb-classes", "-c", type=int, default=2,

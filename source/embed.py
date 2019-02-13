@@ -285,14 +285,16 @@ def EncodeFilep(encoder, inp_file, out_file, buffer_size=10000, verbose=False):
         EncodeTime(t)
 
 # Encode sentences (file names)
-def EncodeFile(encoder, inp_fname, out_fname, buffer_size=10000, verbose=False, over_write=False):
+def EncodeFile(encoder, inp_fname, out_fname,
+              buffer_size=10000, verbose=False, over_write=False,
+              inp_encoding='utf-8'):
     # TODO :handle over write
     if not os.path.isfile(out_fname):
         if verbose:
             print(' - Encoder: {} to {}'.
                   format(os.path.basename(inp_fname) if len(inp_fname) > 0 else 'stdin',
                          os.path.basename(out_fname)))
-        fin = open(inp_fname, 'r') if len(inp_fname) > 0 else sys.stdin
+        fin = open(inp_fname, 'r', encoding=inp_encoding, errors='surrogateescape') if len(inp_fname) > 0 else sys.stdin
         fout = open(out_fname, mode='wb')
         EncodeFilep(encoder, fin, fout, buffer_size=buffer_size, verbose=verbose)
         fin.close()

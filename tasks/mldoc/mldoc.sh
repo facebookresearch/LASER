@@ -84,7 +84,7 @@ for part in "mldoc.train1000" "mldoc.dev" "mldoc.test" ; do
   done
 done
 
-MECAB="/private/home/schwenk/tools/mecab/mecab-0.996/install"
+MECAB="${LASER}/tools-external/mecab"
 export LD_LIBRARY_PATH="${MECAB}/lib:${LD_LIBRARY_PATH}"
 python3 mldoc.py --data_dir ${edir} --lang ${languages[@]} --bpe_codes ${bpe_codes} --encoder ${encoder}
 

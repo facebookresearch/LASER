@@ -102,10 +102,12 @@ def buffered_read(fp, buffer_size):
 
 ###############################################################################
 
-parser = argparse.ArgumentParser('LASER: tool to search sentence representations')
+parser = argparse.ArgumentParser('LASER: paraphrase tool')
 
 parser.add_argument('--encoder', type=str, required=True,
     help='encoder to be used')
+parser.add_argument('--encoding', default='utf-8',
+    help='Character encoding for input/output')
 parser.add_argument('--token-lang', type=str, default='--',
     help="Language of tokenizer ('--' for no tokenization)")
 parser.add_argument('--bpe-codes', type=str, default=None, required=True,
@@ -191,8 +193,8 @@ with tempfile.TemporaryDirectory() as tmpdir:
         ifile = bpe_file
 
     print(' - processing (batch size is {:d})'.format(args.buffer_size))
-    ifp = open(ifile, 'r')
-    ofp = open(args.output, 'w')
+    ifp = open(ifile, 'r', encoding=args.encoding, errors='surrogateescape')
+    ofp = open(args.output, 'w', encoding=args.encoding, errors='surrogateescape')
     stats = namedtuple('stats', 'ns np')
     stats.nbs = 0
     stats.nbp = 0
