@@ -3,3 +3,9 @@ source/lib/__pycache__
 models
 tools-external
 tasks/mldoc/MLDoc
+embed
+tasks/bucc/downloaded
+tasks/similarity/dev/
+tasks/xnli/XNLI-1.0*
+tasks/xnli/multinli_1.0*
+.??*swp

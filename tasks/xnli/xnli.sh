@@ -1,8 +1,8 @@
 #!/bin/bash
-# Copyright (c) 2018-present, Facebook, Inc.
+# Copyright (c) Facebook, Inc. and its affiliates.
 # All rights reserved.
 #
-# This source code is licensed under the license found in the
+# This source code is licensed under the BSD-style license found in the
 # LICENSE file in the root directory of this source tree.
 #
 # LASER  Language-Agnostic SEntence Representations
@@ -138,7 +138,9 @@ ExtractMNLI
 export PYTHONPATH="$PYTHONPATH:$LASER/tools-external/jieba"
 python3 xnli.py --data_dir ${edir} --lang ${languages[@]} --bpe_codes ${bpe_codes} --encoder ${encoder} --verbose
 
-echo -e "\nTraining the classifier (see ${edir}/xnli.log)"
+#for fr in 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 ; do
+for fr in 0.6 0.7 0.8 0.9 ; do
+echo -e "\nTraining the classifier (see ${edir}/xnli.fract${fr}.log)"
 python3 ${LASER}/source/nli.py -b ${edir} \
     --train xnli.train.%s.enc.en --train-labels xnli.train.cl.en \
     --dev xnli.dev.%s.enc.en --dev-labels xnli.dev.cl.en \
@@ -146,6 +148,7 @@ python3 ${LASER}/source/nli.py -b ${edir} \
     --nhid ${nhid[@]} --dropout ${drop} --bsize ${bsize} \
     --seed ${seed} --lr ${lr} --nepoch ${N} \
     --cross-lingual \
-    --save-outputs ${edir}/xnli.outputs \
-    --gpu 0 > ${edir}/xnli.log
-
+    --fraction $fr \
+    --save-outputs ${edir}/xnli.fract${fr}.outputs \
+    --gpu 1 > ${edir}/xnli.fract${fr}.log
+done
