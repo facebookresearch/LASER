@@ -1,10 +1,8 @@
 #!/usr/bin/python
-
-
-# Copyright (c) 2017-present, Facebook, Inc.
+# Copyright (c) Facebook, Inc. and its affiliates.
 # All rights reserved.
 #
-# This source code is licensed under the license found in the
+# This source code is licensed under the BSD-style license found in the
 # LICENSE file in the root directory of this source tree.
 #
 # LASER  Language-Agnostic SEntence Representations
@@ -32,7 +30,9 @@ import faiss
 ################################################
 
 def LoadDataNLI(fn1, fn2, fn_lbl,
-                dim=1024, bsize=32, shuffle=False, quiet=False):
+                dim=1024, bsize=32,
+                fraction=1.0,
+                shuffle=False, quiet=False):
     x = np.fromfile(fn1, dtype=np.float32, count=-1)
     x.resize(x.shape[0] // dim, dim)
     faiss.normalize_L2(x)
@@ -43,13 +43,21 @@ def LoadDataNLI(fn1, fn2, fn_lbl,
 
     lbl = np.loadtxt(fn_lbl, dtype=np.int32)
     lbl.reshape(lbl.shape[0], 1)
+
     if not quiet:
         print(' - read {:d}x{:d} elements in {:s}'.format(x.shape[0], x.shape[1], fn1))
         print(' - read {:d}x{:d} elements in {:s}'.format(y.shape[0], y.shape[1], fn2))
         print(' - read {:d} labels [{:d},{:d}] in {:s}'
               .format(lbl.shape[0], lbl.min(), lbl.max(), fn_lbl))
 
-    # nli = torch.cat((x, y, torch.abs(x - y), x * y), 1)
+    if fraction < 1.0:
+        N = int(x.shape[0] * fraction)
+        if not quiet:
+            print(' - using only the first {:d} examples'.format(N))
+        x = x[:N][:]
+        y = y[:N][:]
+        lbl = lbl[:N][:]
+
     if not quiet:
         print(' - combine premises and hyps')
     nli = np.concatenate((x, y, np.absolute(x - y), np.multiply(x, y)), axis=1)
@@ -112,7 +120,7 @@ class Net(nn.Module):
         corr = np.zeros(nlbl, dtype=np.int32)
         if out_fname:
             fp = open(out_fname, 'w')
-            fp.write('# outputs predicted_class target_class')
+            fp.write('# outputs target_class predicted_class\n')
         for data in dset:
             X, Y = data
             Y = Y.long()
@@ -189,6 +197,9 @@ parser.add_argument(
     '--parts', '-p', type=str, nargs='+', default=['prem', 'hyp'],
     help='Name of the two input parts to compare')
 parser.add_argument(
+    '--fraction', '-f', type=float, default=1.0,
+    help='Fraction of training examples to use (from the beginning)')
+parser.add_argument(
     '--save-outputs', type=str, default=None,
     help='File name to save classifier outputs ("l1-l2.txt" will be added)')
 
@@ -225,7 +236,7 @@ args = parser.parse_args()
 train_loader = LoadDataNLI(os.path.join(args.base_dir, args.train % args.parts[0]),
                            os.path.join(args.base_dir, args.train % args.parts[1]),
                            os.path.join(args.base_dir, args.train_labels),
-                           dim=args.dim, bsize=args.bsize, shuffle=True)
+                           dim=args.dim, bsize=args.bsize, shuffle=True, fraction=args.fraction)
 
 dev_loader = LoadDataNLI(os.path.join(args.base_dir, args.dev % args.parts[0]),
                          os.path.join(args.base_dir, args.dev % args.parts[1]),

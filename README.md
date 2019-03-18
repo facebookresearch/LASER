@@ -3,7 +3,8 @@
 LASER is a library to calculate and use multilingual sentence embeddings.
 
 **NEWS**
-* The code to perform bitext mining is [**now available**](tasks/bucc)
+* 2019/03/18 switch to BSD license
+* 2019/02/13 The code to perform bitext mining is [**now available**](tasks/bucc)
 
 **CURRENT VERSION:**
 * We now provide an encoder which was trained on [**93 languages**](#supported-languages), written in 23 different alphabets [6].
@@ -62,7 +63,7 @@ with code to reproduce our results (in the directory "tasks").
 
 ## License
 
-This source code is licensed under the license found in the [`LICENSE`](LICENSE) file in the root directory of this source tree.
+LASER is BSD-licensed, as found in the [`LICENSE`](LICENSE) file in the root directory of this source tree.
 
 ## Supported languages
 
