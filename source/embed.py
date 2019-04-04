@@ -85,7 +85,7 @@ def convert_padding_direction(src_tokens, padding_idx, right_to_left=False, left
 
 class SentenceEncoder:
 
-    def __init__(self, model_path, max_sentences=None, max_tokens=None, cpu=False, fp16=False, sort_kind='quicksort'):
+    def __init__(self, model_path, max_sentences=None, max_tokens=None, cpu=False, fp16=False, verbose=False, sort_kind='quicksort'):
         self.use_cuda = torch.cuda.is_available() and not cpu
         self.max_sentences = max_sentences
         self.max_tokens = max_tokens
@@ -102,7 +102,8 @@ class SentenceEncoder:
         if fp16:
             self.encoder.half()
         if self.use_cuda:
-            print(' - transfer encoder to GPU')
+            if verbose:
+                print(' - transfer encoder to GPU')
             self.encoder.cuda()
         self.sort_kind = sort_kind
 
@@ -262,7 +263,8 @@ def EncodeLoad(args):
     return SentenceEncoder(args.encoder,
                max_sentences=args.max_sentences,
                max_tokens=args.max_tokens,
-               cpu=args.cpu)
+               cpu=args.cpu,
+               verbose=args.verbose)
 
 
 def EncodeTime(t):
@@ -311,6 +313,13 @@ def EmbedLoad(fname, dim=1024, verbose=False):
         print(' - Embeddings: {:s}, {:d}x{:d}'.format(fname, x.shape[0], dim))
     return x
 
+# Get memory mapped embeddings
+def EmbedMmap(fname, dim=1024, dtype=np.float32, verbose=False):
+    nbex = int(os.path.getsize(fname) / dim / np.dtype(dtype).itemsize)
+    E = np.memmap(fname, mode='r', dtype=dtype, shape=(nbex, dim))
+    if verbose:
+        print(' - embeddings on disk: {:s} {:d} x {:d}'.format(fname, nbex, dim))
+    return E
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='LASER: Embed sentences')

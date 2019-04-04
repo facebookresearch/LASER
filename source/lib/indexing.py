@@ -230,7 +230,7 @@ def IndexTextQuery(txt_mmap, ref_mmap, idx):
 
 ###############################################################################
 # Search the [k] nearest vectors of [x] in the given index
-# and return the text line
+# and return the text lines
 
 def IndexSearchKNN(index, x, T, R, kmax=1, Dmax=1.0, dedup=True):
     D, I = index.search(x, kmax)
