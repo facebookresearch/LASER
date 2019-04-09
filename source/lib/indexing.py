@@ -94,20 +94,33 @@ def IndexCreate(dname, idx_type,
 ###############################################################################
 # search closest vector for all languages pairs and calculate error rate
 
-def IndexSearchMultiple(data, idx, verbose=False):
+def IndexSearchMultiple(data, idx, verbose=False, texts=None, print_errors=False):
     nl = len(data)
     nbex = data[0].shape[0]
     err = np.zeros((nl, nl)).astype(float)
     ref = np.linspace(0, nbex-1, nbex).astype(int)  # [0, nbex)
     if verbose:
-        print('Calculating similarity error:')
+        if texts is None: 
+            print('Calculating similarity error (indices):')
+        else:
+            print('Calculating similarity error (textual):')
     for i1 in range(nl):
         for i2 in range(nl):
             if i1 != i2:
                 D, I = idx[i2].search(data[i1], 1)
-                err[i1, i2] \
-                    = (nbex - np.equal(I.reshape(nbex), ref)
-                       .astype(int).sum()) / nbex
+                if texts: # do textual comparison
+                    e1 = 0
+                    for p in range(I.shape[0]):
+                        if texts[i2][p] != texts[i2][I[p,0]]:
+                            e1 += 1
+                            if print_errors:
+                                print('Error {:s}\n      {:s}'
+                                      .format(texts[i2][p].strip(), texts[i2][I[p,0]].strip()))
+                    err[i1, i2] = e1 / nbex
+                else:  # do index based comparision
+                    err[i1, i2] \
+                        = (nbex - np.equal(I.reshape(nbex), ref)
+                           .astype(int).sum()) / nbex
                 if verbose:
                     print(' - similarity error {:s}/{:s}: {:5d}={:5.2f}%'
                           .format(args.langs[i1], args.langs[i2],
@@ -137,7 +150,7 @@ def IndexPrintConfusionMatrix(err, langs):
         print('{:8.2f}%'.format(100 * err[:, i2].sum() / (nl-1)), end='')
 
     # global average
-    print('{:8.2f}%'.format(100 * err.sum() / (nl-1) / (nl-1)))
+    print('{:8.2f}%'.format(100 * err.sum() / (nl-1) / nl))
 
 
 ###############################################################################

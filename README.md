@@ -30,6 +30,7 @@ be found in [6], together with an extensive experimental evaluation.
 * Python 3.6
 * [PyTorch 1.0](http://pytorch.org/)
 * [NumPy](http://www.numpy.org/), tested with 1.15.4
+* [Cython](https://pypi.org/project/Cython/), needed by Python wrapper of FastBPE, tested with 0.29.6
 * [Faiss](https://github.com/facebookresearch/faiss), for fast similarity search and bitext mining
 * [transliterate 1.10.2](https://pypi.org/project/transliterate), only used for Greek (`pip install transliterate`)
 * [jieba 0.39](https://pypi.org/project/jieba/), Chinese segmenter (`pip install jieba`)

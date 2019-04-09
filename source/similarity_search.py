@@ -39,6 +39,8 @@ parser.add_argument('--data', type=str, required=True,
     help='Direcory and basename of input data (language name will be added)')
 parser.add_argument('--output', type=str, required=True,
     help='Directory and basename of created data (language name will be added)')
+parser.add_argument('--textual', action='store_true',
+    help='Use textual comparison instead of indicies')
 parser.add_argument(
     '--lang', '-l', nargs='+', required=True,
     help="List of languages to test on")
@@ -66,6 +68,16 @@ args = parser.parse_args()
 print('LASER: similarity search')
 
 print('\nProcessing:')
+all_texts = []
+if args.textual:
+    print(' - using textual comparision')
+    for l in args.lang:
+        with open(os.path.join(args.base_dir, args.data + '.' + l),
+                  encoding='utf-8', errors='surrogateescape') as f:
+            texts = f.readlines()
+            print(' -   {:s}: {:d} lines'.format(args.data + '.' + l, len(texts)))
+            all_texts.append(texts)
+
 enc = EncodeLoad(args)
 
 out_dir = os.path.dirname(args.output)
@@ -96,5 +108,6 @@ for l in args.lang:
     all_data.append(d)
     all_index.append(idx)
 
-err = IndexSearchMultiple(all_data, all_index, verbose=False)
+err = IndexSearchMultiple(all_data, all_index, texts=all_texts,
+                          verbose=False, print_errors=False)
 IndexPrintConfusionMatrix(err, args.lang)
