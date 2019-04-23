@@ -106,10 +106,11 @@ InstallFastBPE () {
     mv fastBPE-master fastBPE
     cd fastBPE
     echo " - compiling"
-    g++ -std=c++11 -pthread -O3 fast.cc -o fast
+    g++ -std=c++11 -pthread -O3 fastBPE/main.cc -IfastBPE -o fast
     if [ $? -eq 1 ] ; then
       echo "ERROR: compilation failed, please install manually"; exit
     fi
+    python setup.py install
   fi
 }
 
@@ -148,7 +149,6 @@ InstallMecab () {
     fi
   fi
 }
-
 
 
 ###################################################################
