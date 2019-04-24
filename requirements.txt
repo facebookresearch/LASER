@@ -1,0 +1,4 @@
+Flask
+scipy
+numpy
+Cython
