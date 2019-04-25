@@ -24,36 +24,34 @@ ENV LANG=C.UTF-8
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-COPY . /app
+COPY ./docker /app
+
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --trusted-host pypi.python.org -r requirements.txt
+RUN pip install --trusted-host pypi.python.org -r requirements.txt --verbose
+
 
 # Download LASER from FB
 RUN git clone https://github.com/facebookresearch/LASER.git
 
-WORKDIR /app/LASER
-
-ENV LASER /app/LASER/projects/laser  
-
+ENV LASER /app/LASER
+WORKDIR $LASER  
 
 RUN bash ./install_models.sh
 RUN bash ./install_external_tools.sh
 
-COPY decode.py $LASER/tasks/embed/decode.py
+COPY ./docker/decode.py $LASER/tasks/embed/decode.py
 
-RUN /app/LASER/tasks/embed/embed.sh en test_embed.raw
-RUN python /app/LASER/tasks/embed/decode.py test_embed.raw
 
 # Make port 80 available to the world outside this container
 WORKDIR /app
 
-RUN cat "Hello World" > test.txt
+RUN echo "Hello World" > test.txt
 
-
+RUN $LASER/tasks/embed/embed.sh test.txt en test_embed.raw
+RUN python $LASER/tasks/embed/decode.py test_embed.raw
 
 #Open the port 80
 EXPOSE 80 
-
-# Run app.py when the container launches
-CMD ["python", "app.py"] 
+ 
+CMD ["/bin/bash"] 
