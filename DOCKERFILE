@@ -23,7 +23,6 @@ ENV LANG=C.UTF-8
 # Install any needed packages specified in requirements.txt
 WORKDIR /app
 COPY ./docker/requirements.txt /app/requirements.txt
-COPY ./docker/requirements.txt /app/requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt --verbose
 
 # Download LASER from FB and install
