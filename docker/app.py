@@ -26,20 +26,19 @@ def vectorize():
     content = request.args.get('q')
     lang = request.args.get('lang')
     embedding = ''
-    if lang == None or len(lang) == 0:
+    if lang is None or not lang:
         lang = "en"
     # encoder
-    model_dir = os.path.dirname(os.path.realpath(__file__))
-    model_dir = os.path.join(model_dir, "LASER")
-    model_dir = os.path.join(model_dir, "models")
-    encoder_path = os.path.join(model_dir, "bilstm.93langs.2018-12-26.pt")
-    bpe_codes_path = os.path.join(model_dir, "93langs.fcodes")
-    print(' - Encoder: loading {}'.format(encoder_path))
+    model_dir = Path(__file__).parent / "LASER" / "models"
+    encoder_path = model_dir / "bilstm.93langs.2018-12-26.pt"
+    bpe_codes_path = model_dir / "93langs.fcodes"
+    print(f' - Encoder: loading {encoder_path}')
     encoder = SentenceEncoder(encoder_path,
                               max_sentences=None,
                               max_tokens=12000,
                               sort_kind='mergesort',
                               cpu=True)
+<<<<<<< HEAD
     with os.makedirs('./tmp') as tmpdir:
         ifname = content
         bpe_fname = os.path.join(tmpdir, 'bpe')
@@ -49,16 +48,28 @@ def vectorize():
         BPEfastApply(ifname,
                      bpe_fname,
                      bpe_codes_path,
+=======
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpdir = Path(tmp)
+        ifname = tmpdir / "content.txt"
+        bpe_fname = tmpdir / 'bpe'
+        bpe_oname = tmpdir / 'out.raw'
+        with ifname.open("w") as f:
+            f.write(content)
+        BPEfastApply(str(ifname),
+                     str(bpe_fname),
+                     str(bpe_codes_path),
+>>>>>>> e5e8b398b7b03a849dea3dc9355c7c6a66268113
                      verbose=True, over_write=False)
         ifname = bpe_fname
         EncodeFile(encoder,
-                   ifname,
-                   bpe_oname,
+                   str(ifname),
+                   str(bpe_oname),
                    verbose=True,
                    over_write=False,
                    buffer_size=10000)
         dim = 1024
-        X = np.fromfile(bpe_oname.name, dtype=np.float32, count=-1)
+        X = np.fromfile(str(bpe_oname), dtype=np.float32, count=-1)
         X.resize(X.shape[0] // dim, dim)
         embedding = X
         os.remove(bpe_fname)
@@ -66,10 +77,15 @@ def vectorize():
         os.rmdir(tmpdir)
     print(lang)
     print(content)
+<<<<<<< HEAD
     print(embedding)
     body = {'content': content, 'embedding': embedding, 'lang': lang}
+=======
+    print(embedding)  # TODO remove these prints
+    body = {'content': content, 'embedding': embedding.tolist()}
+>>>>>>> e5e8b398b7b03a849dea3dc9355c7c6a66268113
     return jsonify(body)
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=80, host='0.0.0.0')
+    app.run(debug=True, port=8099, host='0.0.0.0')

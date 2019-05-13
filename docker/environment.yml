@@ -1,0 +1,12 @@
+name: laserenv
+dependencies:
+  - python=3.6
+  - scipy
+  - numpy
+  - Cython
+  - flask
+  - pathlib
+  - pip:
+    - Flask-Testing
+    - torch
+    - transliterate
