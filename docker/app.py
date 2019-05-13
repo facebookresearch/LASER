@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify
 import os
 import socket
 import tempfile
+from pathlib import Path
 import numpy as np
 from LASER.source.lib.text_processing import BPEfastApply
 from LASER.source.embed import *

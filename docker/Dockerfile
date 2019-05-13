@@ -29,11 +29,15 @@ ENV LANG=C.UTF-8
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-COPY ./docker /app
+COPY . /app
 
+ADD environment.yml /tmp/environment.yml
+RUN conda env create -f /tmp/environment.yml
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --trusted-host pypi.python.org -r requirements.txt --verbose
+# Pull the environment name out of the environment.yml
+RUN echo "source activate $(head -1 /tmp/environment.yml | cut -d' ' -f2)" > ~/.bashrc
+ENV PATH /opt/conda/envs/$(head -1 /tmp/environment.yml | cut -d' ' -f2)/bin:$PATH
+
 
 # Download LASER from FB
 RUN git clone https://github.com/facebookresearch/LASER.git
