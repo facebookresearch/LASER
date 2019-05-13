@@ -79,6 +79,16 @@ Once you'll be inside of the docker container, you'll be able to run the Flask s
 
 *  `python app.py`
 
+Here is an example of how you can send requests to it with python:
+```python
+import requests
+import numpy as np
+url = "http://0.0.0.0:8099/vectorize"
+params = {"q": "Hey, how are you?\nI'm OK and you?", "lang": "en"}
+resp = requests.get(url=url, params=params).json()
+print(resp["embedding"])
+```
+
 ## License
 
 LASER is BSD-licensed, as found in the [`LICENSE`](LICENSE) file in the root directory of this source tree.
