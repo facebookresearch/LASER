@@ -6,14 +6,10 @@ An image docker has been created to help you with the settings of an environment
 * Execute the command `docker build --tag=laser docker`
 * Once the image is built run `docker run -it laser`
 
-A REST server on top of the embed task is under construction, 
-to run it you'll have to expose the port 8099 by executing the next line instead of the last command.
+A REST server on top of the embed task is under developement,
+to run it you'll have to expose a local port [CHANGEME_LOCAL_PORT] by executing the next line instead of the last command. It'll overinde the command line entrypoint of your docker container.
 
-* `docker run -p [CHANGEME_LOCAL_PORT]:80 -it laser`
-
-Once you'll be inside of the docker container, you'll be able to run the Flask server by executing this command
-
-*  `docker run -p [CHANGEME_LOCAL_PORT]:80 -it laser python app.py`
+* `docker run -p [CHANGEME_LOCAL_PORT]:80 -it laser python app.py`
 
 This Flask server will serve a REST Api that can be use by calling your server with this URL :
 

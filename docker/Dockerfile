@@ -1,6 +1,11 @@
-FROM python:3.7-stretch
+FROM continuumio/miniconda3
 
 MAINTAINER Gilles Bodart <gillesbodart@users.noreply.github.com>
+
+RUN conda create -n env python=3.6
+RUN echo "source activate env" > ~/.bashrc
+
+ENV PATH /opt/conda/envs/env/bin:$PATH
  
 RUN apt-get -qq -y update
 RUN apt-get -qq -y upgrade
@@ -30,7 +35,6 @@ COPY ./docker /app
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt --verbose
 
-
 # Download LASER from FB
 RUN git clone https://github.com/facebookresearch/LASER.git
 
@@ -41,7 +45,6 @@ RUN bash ./install_models.sh
 RUN bash ./install_external_tools.sh
 
 COPY ./docker/decode.py $LASER/tasks/embed/decode.py
-
 
 # Make port 80 available to the world outside this container
 WORKDIR /app
