@@ -39,10 +39,12 @@ def vectorize():
                               max_tokens=12000,
                               sort_kind='mergesort',
                               cpu=True)
-    with tempfile.TemporaryDirectory() as tmpdir:
-        ifname = content  # stdin will be used
+    with os.makedirs('./tmp') as tmpdir:
+        ifname = content
         bpe_fname = os.path.join(tmpdir, 'bpe')
         bpe_oname = os.path.join(tmpdir, 'out.raw')
+        print(' - BPEfastApply: bpe {}'.format(bpe_fname))
+        print(' - BPEfastApply: out {}'.format(bpe_oname))
         BPEfastApply(ifname,
                      bpe_fname,
                      bpe_codes_path,
@@ -58,10 +60,13 @@ def vectorize():
         X = np.fromfile(bpe_oname.name, dtype=np.float32, count=-1)
         X.resize(X.shape[0] // dim, dim)
         embedding = X
+        os.remove(bpe_fname)
+        os.remove(bpe_oname)
+        os.rmdir(tmpdir)
     print(lang)
     print(content)
     print(embedding)
-    body = {'content': content, 'embedding': embedding}
+    body = {'content': content, 'embedding': embedding, 'lang': lang}
     return jsonify(body)
 
 
