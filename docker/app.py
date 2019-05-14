@@ -6,7 +6,7 @@ import socket
 import tempfile
 from pathlib import Path
 import numpy as np
-from LASER.source.lib.text_processing import BPEfastApply
+from LASER.source.lib.text_processing import Token, BPEfastApply
 from LASER.source.embed import *
 
 app = Flask(__name__)
@@ -38,17 +38,6 @@ def vectorize():
                               max_tokens=12000,
                               sort_kind='mergesort',
                               cpu=True)
-<<<<<<< HEAD
-    with os.makedirs('./tmp') as tmpdir:
-        ifname = content
-        bpe_fname = os.path.join(tmpdir, 'bpe')
-        bpe_oname = os.path.join(tmpdir, 'out.raw')
-        print(' - BPEfastApply: bpe {}'.format(bpe_fname))
-        print(' - BPEfastApply: out {}'.format(bpe_oname))
-        BPEfastApply(ifname,
-                     bpe_fname,
-                     bpe_codes_path,
-=======
     with tempfile.TemporaryDirectory() as tmp:
         tmpdir = Path(tmp)
         ifname = tmpdir / "content.txt"
@@ -56,10 +45,20 @@ def vectorize():
         bpe_oname = tmpdir / 'out.raw'
         with ifname.open("w") as f:
             f.write(content)
+        if lang != '--':
+            tok_fname = tmpdir / "tok"
+            Token(str(ifname),
+                  str(tok_fname),
+                  lang=lang,
+                  romanize=True if lang == 'el' else False,
+                  lower_case=True,
+                  gzip=False,
+                  verbose=True,
+                  over_write=False)
+            ifname = tok_fname
         BPEfastApply(str(ifname),
                      str(bpe_fname),
                      str(bpe_codes_path),
->>>>>>> e5e8b398b7b03a849dea3dc9355c7c6a66268113
                      verbose=True, over_write=False)
         ifname = bpe_fname
         EncodeFile(encoder,
@@ -72,20 +71,8 @@ def vectorize():
         X = np.fromfile(str(bpe_oname), dtype=np.float32, count=-1)
         X.resize(X.shape[0] // dim, dim)
         embedding = X
-        os.remove(bpe_fname)
-        os.remove(bpe_oname)
-        os.rmdir(tmpdir)
-    print(lang)
-    print(content)
-<<<<<<< HEAD
-    print(embedding)
-    body = {'content': content, 'embedding': embedding, 'lang': lang}
-=======
-    print(embedding)  # TODO remove these prints
     body = {'content': content, 'embedding': embedding.tolist()}
->>>>>>> e5e8b398b7b03a849dea3dc9355c7c6a66268113
     return jsonify(body)
 
-
 if __name__ == "__main__":
-    app.run(debug=True, port=8099, host='0.0.0.0')
+    app.run(debug=True, port=80, host='0.0.0.0')

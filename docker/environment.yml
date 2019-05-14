@@ -1,4 +1,4 @@
-name: laserenv
+name: env
 dependencies:
   - python=3.6
   - scipy
