@@ -59,6 +59,6 @@ COPY ./app.py /app/app.py
 
 #Installing FAISS
 
-RUN conda install faiss-cpu -c pytorch
+RUN conda install -c pytorch faiss-cpu -y
 
 CMD ["/bin/bash"]
