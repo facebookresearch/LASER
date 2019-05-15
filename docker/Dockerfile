@@ -1,6 +1,10 @@
-FROM python:3.7-stretch
+FROM continuumio/miniconda3
 
 MAINTAINER Gilles Bodart <gillesbodart@users.noreply.github.com>
+
+RUN conda create -n env python=3.6
+RUN echo "source activate env" > ~/.bashrc
+ENV PATH /opt/conda/envs/env/bin:$PATH
 
 RUN apt-get -qq -y update
 RUN apt-get -qq -y upgrade
@@ -11,9 +15,8 @@ RUN apt-get -qq -y install \
         curl \
         git \
         make \
+        unzip \
         sudo \
-        bash-completion \
-        tree \
         vim
 
 # Use C.UTF-8 locale to avoid issues with ASCII encoding
@@ -24,7 +27,6 @@ ENV LANG=C.UTF-8
 WORKDIR /app
 
 COPY ./requirements.txt /app/requirements.txt
-
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt --verbose
@@ -54,5 +56,9 @@ RUN python $LASER/tasks/embed/decode.py test_embed.raw
 EXPOSE 80
 
 COPY ./app.py /app/app.py
+
+#Installing FAISS
+
+RUN conda install faiss-cpu -c pytorch
 
 CMD ["/bin/bash"]

@@ -5,3 +5,4 @@ Cython
 torch
 transliterate
 pathlib
+faiss

@@ -1,4 +1,6 @@
 name: env
+channel:
+  - pytorch
 dependencies:
   - python=3.6
   - scipy
@@ -6,6 +8,7 @@ dependencies:
   - Cython
   - flask
   - pathlib
+  - faiss
   - pip:
     - Flask-Testing
     - torch
