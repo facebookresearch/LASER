@@ -39,6 +39,12 @@ ENV LASER /app/LASER
 WORKDIR $LASER
 
 RUN bash ./install_models.sh
+
+
+#Installing FAISS
+
+RUN conda install -c pytorch faiss-cpu -y
+
 RUN bash ./install_external_tools.sh
 
 COPY ./decode.py $LASER/tasks/embed/decode.py
@@ -56,9 +62,5 @@ RUN python $LASER/tasks/embed/decode.py test_embed.raw
 EXPOSE 80
 
 COPY ./app.py /app/app.py
-
-#Installing FAISS
-
-RUN conda install -c pytorch faiss-cpu -y
 
 CMD ["/bin/bash"]
