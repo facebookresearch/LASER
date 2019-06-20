@@ -4,4 +4,3 @@ numpy
 Cython
 torch
 transliterate
-pathlib
