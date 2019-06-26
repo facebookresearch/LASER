@@ -43,7 +43,7 @@ RUN bash ./install_models.sh
 
 #Installing FAISS
 
-RUN conda install --name env -c pytorch faiss-cpu -
+RUN conda install --name env -c pytorch faiss-cpu -y
 
 RUN bash ./install_external_tools.sh
 
