@@ -3,6 +3,7 @@
 LASER is a library to calculate and use multilingual sentence embeddings.
 
 **NEWS**
+* 2019/07/11 [**WikiMatrix is availabe**](tasks/WikiMatrix): bitext extraction for 1620 language in WikiPedia [7]
 * 2019/03/18 switch to BSD license
 * 2019/02/13 The code to perform bitext mining is [**now available**](tasks/bucc)
 
@@ -52,6 +53,8 @@ with code to reproduce our results (in the directory "tasks").
 
 * [**Cross-lingual document classification**](tasks/mldoc) using the
   [*MLDoc*](https://github.com/facebookresearch/MLDoc) corpus [2,6]
+* [**WikiMatrix**](tasks/WikiMatrix)
+   Mining 135M Parallel Sentences in 1620 Language Pairs from Wikipedia [7]
 * [**Bitext mining**](tasks/bucc) using the
   [*BUCC*](https://comparable.limsi.fr/bucc2018/bucc2018-task.html) corpus [3,5]
 * [**Cross-lingual NLI**](tasks/xnli)
@@ -106,8 +109,12 @@ Swiss German or Western Frisian.
 
 [5] Mikel Artetxe and Holger Schwenk,
     [*Margin-based Parallel Corpus Mining with Multilingual Sentence Embeddings*](https://arxiv.org/abs/1811.01136)
-    arXiv, 3 Nov 2018.
+    arXiv, Nov 3 2018.
 
 [6] Mikel Artetxe and Holger Schwenk,
     [*Massively Multilingual Sentence Embeddings for Zero-Shot Cross-Lingual Transfer and Beyond*](https://arxiv.org/abs/1812.10464)
-    arXiv, 26 Dec 2018.
+    arXiv, Dec 26 2018.
+
+[7] Holger Schwenk, Vishrav Chaudhary, Shuo Sun, Hongyu Gong and Paco Guzman,
+    [*WikiMatrix: Mining 135M Parallel Sentences in 1620 Language Pairs from Wikipedia*](https://https://arxiv.org)
+    arXiv, July 11  2019.
