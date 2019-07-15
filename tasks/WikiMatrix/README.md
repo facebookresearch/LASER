@@ -71,7 +71,7 @@ Please cite reference [1] if you use this data.
 ## References
 
 [1] Holger Schwenk, Vishrav Chaudhary, Shuo Sun, Hongyu Gong and Paco Guzman,
-    [*WikiMatrix: Mining 135M Parallel Sentences in 1620 Language Pairs from Wikipedia*](https://https://arxiv.org)
+    [*WikiMatrix: Mining 135M Parallel Sentences in 1620 Language Pairs from Wikipedia*](https://arxiv.org/abs/1907.05791)
     arXiv, July 11  2019.
 
 [2] Mikel Artetxe and Holger Schwenk,
