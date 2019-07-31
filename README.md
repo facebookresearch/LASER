@@ -3,6 +3,7 @@
 LASER is a library to calculate and use multilingual sentence embeddings.
 
 **NEWS**
+* 2019/07/31 @jrapin provided a [*Docker environment](docker) to use LASER
 * 2019/07/11 [**WikiMatrix is availabe**](tasks/WikiMatrix): bitext extraction for 1620 language pairs in WikiPedia [7]
 * 2019/03/18 switch to BSD license
 * 2019/02/13 The code to perform bitext mining is [**now available**](tasks/bucc)
