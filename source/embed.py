@@ -35,7 +35,6 @@ LASER = os.environ['LASER']
 sys.path.append(LASER + '/source/lib')
 from text_processing import Token, BPEfastApply
 
-
 SPACE_NORMALIZER = re.compile("\s+")
 Batch = namedtuple('Batch', 'srcs tokens lengths')
 
@@ -85,7 +84,8 @@ def convert_padding_direction(src_tokens, padding_idx, right_to_left=False, left
 
 class SentenceEncoder:
 
-    def __init__(self, model_path, max_sentences=None, max_tokens=None, cpu=False, fp16=False, verbose=False, sort_kind='quicksort'):
+    def __init__(self, model_path, max_sentences=None, max_tokens=None, cpu=False, fp16=False, verbose=False,
+                 sort_kind='quicksort'):
         self.use_cuda = torch.cuda.is_available() and not cpu
         self.max_sentences = max_sentences
         self.max_tokens = max_tokens
@@ -168,8 +168,8 @@ class SentenceEncoder:
 
 class Encoder(nn.Module):
     def __init__(
-        self, num_embeddings, padding_idx, embed_dim=320, hidden_size=512, num_layers=1, bidirectional=False,
-        left_pad=True, padding_value=0.
+            self, num_embeddings, padding_idx, embed_dim=320, hidden_size=512, num_layers=1, bidirectional=False,
+            left_pad=True, padding_value=0.
     ):
         super().__init__()
 
@@ -227,7 +227,6 @@ class Encoder(nn.Module):
         assert list(x.size()) == [seqlen, bsz, self.output_units]
 
         if self.bidirectional:
-
             def combine_bidir(outs):
                 return torch.cat([
                     torch.cat([outs[2 * i], outs[2 * i + 1]], dim=0).view(1, bsz, self.output_units)
@@ -261,18 +260,19 @@ def EncodeLoad(args):
 
     print(' - loading encoder', args.encoder)
     return SentenceEncoder(args.encoder,
-               max_sentences=args.max_sentences,
-               max_tokens=args.max_tokens,
-               cpu=args.cpu,
-               verbose=args.verbose)
+                           max_sentences=args.max_sentences,
+                           max_tokens=args.max_tokens,
+                           cpu=args.cpu,
+                           verbose=args.verbose)
 
 
 def EncodeTime(t):
-    t = int(time.time() - t) 
+    t = int(time.time() - t)
     if t < 1000:
         print(' in {:d}s'.format(t))
     else:
         print(' in {:d}m{:d}s'.format(t // 60, t % 60))
+
 
 # Encode sentences (existing file pointers)
 def EncodeFilep(encoder, inp_file, out_file, buffer_size=10000, verbose=False):
@@ -287,10 +287,11 @@ def EncodeFilep(encoder, inp_file, out_file, buffer_size=10000, verbose=False):
         print('\r - Encoder: {:d} sentences'.format(n), end='')
         EncodeTime(t)
 
+
 # Encode sentences (file names)
 def EncodeFile(encoder, inp_fname, out_fname,
-              buffer_size=10000, verbose=False, over_write=False,
-              inp_encoding='utf-8'):
+               buffer_size=10000, verbose=False, over_write=False,
+               inp_encoding='utf-8'):
     # TODO :handle over write
     if not os.path.isfile(out_fname):
         if verbose:
@@ -305,6 +306,7 @@ def EncodeFile(encoder, inp_fname, out_fname,
     elif not over_write and verbose:
         print(' - Encoder: {} exists already'.format(os.path.basename(out_fname)))
 
+
 # Load existing embeddings
 def EmbedLoad(fname, dim=1024, verbose=False):
     x = np.fromfile(fname, dtype=np.float32, count=-1)
@@ -312,6 +314,7 @@ def EmbedLoad(fname, dim=1024, verbose=False):
     if verbose:
         print(' - Embeddings: {:s}, {:d}x{:d}'.format(fname, x.shape[0], dim))
     return x
+
 
 # Get memory mapped embeddings
 def EmbedMmap(fname, dim=1024, dtype=np.float32, verbose=False):
@@ -321,29 +324,30 @@ def EmbedMmap(fname, dim=1024, dtype=np.float32, verbose=False):
         print(' - embeddings on disk: {:s} {:d} x {:d}'.format(fname, nbex, dim))
     return E
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='LASER: Embed sentences')
     parser.add_argument('--encoder', type=str, required=True,
-        help='encoder to be used')
+                        help='encoder to be used')
     parser.add_argument('--token-lang', type=str, default='--',
-        help="Perform tokenization with given language ('--' for no tokenization)")
+                        help="Perform tokenization with given language ('--' for no tokenization)")
     parser.add_argument('--bpe-codes', type=str, default=None,
-        help='Apply BPE using specified codes')
+                        help='Apply BPE using specified codes')
     parser.add_argument('-v', '--verbose', action='store_true',
-        help='Detailed output')
+                        help='Detailed output')
 
     parser.add_argument('-o', '--output', required=True,
-        help='Output sentence embeddings')
+                        help='Output sentence embeddings')
     parser.add_argument('--buffer-size', type=int, default=10000,
-        help='Buffer size (sentences)')
+                        help='Buffer size (sentences)')
     parser.add_argument('--max-tokens', type=int, default=12000,
-        help='Maximum number of tokens to process in a batch')
+                        help='Maximum number of tokens to process in a batch')
     parser.add_argument('--max-sentences', type=int, default=None,
-        help='Maximum number of sentences to process in a batch')
+                        help='Maximum number of sentences to process in a batch')
     parser.add_argument('--cpu', action='store_true',
-        help='Use CPU instead of GPU')
+                        help='Use CPU instead of GPU')
     parser.add_argument('--stable', action='store_true',
-        help='Use stable merge sort instead of quick sort')
+                        help='Use stable merge sort instead of quick sort')
     args = parser.parse_args()
 
     args.buffer_size = max(args.buffer_size, 1)
@@ -382,4 +386,4 @@ if __name__ == '__main__':
                    ifname,
                    args.output,
                    verbose=args.verbose, over_write=False,
-                   buffer_size=args.buffer_size) 
+                   buffer_size=args.buffer_size)

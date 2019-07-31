@@ -1,0 +1,6 @@
+Flask
+scipy
+numpy
+Cython
+torch
+transliterate
