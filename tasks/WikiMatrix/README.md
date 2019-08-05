@@ -14,8 +14,8 @@ wget https://dl.fbaipublicfiles.com/laser/WikiMatrix/v1/WikiMatrix.en-fr.tsv.gz
 Replace "en-fr" with the ISO codes of the desired language pair.
 The language pair must be in alphabetical order, e.g. "de-en" and not "en-de".
 The list of available bitexts and their sizes are given in the file [*list_of_bitexts.txt*](list_of_bitexts.txt).
-All bitexts total to 65GB!
-* please use this link if you want to download all 1620 language pairs in one tar file (but this is 65GB!)
+Please do **not loop over all files** since AWs implements some [*limitations*](https://dl.fbaipublicfiles.com/README) to avoid abuse.
+* use this link if you want to download all 1620 language pairs in one tar file (but this is 65GB!)
 ```bash
 wget https://dl.fbaipublicfiles.com/laser/WikiMatrix/WikiMatrix.v1.1620_language_pairs.tar
 ```
