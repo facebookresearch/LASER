@@ -133,7 +133,7 @@ InstallMecab () {
       mkdir mecab
       cd mecab-master/mecab
       echo " - installing code"
-      ./configure --prefix ${tools_ext}/mecab && make && make install 
+      ./configure --prefix ${tools_ext}/mecab --with-charset=utf8 && make && make install 
       if [ $? -q 1 ] ; then
         echo "ERROR: installation failed, please install manually"; exit
       fi
@@ -141,7 +141,7 @@ InstallMecab () {
     if [ ! -d mecab/lib/mecab/dic/ipadic ] ; then
       cd ${tools_ext}/mecab-master/mecab-ipadic
       echo " - installing dictionaries"
-      ./configure --prefix ${tools_ext}/mecab --with-mecab-config=${tools_ext}/mecab/bin/mecab-config \
+      ./configure --prefix ${tools_ext}/mecab --with-mecab-config=${tools_ext}/mecab/bin/mecab-config --with-charset=utf8 \
         && make && make install 
       if [ $? -eq 1 ] ; then
         echo "ERROR: compilation failed, please install manually"; exit
