@@ -133,7 +133,7 @@ InstallMecab () {
       mkdir mecab
       cd mecab-master/mecab
       echo " - installing code"
-      ./configure --prefix ${tools_ext}/mecab --with-charset=utf8 && make && make install 
+      ./configure --prefix ${tools_ext}/mecab --enable-utf8-only && make && make install 
       if [ $? -q 1 ] ; then
         echo "ERROR: installation failed, please install manually"; exit
       fi
