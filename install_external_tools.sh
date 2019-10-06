@@ -124,7 +124,7 @@ InstallFastBPE () {
 
 InstallMecab () {
   cd ${tools_ext}
-  if [ ! -x mecab/mecab/bin/mecab ] ; then
+  if [ ! -x mecab/bin/mecab ] ; then
     echo " - download mecab from github"
     wget https://github.com/taku910/mecab/archive/master.zip
     unzip master.zip 
@@ -157,15 +157,29 @@ InstallMecab () {
 #
 ###################################################################
 
+for arg
+do
+  case "$arg" in
+    --install-mecab)
+    install_mecab=1
+    ;;
+  esac
+done
+
 echo "Installing external tools"
 
 InstallMosesTools
 InstallFastBPE
 
-#InstallMecab
-echo ""
-echo "automatic installation of the Japanese tokenizer mecab may be tricky"
-echo "Please install it manually from https://github.com/taku910/mecab"
-echo ""
-echo "The installation directory should be ${LASER}/tools-external/mecab"
-echo ""
+if [[ -n "$install_mecab" ]]; then
+  InstallMecab
+else
+  echo ""
+  echo "Automatic installation of the Japanese tokenizer mecab may be tricky"
+  echo ""
+  echo "Please use --install-mecab argument to try the automatic installation"
+  echo "or install it manually from https://github.com/taku910/mecab"
+  echo ""
+  echo "The installation directory should be ${LASER}/tools-external/mecab"
+  echo ""
+fi

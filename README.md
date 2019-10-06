@@ -44,7 +44,7 @@ be found in [6], together with an extensive experimental evaluation.
 * set the environment variable 'LASER' to the root of the installation, e.g.
   `export LASER="${HOME}/projects/laser"`
 * download encoders from Amazon s3 by `bash ./install_models.sh`
-* download third party software by `bash ./install_external_tools.sh`
+* download third party software by `bash ./install_external_tools.sh` (use `--install-mecab` argument to try the automatic installation of mecab)
 * download the data used in the example tasks (see description for each task)
 
 ## Applications
