@@ -78,7 +78,7 @@ for lang in languages_train:
               cfname + 'tok.' + lang,
               lang=lang,
               romanize=True if lang=='el' else False,
-              lower_case=True, gzip=True,
+              gzip=True,
               verbose=args.verbose, over_write=False)
         BPEfastApply(cfname + 'tok.' + lang,
                      cfname + 'bpe.' + lang,
@@ -99,7 +99,7 @@ for corpus in ('xnli.dev', 'xnli.test'):
                   cfname + 'tok.' + lang,
                   lang=lang,
                   romanize=True if lang=='el' else False,
-                  lower_case=True, gzip=False,
+                  gzip=False,
                   verbose=args.verbose, over_write=False)
             BPEfastApply(cfname + 'tok.' + lang,
                          cfname + 'bpe.' + lang,

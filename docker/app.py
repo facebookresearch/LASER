@@ -51,7 +51,6 @@ def vectorize():
                   str(tok_fname),
                   lang=lang,
                   romanize=True if lang == 'el' else False,
-                  lower_case=True,
                   gzip=False,
                   verbose=True,
                   over_write=False)

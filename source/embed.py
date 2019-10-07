@@ -370,7 +370,7 @@ if __name__ == '__main__':
                   tok_fname,
                   lang=args.token_lang,
                   romanize=True if args.token_lang == 'el' else False,
-                  lower_case=True, gzip=False,
+                  gzip=False,
                   verbose=args.verbose, over_write=False)
             ifname = tok_fname
 

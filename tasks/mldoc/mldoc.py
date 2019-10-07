@@ -82,7 +82,7 @@ for part in ('train1000', 'dev', 'test'):
               cfname + '.tok.' + lang,
               lang=lang,
               romanize=(True if lang == 'el' else False),
-              lower_case=True, gzip=False,
+              gzip=False,
               verbose=args.verbose, over_write=False)
         SplitLines(cfname + '.tok.' + lang,
                    cfname + '.split.' + lang,
