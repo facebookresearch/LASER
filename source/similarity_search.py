@@ -92,6 +92,7 @@ for l in args.lang:
           os.path.join(args.base_dir, args.output + '.tok.' + l),
           lang=l,
           romanize=True if l == 'el' else False,
+          lower_case=True,
           verbose=args.verbose, over_write=False)
     BPEfastApply(os.path.join(args.base_dir, args.output + '.tok.' + l),
                  os.path.join(args.base_dir, args.output + '.bpe.' + l),

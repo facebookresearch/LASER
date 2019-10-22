@@ -45,7 +45,8 @@ MECAB = LASER + '/tools-external/mecab'
 #
 ###############################################################################
 
-def TokenLine(line, lang='en', romanize=False):
+def TokenLine(line, lang='en', lower_case=True, romanize=False):
+    assert lower_case, 'lower case is needed by all the models'
     roman = lang if romanize else 'none'
     tok = check_output(
             REM_NON_PRINT_CHAR
@@ -68,8 +69,9 @@ def TokenLine(line, lang='en', romanize=False):
 ###############################################################################
 
 def Token(inp_fname, out_fname, lang='en',
-          romanize=False, descape=False,
+          lower_case=True, romanize=False, descape=False,
           verbose=False, over_write=False, gzip=False):
+    assert lower_case, 'lower case is needed by all the models'
     assert not over_write, 'over-write is not yet implemented'
     if not os.path.isfile(out_fname):
         cat = 'zcat ' if gzip else 'cat '
@@ -107,7 +109,7 @@ def Token(inp_fname, out_fname, lang='en',
 #
 ###############################################################################
 
-def BPEfastLoad(bpe_codes):
+def BPEfastLoad(line, bpe_codes):
     bpe_vocab = bpe_codes.replace('fcodes', 'fvocab')
     return fastBPE.fastBPE(bpe_codes, bpe_vocab)
 
