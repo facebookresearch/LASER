@@ -16,7 +16,6 @@
 
 import os
 import sys
-import tempfile
 import fastBPE
 import numpy as np
 from subprocess import run, check_output, DEVNULL
