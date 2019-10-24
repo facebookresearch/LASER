@@ -110,7 +110,7 @@ def Token(inp_fname, out_fname, lang='en',
 #
 ###############################################################################
 
-def BPEfastLoad(line, bpe_codes):
+def BPEfastLoad(bpe_codes):
     bpe_vocab = bpe_codes.replace('fcodes', 'fvocab')
     return fastBPE.fastBPE(bpe_codes, bpe_vocab)
 
