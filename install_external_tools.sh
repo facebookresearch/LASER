@@ -110,10 +110,10 @@ InstallFastBPE () {
   cd ${tools_ext}
   if [ ! -x fastBPE/fast ] ; then
     echo " - download fastBPE software from github"
-    wget https://github.com/glample/fastBPE/archive/master.zip
-    unzip master.zip
-    /bin/rm master.zip
-    mv fastBPE-master fastBPE
+    wget https://github.com/glample/fastBPE/archive/1fd33189c126dae356b9e187d93d93302fa45cef.zip
+    unzip 1fd33189c126dae356b9e187d93d93302fa45cef.zip
+    /bin/rm 1fd33189c126dae356b9e187d93d93302fa45cef.zip
+    mv fastBPE-1fd33189c126dae356b9e187d93d93302fa45cef fastBPE
     cd fastBPE
     echo " - compiling"
     g++ -std=c++11 -pthread -O3 fastBPE/main.cc -IfastBPE -o fast
@@ -136,12 +136,12 @@ InstallMecab () {
   cd ${tools_ext}
   if [ ! -x mecab/mecab/bin/mecab ] ; then
     echo " - download mecab from github"
-    wget https://github.com/taku910/mecab/archive/master.zip
-    unzip master.zip 
+    wget https://github.com/taku910/mecab/archive/3a07c4eefaffb4e7a0690a7f4e5e0263d3ddb8a3.zip
+    unzip 3a07c4eefaffb4e7a0690a7f4e5e0263d3ddb8a3.zip
     #/bin/rm master.zip
     if [ ! -s mecab/bin/mecab ] ; then
       mkdir mecab
-      cd mecab-master/mecab
+      cd mecab-3a07c4eefaffb4e7a0690a7f4e5e0263d3ddb8a3/mecab
       echo " - installing code"
       ./configure --prefix ${tools_ext}/mecab && make && make install 
       if [ $? -q 1 ] ; then
@@ -149,7 +149,7 @@ InstallMecab () {
       fi
     fi
     if [ ! -d mecab/lib/mecab/dic/ipadic ] ; then
-      cd ${tools_ext}/mecab-master/mecab-ipadic
+      cd ${tools_ext}/mecab-3a07c4eefaffb4e7a0690a7f4e5e0263d3ddb8a3/mecab-ipadic
       echo " - installing dictionaries"
       ./configure --prefix ${tools_ext}/mecab --with-mecab-config=${tools_ext}/mecab/bin/mecab-config \
         && make && make install 
