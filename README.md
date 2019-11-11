@@ -3,6 +3,7 @@
 LASER is a library to calculate and use multilingual sentence embeddings.
 
 **NEWS**
+* 2019/11/08 [**CCMatrix is availabe**](tasks/CCMatrix): Mining billions of high-quality parallel sentences on the WEB [8]
 * 2019/07/31 Jérémy Rapin provided a [**Docker environment**](docker) to use LASER
 * 2019/07/11 [**WikiMatrix is availabe**](tasks/WikiMatrix): bitext extraction for 1620 language pairs in WikiPedia [7]
 * 2019/03/18 switch to BSD license
@@ -118,4 +119,9 @@ Swiss German or Western Frisian.
 
 [7] Holger Schwenk, Vishrav Chaudhary, Shuo Sun, Hongyu Gong and Paco Guzman,
     [*WikiMatrix: Mining 135M Parallel Sentences in 1620 Language Pairs from Wikipedia*](https://arxiv.org/abs/1907.05791)
+    arXiv, July 11  2019.
+
+[8] Holger Schwenk, Guillaume Wenzek, Sergey Edunov, Edouard Grave and Armand Joulin
+    [*CCMatrix: Mining Billions of High-Quality Parallel Sentences on the WEB*](https://arxiv.org/abs/xxx.yyy)
+    THE PAPER WILL BE AVAILABLE ON MONDAY 8pm EST
     arXiv, July 11  2019.
