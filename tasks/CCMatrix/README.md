@@ -4,6 +4,9 @@
 
 We show that margin-based bitext mining in LASER's multilingual sentence space can be applied to monolingual corpora of billions of sentences.  We are using ten snapshots of a curated common crawl corpus [1] totaling 32.7 billion unique sentences.  Using one unified approach for 38 languages, we were able to mine 3.5 billions parallel sentences, out of which 661 million are aligned with English.  17 language pairs have more then 30 million parallel sentences, 82 more then 10 million, and most more than one million, including direct alignments between many European or Asian languages.
 
+This [*table shows the amount of mined parallel sentences for most of the language pairs (all sizes in million sentences)*](MatrixMine.pdf)
+
+
 ## Download
 
 * You need to download first the 
