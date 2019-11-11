@@ -8,10 +8,10 @@ We show that margin-based bitext mining in LASER's multilingual sentence space c
 
 * You need to download first the 
   [*CCNet corpus*](https://github.com/facebookresearch/cc_net) corpus [1]
+* **We will soon provide a script to extract the parallel data from this corpus.  Please be patient**
 
 Please cite reference [2] if you use this data.
 
-**We will soon provide a script to extract the parallel data from this corpus.  Please be patient**
 
 ## Evaluation
 
@@ -22,7 +22,6 @@ To evaluate the quality of the mined bitexts, we train NMT systems for most of t
 
 [1] Guillaume Wenzek, Marie-Anne Lachaux, Alexis Conneau, Vishrav Chaudhary, Francisco Guzmán, Armand Jouli and Edouard Grave,
     [*CCNet: Extracting High Quality Monolingual Datasets from Web Crawl Data*](https://arxiv.org/abs/1911.00359)
-[2] Holger Schwenk, Guillaume Wenzek, Sergey Edunov, Edouard Grave and Armand Joulin
+[2] Holger Schwenk, Guillaume Wenzek, Sergey Edunov, Edouard Grave and Armand Joulin,
     [*CCMatrix: Mining Billions of High-Quality Parallel Sentences on the WEB*](https://arxiv.org/abs/xxx.yyy)
-    THE PAPER WILL BE AVAILABLE ON MONDAY 8pm EST
-    arXiv, July 11  2019.rXiv, July 11  2019.
+    **THE PAPER WILL BE AVAILABLE ON MONDAY 11/11 8pm EST**
