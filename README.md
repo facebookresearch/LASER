@@ -122,5 +122,4 @@ Swiss German or Western Frisian.
     arXiv, July 11  2019.
 
 [8] Holger Schwenk, Guillaume Wenzek, Sergey Edunov, Edouard Grave and Armand Joulin
-    [*CCMatrix: Mining Billions of High-Quality Parallel Sentences on the WEB*](https://arxiv.org/abs/xxx.yyy)
-    **THE PAPER WILL BE AVAILABLE ON MONDAY 11/11 8pm EST**
+    [*CCMatrix: Mining Billions of High-Quality Parallel Sentences on the WEB*](https://arxiv.org/abs/1911.04944)

@@ -27,5 +27,5 @@ To evaluate the quality of the mined bitexts, we train NMT systems for most of t
     [*CCNet: Extracting High Quality Monolingual Datasets from Web Crawl Data*](https://arxiv.org/abs/1911.00359)
 
 [2] Holger Schwenk, Guillaume Wenzek, Sergey Edunov, Edouard Grave and Armand Joulin,
-    [*CCMatrix: Mining Billions of High-Quality Parallel Sentences on the WEB*](https://arxiv.org/abs/xxx.yyy)
-    **THE PAPER WILL BE AVAILABLE ON MONDAY 11/11 8pm EST**
+    [*CCMatrix: Mining Billions of High-Quality Parallel Sentences on the WEB*](https://arxiv.org/abs/1911.04944)
+    
