@@ -9,8 +9,8 @@ This [*table shows the amount of mined parallel sentences for most of the langua
 
 ## Download
 
-* You need to download first the 
-  [*CCNet corpus*](https://github.com/facebookresearch/cc_net) corpus [1]
+* You need to first download the 
+  [*CCNet corpus*](https://github.com/facebookresearch/cc_net) [1]
 * **We will soon provide a script to extract the parallel data from this corpus.  Please be patient**
 
 Please cite reference [2] if you use this data.
