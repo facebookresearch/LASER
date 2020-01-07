@@ -98,7 +98,8 @@ def Token(inp_fname, out_fname, lang='en',
             + '|' + ROMAN_LC + roman
             + '>' + out_fname,
             env=dict(os.environ, LD_LIBRARY_PATH=MECAB + '/lib'),
-            shell=True)
+            shell=True,
+            check=True)
     elif not over_write and verbose:
         print(' - Tokenizer: {} exists already'
               .format(os.path.basename(out_fname), lang))
