@@ -364,15 +364,21 @@ if __name__ == '__main__':
 
     with tempfile.TemporaryDirectory() as tmpdir:
         ifname = ''  # stdin will be used
+        tok_fname = os.path.join(tmpdir, 'tok')
+
         if args.token_lang != '--':
-            tok_fname = os.path.join(tmpdir, 'tok')
+
             Token(ifname,
                   tok_fname,
                   lang=args.token_lang,
                   romanize=True if args.token_lang == 'el' else False,
                   lower_case=True, gzip=False,
                   verbose=args.verbose, over_write=False)
-            ifname = tok_fname
+        else:
+            with open(tok_fname, "w") as ofname:
+                for line in sys.stdin:
+                    ofname.write(line)
+        ifname = tok_fname
 
         if args.bpe_codes:
             bpe_fname = os.path.join(tmpdir, 'bpe')
