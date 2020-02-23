@@ -122,9 +122,9 @@ def IndexSearchMultiple(data, idx, verbose=False, texts=None, print_errors=False
                         = (nbex - np.equal(I.reshape(nbex), ref)
                            .astype(int).sum()) / nbex
                 if verbose:
-                    print(' - similarity error {:s}/{:s}: {:5d}={:5.2f}%'
+                    print(' - similarity error {:s}/{:s}: {:5d}={:5.2%}'
                           .format(args.langs[i1], args.langs[i2],
-                                  err[i1, i2], 100.0 * err[i1, i2]))
+                                  err[i1, i2], err[i1, i2]))
     return err
 
 
@@ -142,15 +142,15 @@ def IndexPrintConfusionMatrix(err, langs):
     for i1 in range(nl):
         print('{:3s}'.format(langs[i1]), end='')
         for i2 in range(nl):
-            print('{:8.2f}%'.format(100 * err[i1, i2]), end='')
-        print('{:8.2f}%'.format(100 * err[i1, :].sum() / (nl-1)))
+            print('{:8.2%}'.format(err[i1, i2]), end='')
+        print('{:8.2%}'.format(err[i1, :].sum() / (nl-1)))
 
     print('avg', end='')
     for i2 in range(nl):
-        print('{:8.2f}%'.format(100 * err[:, i2].sum() / (nl-1)), end='')
+        print('{:8.2%}'.format(err[:, i2].sum() / (nl-1)), end='')
 
     # global average
-    print('{:8.2f}%'.format(100 * err.sum() / (nl-1) / nl))
+    print('{:8.2%}'.format(err.sum() / (nl-1) / nl))
 
 
 ###############################################################################
