@@ -22,7 +22,7 @@ to specify the input language (but tokenization is language specific).
 According to our experience, the sentence encoder also supports code-switching, i.e.
 the same sentences can contain words in several different languages.
 
-We have also some evidence that the encoder can generalizes to other
+We have also some evidence that the encoder can generalize to other
 languages which have not been seen during training, but which are in
 a language family which is covered by other languages.
 
