@@ -21,7 +21,7 @@ fi
 
 xnli="XNLI-1.0"
 xnli_mt="XNLI-MT-1.0"
-xnli_http="https://s3.amazonaws.com/xnli"
+xnli_http="https://dl.fbaipublicfiles.com/XNLI"
 mnli_http="https://www.nyu.edu/projects/bowman/multinli/multinli_1.0.zip"
 
 languages=("en" "fr" "es" "de" "el" "bg" "ru" "tr" "ar" "vi" "th" "zh" "hi" "sw" "ur")
