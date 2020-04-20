@@ -17,12 +17,12 @@
 
 if [ -z ${LASER+x} ] ; then
   echo "Please set the environment variable 'LASER'"
-  exit
+  exit 1
 fi
 
 if [ $# -ne 3 ] ; then
   echo "usage embed.sh input-file language output-file"
-  exit
+  exit 1
 fi
 
 ifile=$1
