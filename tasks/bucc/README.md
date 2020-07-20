@@ -89,6 +89,6 @@ Below the number of extracted parallel sentences for each language pair.
     [*Margin-based Parallel Corpus Mining with Multilingual Sentence Embeddings*](https://arxiv.org/abs/1811.01136)
     arXiv, 3 Nov 2018.
 
-[3] Mikel Artetxe and Holger Schwenk,
+[4] Mikel Artetxe and Holger Schwenk,
     [*Massively Multilingual Sentence Embeddings for Zero-Shot Cross-Lingual Transfer and Beyond*](https://arxiv.org/abs/1812.10464)
     arXiv, 26 Dec 2018.
