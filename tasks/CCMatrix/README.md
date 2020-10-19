@@ -22,6 +22,9 @@ We have assessed the quality of our mined data with bilingual models and multili
 
 * Multilingual models [3]:  CCMatrix data is used to train M2M-100, a large-scale Many-to-Many multilingual translation model. The thousands of directions we mine produce training data for direct translations without relying solely on English data. We mine using novel strategy which exploits language groupings and bridge languages to avoid mining every possible direction while maintaining good accuracy. By training on this data and scaling model capacity through model parallelism and language-specific parameters, M2M-100 outperforms English-Centric multilingual models trained on data where either the source or target language is English. The system improves over 10 BLEU on average compared to an English-Centric baseline when translating directly between non-English directions. M2M-100 is competitive to bilingual models from WMT and improves over existing publicly available multilingual translation systems. To download the data, follow our instructions above. To download the models and reproduce the training, click [*here*](https://github.com/pytorch/fairseq/tree/master/examples/m2m_100)
 
+Please note that additional data filtering was applied before training the M2M-100 model, see [3] for details.
+Also, we have improved mining against English which leads to more bitexts, in particular for mid- and low-resources languages.
+This new data was not used for M2M-100.
 
 ## References
 
