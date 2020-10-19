@@ -2,7 +2,7 @@
 
 ## Parallel data
 
-We show that margin-based bitext mining in LASER's multilingual sentence space can be applied to monolingual corpora of billions of sentences to produce high quality aligned translation data. We use thirty-two snapshots of a curated common crawl corpus [1] totaling 69 billion unique sentences. Using one unified approach for 80 languages, we were able to mine 10.8 billion parallel sentences, out of which only 2.9 billion are aligned with English. The figure below demonstrates that a large quantity of mined data is not aligned through English, but various other languages.
+We show that margin-based bitext mining in LASER's multilingual sentence space can be applied to monolingual corpora of billions of sentences to produce high quality aligned translation data. We use thirty-two snapshots of a curated common crawl corpus [1] totaling 69 billion unique sentences. Using one unified approach for 80 languages, we were able to mine 10.8 billion parallel sentences, out of which only 2.9 billion are aligned with English. 
 
 ## Download
 
