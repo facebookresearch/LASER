@@ -24,6 +24,7 @@ import time
 import argparse
 import numpy as np
 from collections import namedtuple
+from multiprocessing import Pool
 
 import torch
 import torch.nn as nn
@@ -348,6 +349,9 @@ if __name__ == '__main__':
                         help='Use CPU instead of GPU')
     parser.add_argument('--stable', action='store_true',
                         help='Use stable merge sort instead of quick sort')
+    parser.add_argument('--num-workers', type=int, default=1,
+                        help='To mention number of cores to be used')
+                        
     args = parser.parse_args()
 
     args.buffer_size = max(args.buffer_size, 1)
@@ -366,20 +370,29 @@ if __name__ == '__main__':
         ifname = ''  # stdin will be used
         if args.token_lang != '--':
             tok_fname = os.path.join(tmpdir, 'tok')
+            pool=None
+            pool = Pool(processes=int(args.num_workers) - 1)
+            pool.apply_async(
             Token(ifname,
                   tok_fname,
                   lang=args.token_lang,
                   romanize=True if args.token_lang == 'el' else False,
                   lower_case=True, gzip=False,
                   verbose=args.verbose, over_write=False)
+            )
+            pool.close()
             ifname = tok_fname
 
         if args.bpe_codes:
             bpe_fname = os.path.join(tmpdir, 'bpe')
+            pool = Pool(processes=int(args.num_workers) - 1)
+            pool.apply_async(
             BPEfastApply(ifname,
                          bpe_fname,
                          args.bpe_codes,
                          verbose=args.verbose, over_write=False)
+            )
+            pool.close()            
             ifname = bpe_fname
 
         EncodeFile(encoder,
