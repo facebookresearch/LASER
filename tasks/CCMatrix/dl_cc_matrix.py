@@ -17,7 +17,7 @@ import multiprocessing
 BUFFER_SIZE = "32G"
 SORT_PARALLEL = 8
 
-KNOWN_VERSIONS = ["v1.0.alpha"]
+KNOWN_VERSIONS = ["v1.0.beta", "v1.0.alpha"]
 
 
 class NormalizedBitextPtr(NamedTuple):
@@ -27,6 +27,7 @@ class NormalizedBitextPtr(NamedTuple):
     digest: str
     ptr_start: int
     ptr_end: int
+    score: float
 
 
 class Bitext(NamedTuple):
