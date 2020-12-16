@@ -205,6 +205,7 @@ def transpose_file(outdir: Path, file: Path) -> None:
                 assert (
                     "/" in lang_pair
                 ), f"Invalid lang pair '{lang_pair}' should be 'src-trg/src' or 'src-trg/trg'"
+                (outdir / f"{lang_pair}").mkdir(exist_ok=True, parents=True)
                 o = FileWriterWithTmp(outdir / f"{lang_pair}_{file.name}")
                 outputs[lang_pair] = o
             simple_bt = SimpleBitext(bt.line_no, bt.score, bt.text)
@@ -234,7 +235,14 @@ def sort_files(outdir: Path, lang_pair_dir: Path, lang: str) -> Path:
     print(f"Found {len(files)} files for lang '{lang}' in {lang_pair_dir}: {files}")
     assert len(files) > 0
 
+    (outdir / lang_pair_dir.name).mkdir(exist_ok=True, parents=True)
     tmp_out = _tmp(out)
+    
+    unzipped_files = []
+    for f in files:
+        subprocess.check_call(["gunzip", "-k", str(f)])
+        unzipped_files.append(str(f)[:-3])
+
     sort_cmd = [
         "sort",
         "-nk1",
@@ -242,7 +250,7 @@ def sort_files(outdir: Path, lang_pair_dir: Path, lang: str) -> Path:
         f"--buffer-size={BUFFER_SIZE}",
         "--output",
         str(tmp_out),
-    ] + [str(f) for f in files]
+        ] + unzipped_files
     subprocess.check_call(sort_cmd)
     tmp_out.rename(out)
     return out
@@ -278,12 +286,13 @@ def finalize(
             assert (
                 len(pair.split("-")) == 2
             ), f"Invalid pair '{pair}', should be 'src-trg'"
-            pair_dir = raw_dir / pair
+            pair_dir = split_dir / pair
             assert (
                 pair_dir.is_dir()
             ), f"Dir {pair_dir} not found for lang pair '{pair}'. Is the pair valid ?"
+            pair_dirs.append(pair_dir)
     else:
-        pair_dirs = [d for d in raw_dir.iterdir() if d.is_dir()]
+        pair_dirs = [d for d in split_dir.iterdir() if d.is_dir()]
 
     for pair_dir in pair_dirs:
         src, trg = pair_dir.name.split("-")
@@ -310,6 +319,7 @@ def validate(src_file: Path, trg_file: Path) -> None:
                 trg_l = trg_f.readline()
             if trg.line_no == src.line_no:
                 found_pairs += 1
+
     if found_pairs == lines_src and found_pairs == lines_trg:
         logging.info(
             f"Validated {src_file} and {trg_file}. Found {found_pairs} bitexts."
