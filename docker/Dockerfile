@@ -2,7 +2,7 @@ FROM continuumio/miniconda3
 
 MAINTAINER Gilles Bodart <gillesbodart@users.noreply.github.com>
 
-RUN conda create -n env python=3.6
+RUN conda create -n env python=3.7
 RUN echo "source activate env" > ~/.bashrc
 ENV PATH /opt/conda/envs/env/bin:$PATH
 
@@ -49,9 +49,31 @@ RUN bash ./install_external_tools.sh
 
 COPY ./decode.py $LASER/tasks/embed/decode.py
 
+# Dependencies for kenlm needed by cc_net
+RUN apt-get -qq -y install \
+	build-essential \
+	cmake \
+	libboost-system-dev \
+	libboost-thread-dev \
+	libboost-program-options-dev \
+	libboost-test-dev \
+	libeigen3-dev \
+	zlib1g-dev \
+	libbz2-dev \
+	liblzma-dev
+
+# Installing cc_net
+WORKDIR /
+
+RUN git clone https://github.com/facebookresearch/cc_net.git
+
+WORKDIR /cc_net
+
+RUN make install
 
 # Make port 80 available to the world outside this container
 WORKDIR /app
+
 
 RUN echo "Hello World" > test.txt
 
