@@ -17,7 +17,7 @@ import multiprocessing
 BUFFER_SIZE = "32G"
 SORT_PARALLEL = 8
 
-KNOWN_VERSIONS = ["v1.0.beta", "v1.0.alpha"]
+KNOWN_VERSIONS = ["v1.0.0", "v1.0.beta", "v1.0.alpha"]
 
 
 class NormalizedBitextPtr(NamedTuple):
@@ -97,8 +97,9 @@ def dl(outdir: Path = Path("data"), version: str = KNOWN_VERSIONS[0], parallelis
     outdir = outdir / version / "raw"
     outdir.mkdir(exist_ok=True, parents=True)
 
+    dlf = functools.partial(dl_file, metadata_dir, outdir)
+    # list(map(dlf, file_list))
     with multiprocessing.Pool(parallelism) as pool:
-        dlf = functools.partial(dl_file, metadata_dir, outdir)
         pool.map(dlf, file_list)
 
 
@@ -153,7 +154,7 @@ def dl_file(metadata_dir: str, outdir: Path, file: str):
         bt = Bitext(bitext.lang_pair, bitext.line_no, score, text)
         print(*bt, sep="\t", file=o)
 
-    o.close()
+    o.close(True)
     logging.info(f"Found {found_bitext} sentences, missed {missed_bitext} sentences.")
     if skipped_line > 0:
         logging.error(f"Skipped {skipped_line} unparsable lines")
