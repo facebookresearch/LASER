@@ -37,7 +37,7 @@ REM_NON_PRINT_CHAR = MOSES_BDIR + 'remove-non-printing-char.perl'
 ROMAN_LC = 'python3 ' + LASER + '/source/lib/romanize_lc.py -l '
 
 # Mecab tokenizer for Japanese
-MECAB = LASER + '/tools-external/mecab'
+MECAB = 'python3 ' + LASER + '/source/lib/python_mecab.py'
 
 
 ###############################################################################
@@ -55,7 +55,7 @@ def TokenLine(line, lang='en', lower_case=True, romanize=False):
             + '|' + DESCAPE
             + '|' + MOSES_TOKENIZER + lang
             + ('| python3 -m jieba -d ' if lang == 'zh' else '')
-            + ('|' + MECAB + '/bin/mecab -O wakati -b 50000 ' if lang == 'ja' else '')
+            + ('|' + MECAB if lang == 'ja' else '')
             + '|' + ROMAN_LC + roman,
             input=line,
             encoding='UTF-8',
@@ -94,7 +94,7 @@ def Token(inp_fname, out_fname, lang='en',
             + ('|' + DESCAPE if descape else '')
             + '|' + MOSES_TOKENIZER + lang
             + ('| python3 -m jieba -d ' if lang == 'zh' else '')
-            + ('|' + MECAB + '/bin/mecab -O wakati -b 50000 ' if lang == 'ja' else '')
+            + ('|' + MECAB if lang == 'ja' else '')
             + '|' + ROMAN_LC + roman
             + '>' + out_fname,
             env=dict(os.environ, LD_LIBRARY_PATH=MECAB + '/lib'),

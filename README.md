@@ -37,7 +37,7 @@ be found in [6], together with an extensive experimental evaluation.
 * [Faiss](https://github.com/facebookresearch/faiss), for fast similarity search and bitext mining
 * [transliterate 1.10.2](https://pypi.org/project/transliterate), only used for Greek (`pip install transliterate`)
 * [jieba 0.39](https://pypi.org/project/jieba/), Chinese segmenter (`pip install jieba`)
-* [mecab 0.996](https://pypi.org/project/JapaneseTokenizer/), Japanese segmenter
+* [mecab-python3 1.0.3](https://pypi.org/project/mecab-python3/), Japanese segmenter (`pip install mecab-python3 && pip install unidic-lite`)
 * tokenization from the Moses encoder (installed automatically)
 * [FastBPE](https://github.com/glample/fastBPE), fast C++ implementation of byte-pair encoding (installed automatically)
 

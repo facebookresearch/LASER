@@ -118,36 +118,14 @@ InstallFastBPE () {
 ###################################################################
 #
 # Install Japanese tokenizer Mecab
-# We do not use automatic installation with "pip" but directly add the soruce directory
+# Installing directly from source is a headache, changed to be able 
+# to use with pip mecab
 #
 ###################################################################
 
 InstallMecab () {
-  cd ${tools_ext}
-  if [ ! -x mecab/mecab/bin/mecab ] ; then
-    echo " - download mecab from github"
-    wget https://github.com/taku910/mecab/archive/master.zip
-    unzip master.zip 
-    #/bin/rm master.zip
-    if [ ! -s mecab/bin/mecab ] ; then
-      mkdir mecab
-      cd mecab-master/mecab
-      echo " - installing code"
-      ./configure --prefix ${tools_ext}/mecab && make && make install 
-      if [ $? -q 1 ] ; then
-        echo "ERROR: installation failed, please install manually"; exit
-      fi
-    fi
-    if [ ! -d mecab/lib/mecab/dic/ipadic ] ; then
-      cd ${tools_ext}/mecab-master/mecab-ipadic
-      echo " - installing dictionaries"
-      ./configure --prefix ${tools_ext}/mecab --with-mecab-config=${tools_ext}/mecab/bin/mecab-config \
-        && make && make install 
-      if [ $? -eq 1 ] ; then
-        echo "ERROR: compilation failed, please install manually"; exit
-      fi
-    fi
-  fi
+  pip install mecab-python3
+  pip install unidic-lite
 }
 
 
@@ -161,11 +139,4 @@ echo "Installing external tools"
 
 InstallMosesTools
 InstallFastBPE
-
-#InstallMecab
-echo ""
-echo "automatic installation of the Japanese tokenizer mecab may be tricky"
-echo "Please install it manually from https://github.com/taku910/mecab"
-echo ""
-echo "The installation directory should be ${LASER}/tools-external/mecab"
-echo ""
+InstallMecab
