@@ -7,8 +7,10 @@ We show that margin-based bitext mining in LASER's multilingual sentence space c
 ## Download
 
 We open-source our scripts in this directory so that others may reproduce the data, evaluation and results reported in the CCMatrix paper.
-
-* we are finalizing some details and first parts of the data will be available on Oct 19th.
+```
+pip3 install cc_net
+python3 dl_cc_matrix.py
+```
 
 Please cite reference [2][3] if you use this data.
 
