@@ -37,7 +37,7 @@ be found in [6], together with an extensive experimental evaluation.
 * [Faiss](https://github.com/facebookresearch/faiss), for fast similarity search and bitext mining
 * [transliterate 1.10.2](https://pypi.org/project/transliterate), only used for Greek (`pip install transliterate`)
 * [jieba 0.39](https://pypi.org/project/jieba/), Chinese segmenter (`pip install jieba`)
-* [mecab 0.996](https://pypi.org/project/JapaneseTokenizer/), Japanese segmenter
+* [mecab 0.996](https://pypi.org/project/JapaneseTokenizer/), segmenter only used for Japanese.
 * tokenization from the Moses encoder (installed automatically)
 * [FastBPE](https://github.com/glample/fastBPE), fast C++ implementation of byte-pair encoding (installed automatically)
 
@@ -46,6 +46,8 @@ be found in [6], together with an extensive experimental evaluation.
   `export LASER="${HOME}/projects/laser"`
 * download encoders from Amazon s3 by `bash ./install_models.sh`
 * download third party software by `bash ./install_external_tools.sh`
+ * If you do not have `unzip` on your system, run `sudo apt install unzip` beforehand.
+ * If your task involves Japanese text, install mecab manually by following the instructions that appear at the end.
 * download the data used in the example tasks (see description for each task)
 
 ## Applications
