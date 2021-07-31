@@ -2,6 +2,7 @@ FROM continuumio/miniconda3
 
 MAINTAINER Gilles Bodart <gillesbodart@users.noreply.github.com>
 
+RUN conda config --append channels conda-forge
 RUN conda create -n env python=3.6
 RUN echo "source activate env" > ~/.bashrc
 ENV PATH /opt/conda/envs/env/bin:$PATH
