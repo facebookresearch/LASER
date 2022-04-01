@@ -20,24 +20,31 @@ if [ -z ${LASER+x} ] ; then
   exit 1
 fi
 
-if [ $# -ne 3 ] ; then
-  echo "usage embed.sh input-file language output-file"
+if [ $# -lt 2 ] ; then
+  echo "usage: embed.sh input-file output-file [language (iso3)]"
   exit 1
 fi
 
-ifile=$1
-lang=$2
-ofile=$3
+infile=$1
+outfile=$2
+language=${3:-"eng"}
 
-# encoder
-model_dir="${LASER}/models"
-encoder="${model_dir}/bilstm.93langs.2018-12-26.pt"
-bpe_codes="${model_dir}/93langs.fcodes"
+version=1
 
-cat $ifile \
-  | python3 ${LASER}/source/embed.py \
+# defaulting to WMT'22 models (see tasks/wmt22)
+model_dir="$LASER/models/wmt22"
+
+model_file=${model_dir}/laser3-$language.v$version.pt
+
+if [ -s $model_file ]; then
+    encoder=$model_file
+else
+    echo "couldn't find $model_file. defaulting to laser2"
+    encoder="${model_dir}/laser2.pt"
+fi
+
+python3 ${LASER}/source/embed.py \
+    --input ${infile}    \
     --encoder ${encoder} \
-    --token-lang ${lang} \
-    --bpe-codes ${bpe_codes} \
-    --output ${ofile} \
+    --output ${outfile}  \
     --verbose

@@ -20,10 +20,6 @@ if [ -z ${LASER} ] ; then
   exit
 fi
 
-bdir="${LASER}"
-tools_ext="${bdir}/tools-external"
-
-
 ###################################################################
 #
 # Generic helper functions
@@ -38,6 +34,10 @@ MKDIR () {
   fi
 }
 
+
+bdir="${LASER}"
+tools_ext="${bdir}/tools-external"
+MKDIR $tools_ext
 
 ###################################################################
 #
@@ -114,6 +114,30 @@ InstallFastBPE () {
   fi
 }
 
+###################################################################
+#
+# SENTENCEPIECE 
+#
+###################################################################
+
+InstallSentencePiece () {
+  cd ${tools_ext}
+  if [ ! -d sentencepiece-master ] ; then
+    echo " - download sentencepiece from github"
+    wget https://github.com/google/sentencepiece/archive/master.zip
+    unzip master.zip
+    /bin/rm master.zip
+    if [ ! -s /usr/local/bin/spm_encode ] ; then
+      echo " - building code "
+      cd sentencepiece-master
+      mkdir build
+      cd build
+      cmake ..
+      make -j 10
+    fi
+  fi
+}
+
 
 ###################################################################
 #
@@ -161,6 +185,7 @@ echo "Installing external tools"
 
 InstallMosesTools
 InstallFastBPE
+InstallSentencePiece
 
 #InstallMecab
 echo ""

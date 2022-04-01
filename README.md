@@ -40,6 +40,8 @@ be found in [6], together with an extensive experimental evaluation.
 * [mecab 0.996](https://pypi.org/project/JapaneseTokenizer/), Japanese segmenter
 * tokenization from the Moses encoder (installed automatically)
 * [FastBPE](https://github.com/glample/fastBPE), fast C++ implementation of byte-pair encoding (installed automatically)
+* [Fairseq](https://github.com/pytorch/fairseq), sequence modeling toolkit (`pip install fairseq==0.10.2`)
+* [Sentencepiece](https://github.com/google/sentencepiece), subword tokenization (installed automatically)
 
 ## Installation
 * set the environment variable 'LASER' to the root of the installation, e.g.

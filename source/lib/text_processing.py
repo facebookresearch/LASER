@@ -16,7 +16,7 @@
 
 import os
 import sys
-import tempfile
+from pathlib import Path
 import fastBPE
 import numpy as np
 from subprocess import run, check_output, DEVNULL
@@ -32,12 +32,16 @@ MOSES_LC = MOSES_BDIR + 'lowercase.perl'
 NORM_PUNC = MOSES_BDIR + 'normalize-punctuation.perl -l '
 DESCAPE = MOSES_BDIR + 'deescape-special-chars.perl'
 REM_NON_PRINT_CHAR = MOSES_BDIR + 'remove-non-printing-char.perl'
+SPM_DIR = LASER + '/tools-external/sentencepiece-master/build/src/'
+SPM = 'LD_LIBRARY_PATH=' + SPM_DIR + ' ' + SPM_DIR + '/spm_encode --output_format=piece'
 
 # Romanization (Greek only)
 ROMAN_LC = 'python3 ' + LASER + '/source/lib/romanize_lc.py -l '
 
 # Mecab tokenizer for Japanese
 MECAB = LASER + '/tools-external/mecab'
+
+
 
 
 ###############################################################################
@@ -102,6 +106,39 @@ def Token(inp_fname, out_fname, lang='en',
     elif not over_write and verbose:
         print(' - Tokenizer: {} exists already'
               .format(os.path.basename(out_fname), lang))
+
+
+###############################################################################
+#
+# Apply SPM on a whole file
+#
+###############################################################################
+
+def SPMApply(inp_fname, out_fname, spm_model, lang='en',
+             lower_case=True, descape=False,
+             verbose=False, over_write=False, gzip=False):
+    assert lower_case, 'lower case is needed by all the models'
+    if not os.path.isfile(out_fname):
+        cat = 'zcat ' if gzip else 'cat '
+        if verbose:
+            print(' - SPM: processing {} {} {}'
+                  .format(os.path.basename(inp_fname),
+                         '(gzip)' if gzip else '',
+                         '(de-escaped)' if descape else ''))
+
+        if not os.path.isfile(spm_model):
+            print(' - SPM: model {} not found'.format(spm_model))
+        check_output(cat + inp_fname
+            + '|' + REM_NON_PRINT_CHAR
+            + '|' + NORM_PUNC + lang
+            + ('|' + DESCAPE if descape else '')
+            + '|' + ROMAN_LC + 'none'
+            + '|' + SPM + " --model=" + spm_model
+            + ' > ' + out_fname,
+            shell=True, stderr=DEVNULL)
+    elif not over_write and verbose:
+        print(' - SPM: {} exists already'
+              .format(os.path.basename(out_fname)))
 
 
 ###############################################################################
