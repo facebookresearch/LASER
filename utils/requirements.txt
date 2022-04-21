@@ -1,0 +1,7 @@
+indic-nlp-library==0.81
+sentence-splitter==1.4
+botok==0.8.8
+khmer-nltk==1.5
+LaoNLP==0.6
+sacremoses==0.0.47
+xxhash==3.0.0
