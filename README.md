@@ -3,6 +3,7 @@
 LASER is a library to calculate and use multilingual sentence embeddings.
 
 **NEWS**
+* 2022/05/03 [**Librivox S2S is available**](tasks/librivox-s2s): Speech-to-Speech translations automatically mined in Librivox [9]
 * 2019/11/08 [**CCMatrix is available**](tasks/CCMatrix): Mining billions of high-quality parallel sentences on the WEB [8]
 * 2019/07/31 Gilles Bodard and Jérémy Rapin provided a [**Docker environment**](docker) to use LASER
 * 2019/07/11 [**WikiMatrix is available**](tasks/WikiMatrix): bitext extraction for 1620 language pairs in WikiPedia [7]
@@ -125,3 +126,7 @@ Swiss German or Western Frisian.
 
 [8] Holger Schwenk, Guillaume Wenzek, Sergey Edunov, Edouard Grave and Armand Joulin
     [*CCMatrix: Mining Billions of High-Quality Parallel Sentences on the WEB*](https://arxiv.org/abs/1911.04944)
+
+[9] Paul-Ambroise Duquenne, Hongyu Gong, Holger Schwenk,
+    [*Multimodal and Multilingual Embeddings for Large-Scale Speech Mining,*](https://papers.nips.cc/paper/2021/hash/8466f9ace6a9acbe71f75762ffc890f1-Abstract.html), NeurIPS 2021, pages 15748-15761.
+
