@@ -1,8 +1,8 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 setup(
-    name="sentence-cleaner-splitter",
-    version="1.0.0",
+    name="sentence_cleaner_splitter",
+    version="1.0.1",
     url="https://github.com/facebookresearch/LASER/",
     author="NLLB Data Team",
     author_email="nllb_data@fb.com",
@@ -15,7 +15,8 @@ setup(
         "botok==0.8.8",
         "khmer-nltk==1.5",
         "LaoNLP==0.6",
-        "sacremoses==0.0.47",
+        "sacremoses==0.0.43",
         "xxhash==3.0.0",
+        "emoji==1.7.0",
     ],
 )
