@@ -135,8 +135,8 @@ def split_clean():
             _,
             _,
             _,
-            _,
             lang,
+            _,
         ) = metadata.split()
         paragraph_digest = int(paragraph_digest)
         sentence_digest = int(sentence_digest)
