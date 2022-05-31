@@ -28,8 +28,7 @@ LASER = os.environ['LASER']
 
 sys.path.append(LASER + '/source')
 sys.path.append(LASER + '/source/tools')
-from embed import SentenceEncoder, EncodeLoad, EncodeFile, EmbedLoad
-from text_processing import Token, BPEfastApply
+from embed import EmbedLoad
 
 
 ###############################################################################

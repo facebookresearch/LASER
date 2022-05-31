@@ -28,7 +28,6 @@ LASER = os.environ['LASER']
 FASTBPE = LASER + '/tools-external/fastBPE/fast'
 MOSES_BDIR = LASER + '/tools-external/moses-tokenizer/tokenizer/'
 MOSES_TOKENIZER = MOSES_BDIR + 'tokenizer.perl -q -no-escape -threads 20 -l '
-MOSES_LC = MOSES_BDIR + 'lowercase.perl'
 NORM_PUNC = MOSES_BDIR + 'normalize-punctuation.perl -l '
 DESCAPE = MOSES_BDIR + 'deescape-special-chars.perl'
 REM_NON_PRINT_CHAR = MOSES_BDIR + 'remove-non-printing-char.perl'
@@ -147,7 +146,7 @@ def SPMApply(inp_fname, out_fname, spm_model, lang='en',
 #
 ###############################################################################
 
-def BPEfastLoad(line, bpe_codes):
+def BPEfastLoad(bpe_codes):
     bpe_vocab = bpe_codes.replace('fcodes', 'fvocab')
     return fastBPE.fastBPE(bpe_codes, bpe_vocab)
 
