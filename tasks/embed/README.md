@@ -5,6 +5,7 @@ Tool to calculate sentence embeddings for an arbitrary text file:
 bash ./embed.sh INPUT-FILE OUTPUT-FILE [LANGUAGE (ISO3)]
 ```
 
+Requires download of the wmt22 models, see [tasks/wmt22/README.md](https://github.com/facebookresearch/LASER/tree/main/tasks/wmt22).
 The input will first be tokenized, and then sentence embeddings will be generated. If a `language` is specified, 
 then `embed.sh` will look for a language-specific encoder (specified by a three-letter langauge code). Otherwise 
 it will default to LASER2, which covers 93 languages (https://arxiv.org/pdf/1812.10464.pdf).
