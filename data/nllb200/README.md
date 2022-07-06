@@ -1,7 +1,7 @@
 
 # Bitext Metadata - No Language Left Behind
 
-As part of the project [No Language Left Behind (NLLB)](https://github.com/facebookresearch/fairseq/tree/nllb/examples/nllb), we have mined bitexts in 1613 directions.
+As part of the project [No Language Left Behind (NLLB)](https://github.com/facebookresearch/fairseq/tree/nllb), we have mined bitexts in 1613 directions.
 
 This document contains metadata information for reconstructing these bitexts.
 
@@ -625,3 +625,4 @@ We are releasing the metadata and the script to recreate the bitext under a [CC 
 |[umb_Latn-yor_Latn](https://dl.fbaipublicfiles.com/nllb/data/umb_Latn-yor_Latn.meta.v1.xz)|[umb_Latn-zul_Latn](https://dl.fbaipublicfiles.com/nllb/data/umb_Latn-zul_Latn.meta.v1.xz)|[wol_Latn-xho_Latn](https://dl.fbaipublicfiles.com/nllb/data/wol_Latn-xho_Latn.meta.v1.xz)|
 |[wol_Latn-yor_Latn](https://dl.fbaipublicfiles.com/nllb/data/wol_Latn-yor_Latn.meta.v1.xz)|[wol_Latn-zul_Latn](https://dl.fbaipublicfiles.com/nllb/data/wol_Latn-zul_Latn.meta.v1.xz)|[xho_Latn-yor_Latn](https://dl.fbaipublicfiles.com/nllb/data/xho_Latn-yor_Latn.meta.v1.xz)|
 |[xho_Latn-zul_Latn](https://dl.fbaipublicfiles.com/nllb/data/xho_Latn-zul_Latn.meta.v1.xz)|[yor_Latn-zul_Latn](https://dl.fbaipublicfiles.com/nllb/data/yor_Latn-zul_Latn.meta.v1.xz)|
+
