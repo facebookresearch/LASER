@@ -16,10 +16,17 @@
 
 import os
 import sys
+import logging
 from pathlib import Path
 import fastBPE
 import numpy as np
 from subprocess import run, check_output, DEVNULL
+
+logging.basicConfig(
+    stream=sys.stdout,
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s")
+logger = logging.getLogger("preprocess")
 
 # get environment
 assert os.environ.get('LASER'), 'Please set the enviornment variable LASER'
@@ -87,7 +94,7 @@ def Token(inp_fname, out_fname, lang='en',
         if lang in ('jpn'):
             lang = 'ja'
         if verbose:
-            print(' - Tokenizer: {} in language {} {} {}'
+            logger.info('tokenizing {} in language {} {} {}'
                   .format(os.path.basename(inp_fname), lang,
                           '(gzip)' if gzip else '',
                           '(de-escaped)' if descape else '',
@@ -104,7 +111,7 @@ def Token(inp_fname, out_fname, lang='en',
             env=dict(os.environ, LD_LIBRARY_PATH=MECAB + '/lib'),
             shell=True)
     elif not over_write and verbose:
-        print(' - Tokenizer: {} exists already'
+        logger.info('tokenized file {} exists already'
               .format(os.path.basename(out_fname), lang))
 
 
@@ -121,13 +128,12 @@ def SPMApply(inp_fname, out_fname, spm_model, lang='en',
     if not os.path.isfile(out_fname):
         cat = 'zcat ' if gzip else 'cat '
         if verbose:
-            print(' - SPM: processing {} {} {}'
+            logger.info('SPM processing {} {} {}'
                   .format(os.path.basename(inp_fname),
                          '(gzip)' if gzip else '',
                          '(de-escaped)' if descape else ''))
 
-        if not os.path.isfile(spm_model):
-            print(' - SPM: model {} not found'.format(spm_model))
+        assert os.path.isfile(spm_model), f'SPM model {spm_model} not found'
         check_output(cat + inp_fname
             + '|' + REM_NON_PRINT_CHAR
             + '|' + NORM_PUNC + lang
@@ -137,7 +143,7 @@ def SPMApply(inp_fname, out_fname, spm_model, lang='en',
             + ' > ' + out_fname,
             shell=True, stderr=DEVNULL)
     elif not over_write and verbose:
-        print(' - SPM: {} exists already'
+        logger.info('SPM encoded file {} exists already'
               .format(os.path.basename(out_fname)))
 
 
@@ -165,18 +171,16 @@ def BPEfastApply(inp_fname, out_fname, bpe_codes,
                  verbose=False, over_write=False):
     if not os.path.isfile(out_fname):
         if verbose:
-            print(' - fast BPE: processing {}'
+            logger.info('fastBPE: processing {}'
                   .format(os.path.basename(inp_fname)))
         bpe_vocab = bpe_codes.replace('fcodes', 'fvocab')
-        if not os.path.isfile(bpe_vocab):
-            print(' - fast BPE: focab file not found {}'.format(bpe_vocab))
-            bpe_vocab = ''
+        assert os.path.isfile(bpe_vocab), f'fastBPE: vocab file {bpe_vocab} not found'
         run(FASTBPE + ' applybpe '
             + out_fname + ' ' + inp_fname
             + ' ' + bpe_codes
             + ' ' + bpe_vocab, shell=True, stderr=DEVNULL)
     elif not over_write and verbose:
-        print(' - fast BPE: {} exists already'
+        logger.info('fastBPE: {} exists already'
               .format(os.path.basename(out_fname)))
 
 

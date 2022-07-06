@@ -23,9 +23,11 @@ import sys
 import time
 import argparse
 import numpy as np
+import logging
 from collections import namedtuple
+from subprocess import run
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Union
 
 import torch
 import torch.nn as nn
@@ -40,9 +42,14 @@ from fairseq.models.transformer import (
 from fairseq.data.dictionary import Dictionary
 from fairseq.modules import LayerNorm
 
-SPACE_NORMALIZER = re.compile("\s+")
+SPACE_NORMALIZER = re.compile(r"\s+")
 Batch = namedtuple("Batch", "srcs tokens lengths")
 
+logging.basicConfig(
+    stream=sys.stdout,
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s")
+logger = logging.getLogger('embed')
 
 def buffered_read(fp, buffer_size):
     buffer = []
@@ -54,39 +61,6 @@ def buffered_read(fp, buffer_size):
 
     if len(buffer) > 0:
         yield buffer
-
-
-def buffered_arange(max):
-    if not hasattr(buffered_arange, "buf"):
-        buffered_arange.buf = torch.LongTensor()
-    if max > buffered_arange.buf.numel():
-        torch.arange(max, out=buffered_arange.buf)
-    return buffered_arange.buf[:max]
-
-
-# TODO Do proper padding from the beginning
-def convert_padding_direction(
-    src_tokens, padding_idx, right_to_left=False, left_to_right=False
-):
-    assert right_to_left ^ left_to_right
-    pad_mask = src_tokens.eq(padding_idx)
-    if not pad_mask.any():
-        # no padding, return early
-        return src_tokens
-    if left_to_right and not pad_mask[:, 0].any():
-        # already right padded
-        return src_tokens
-    if right_to_left and not pad_mask[:, -1].any():
-        # already left padded
-        return src_tokens
-    max_len = src_tokens.size(1)
-    range = buffered_arange(max_len).type_as(src_tokens).expand_as(src_tokens)
-    num_pads = pad_mask.long().sum(dim=1, keepdim=True)
-    if right_to_left:
-        index = torch.remainder(range - num_pads, max_len)
-    else:
-        index = torch.remainder(range + num_pads, max_len)
-    return src_tokens.gather(1, index)
 
 
 class SentenceEncoder:
@@ -101,6 +75,8 @@ class SentenceEncoder:
         verbose=False,
         sort_kind="quicksort",
     ):
+        if verbose:
+            logger.info(f"loading encoder: {model_path}")
         self.use_cuda = torch.cuda.is_available() and not cpu
         self.max_sentences = max_sentences
         self.max_tokens = max_tokens
@@ -113,7 +89,7 @@ class SentenceEncoder:
             self.encoder.load_state_dict(state_dict["model"])
             self.dictionary = state_dict["dictionary"]
             self.prepend_bos = False
-            self.left_padding = True
+            self.left_padding = False
         else:
             self.encoder = LaserTransformerEncoder(state_dict, spm_vocab)
             self.dictionary = self.encoder.dictionary.indices
@@ -124,11 +100,12 @@ class SentenceEncoder:
         self.pad_index = self.dictionary["<pad>"] = 1
         self.eos_index = self.dictionary["</s>"] = 2
         self.unk_index = self.dictionary["<unk>"] = 3
+
         if fp16:
             self.encoder.half()
         if self.use_cuda:
             if verbose:
-                print(" - transfer encoder to GPU")
+                logger.info("transfer encoder to GPU")
             self.encoder.cuda()
         self.encoder.eval()
         self.sort_kind = sort_kind
@@ -204,6 +181,18 @@ class SentenceEncoder:
             indices.extend(batch_indices)
             results.append(self._process_batch(batch))
         return np.vstack(results)[np.argsort(indices, kind=self.sort_kind)]
+
+
+class HuggingFaceEncoder():
+    def __init__(self, encoder_name: str, verbose=False):
+        from sentence_transformers import SentenceTransformer
+        encoder = f"sentence-transformers/{encoder_name}"
+        if verbose:
+            logger.info(f"loading HuggingFace encoder: {encoder}")
+        self.encoder = SentenceTransformer(encoder)
+
+    def encode_sentences(self, sentences):
+        return self.encoder.encode(sentences)
 
 
 class LaserTransformerEncoder(TransformerEncoder):
@@ -297,12 +286,6 @@ class LaserLstmEncoder(nn.Module):
             self.output_units *= 2
 
     def forward(self, src_tokens, src_lengths):
-        if self.left_pad:
-            # convert left-padding to right-padding
-            src_tokens = convert_padding_direction(
-                src_tokens, self.padding_idx, left_to_right=True,
-            )
-
         bsz, seqlen = src_tokens.size()
 
         # embed tokens
@@ -364,6 +347,28 @@ class LaserLstmEncoder(nn.Module):
         }
 
 
+def load_model(
+    encoder: str,
+    spm_model: str,
+    bpe_codes: str,
+    hugging_face=False,
+    verbose=False,
+    **encoder_kwargs
+) -> Union[SentenceEncoder, HuggingFaceEncoder]:
+    if hugging_face:
+        return HuggingFaceEncoder(encoder, verbose=verbose)
+    if spm_model:
+        spm_vocab = str(Path(spm_model).with_suffix(".cvocab"))
+        if verbose:
+            logger.info(f"spm_model: {spm_model}")
+            logger.info(f"spm_cvocab: {spm_vocab}")
+    else:
+        spm_vocab = None
+    return SentenceEncoder(
+        encoder, spm_vocab=spm_vocab, verbose=verbose, **encoder_kwargs
+    )
+
+
 def EncodeLoad(args):
     args.buffer_size = max(args.buffer_size, 1)
     assert (
@@ -383,9 +388,9 @@ def EncodeLoad(args):
 def EncodeTime(t):
     t = int(time.time() - t)
     if t < 1000:
-        print(" in {:d}s".format(t))
+        return "{:d}s".format(t)
     else:
-        print(" in {:d}m{:d}s".format(t // 60, t % 60))
+        return "{:d}m{:d}s".format(t // 60, t % 60)
 
 
 # Encode sentences (existing file pointers)
@@ -401,10 +406,10 @@ def EncodeFilep(
         encoded.tofile(out_file)
         n += len(sentences)
         if verbose and n % 10000 == 0:
-            print("\r - Encoder: {:d} sentences".format(n), end="")
+            loger.info("encoded {:d} sentences".format(n))
     if verbose:
-        print("\r - Encoder: {:d} sentences".format(n), end="")
-        EncodeTime(t)
+        logger.info(f"encoded {n} sentences in {EncodeTime(t)}")
+
 
 
 # Encode sentences (file names)
@@ -421,10 +426,9 @@ def EncodeFile(
     # TODO :handle over write
     if not os.path.isfile(out_fname):
         if verbose:
-            print(
-                " - Encoder: {} to {}".format(
-                    os.path.basename(inp_fname) if len(inp_fname) > 0 else "stdin",
-                    os.path.basename(out_fname),
+            logger.info(
+                "encoding {} to {}".format(
+                    inp_fname if len(inp_fname) > 0 else "stdin", out_fname,
                 )
             )
         fin = (
@@ -439,7 +443,7 @@ def EncodeFile(
         fin.close()
         fout.close()
     elif not over_write and verbose:
-        print(" - Encoder: {} exists already".format(os.path.basename(out_fname)))
+        logger.info("encoder: {} exists already".format(os.path.basename(out_fname)))
 
 
 # Load existing embeddings
@@ -463,8 +467,9 @@ def EmbedMmap(fname, dim=1024, dtype=np.float32, verbose=False):
 def embed_sentences(
     ifname: Path,
     output: Path,
-    encoder: SentenceEncoder = None,
+    encoder: Union[SentenceEncoder, HuggingFaceEncoder] = None,
     encoder_path: Path = None,
+    hugging_face = False,
     token_lang: Optional[str] = "--",
     bpe_codes: Optional[Path] = None,
     spm_lang: Optional[str] = "en",
@@ -483,21 +488,22 @@ def embed_sentences(
         not max_sentences or max_sentences <= buffer_size
     ), "--max-sentences/--batch-size cannot be larger than --buffer-size"
 
-    if not bpe_codes:
-        spm_model, spm_vocab = get_spm(encoder_path, spm_model)
+    assert not (bpe_codes and spm_model), "Cannot specify both spm and bpe"
 
     if encoder_path:
-        print(f" - Encoder: loading {encoder_path}")
-        encoder = SentenceEncoder(
+        encoder = load_model(
             encoder_path,
+            spm_model,
+            bpe_codes,
+            verbose=verbose,
+            hugging_face=hugging_face,
             max_sentences=max_sentences,
             max_tokens=max_tokens,
             sort_kind=sort_kind,
-            spm_vocab=spm_vocab,
             cpu=cpu,
-            fp16=fp16,
         )
-    if not ifname: ifname = ''  # default to stdin
+    if not ifname:
+        ifname = ""  # default to stdin
     with tempfile.TemporaryDirectory() as tmpdir:
         if token_lang != "--":
             tok_fname = os.path.join(tmpdir, "tok")
@@ -514,6 +520,9 @@ def embed_sentences(
             ifname = tok_fname
 
         if bpe_codes:
+            if ifname == "":  # stdin
+                ifname = os.path.join(tmpdir, "no_tok")
+                run(f'cat > {ifname}', shell=True)
             bpe_fname = os.path.join(tmpdir, "bpe")
             BPEfastApply(
                 ifname, bpe_fname, bpe_codes, verbose=verbose, over_write=False
@@ -542,27 +551,6 @@ def embed_sentences(
             buffer_size=buffer_size,
             fp16=fp16,
         )
-
-
-def get_spm(encoder_model, spm_model) -> Tuple[str, str]:
-    if not spm_model:
-        spm_model = default_spm(encoder_model)
-    spm_model = Path(spm_model)
-    spm_vocab = spm_model.with_suffix(".cvocab")
-    assert (
-        spm_model.is_file() and spm_vocab.is_file()
-    ), f"Could not find {spm_model} or {spm_vocab}"
-    return str(spm_model), str(spm_vocab)
-
-
-def default_spm(encoder_model) -> str:
-    encoder_path = Path(encoder_model)
-    spm_model = encoder_path.with_suffix(".spm")
-    print(f"spm not specified, attempting default to: {spm_model}")
-    if not spm_model.exists():
-        print(f"couldn't find {spm_model.name}, defaulting to laser2.spm")
-        spm_model = encoder_path.parent / "laser2.spm"
-    return str(spm_model)
 
 
 if __name__ == "__main__":
@@ -619,6 +607,9 @@ if __name__ == "__main__":
         choices=["quicksort", "mergesort"],
         help="Algorithm used to sort batch by length",
     )
+    parser.add_argument(
+        "--use-hugging-face", action="store_true", help="Use a HuggingFace sentence transformer"
+    )
 
     args = parser.parse_args()
     embed_sentences(
@@ -627,6 +618,7 @@ if __name__ == "__main__":
         token_lang=args.token_lang,
         bpe_codes=args.bpe_codes,
         spm_lang=args.spm_lang,
+        hugging_face=args.use_hugging_face,
         spm_model=args.spm_model,
         verbose=args.verbose,
         output=args.output,

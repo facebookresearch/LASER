@@ -15,36 +15,65 @@
 # bash script to calculate sentence embeddings for arbitrary
 # text file
 
-if [ -z ${LASER+x} ] ; then
+#############################
+# BEGIN PARAMETERS TO SET
+#############################
+# location of models (e.g. /path/to/models); no trailing slash
+model_dir=""
+
+# version number for LASER3 models
+version=1
+#############################
+# END PARAMETERS TO SET
+#############################
+
+if [ -z ${model_dir} ]; then
+    echo "Please set model directory within script"
+    exit 1
+elif [ ! -d ${model_dir} ]; then
+    echo "Can't find model directory: $model_dir"
+    exit 1
+fi
+
+if [ -z ${LASER} ] ; then
   echo "Please set the environment variable 'LASER'"
   exit 1
 fi
 
 if [ $# -lt 2 ] ; then
-  echo "usage: embed.sh input-file output-file [language (iso3)]"
+  echo "usage: embed.sh input-file output-file [language]"
   exit 1
 fi
 
 infile=$1
 outfile=$2
-language=${3:-"eng"}
+language=$3
 
-version=1
+# default to laser2
+model_file=${model_dir}/laser2.pt
+spm=${model_dir}/laser2.spm
 
-# defaulting to WMT'22 models (see tasks/wmt22)
-model_dir="$LASER/models/wmt22"
+if [ ! -z ${language} ]; then
+    model_file=${model_dir}/laser3-$language.v$version.pt
+    lang_specific_spm=${model_dir}/laser3-$language.v$version.spm
+    if [[ -s $lang_specific_spm ]]; then
+        spm=$lang_specific_spm
+    fi
+fi
 
-model_file=${model_dir}/laser3-$language.v$version.pt
+if [[ ! -s $model_file ]]; then
+    echo "couldn't find model file: $model_file"
+    exit 1
+fi
 
-if [ -s $model_file ]; then
-    encoder=$model_file
-else
-    echo "couldn't find $model_file. defaulting to laser2"
-    encoder="${model_dir}/laser2.pt"
+if [[ ! -s $spm ]]; then
+    echo "couldn't find spm: $spm"
+    exit 1
 fi
 
 python3 ${LASER}/source/embed.py \
-    --input ${infile}    \
-    --encoder ${encoder} \
-    --output ${outfile}  \
+    --input     ${infile}        \
+    --encoder   ${model_file}    \
+    --spm-model $spm             \
+    --output    ${outfile}       \
     --verbose

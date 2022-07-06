@@ -3,6 +3,8 @@
 LASER is a library to calculate and use multilingual sentence embeddings.
 
 **NEWS**
+* 2022/07/06 Updated LASER models with support for over 200 languages are [**now available**](nllb/README.md)
+* 2022/07/06 Multilingual similarity search (**xsim**) evaluation pipeline [**released**](tasks/xsim/README.md)
 * 2022/05/03 [**Librivox S2S is available**](tasks/librivox-s2s): Speech-to-Speech translations automatically mined in Librivox [9]
 * 2019/11/08 [**CCMatrix is available**](tasks/CCMatrix): Mining billions of high-quality parallel sentences on the WEB [8]
 * 2019/07/31 Gilles Bodard and Jérémy Rapin provided a [**Docker environment**](docker) to use LASER
@@ -11,24 +13,17 @@ LASER is a library to calculate and use multilingual sentence embeddings.
 * 2019/02/13 The code to perform bitext mining is [**now available**](tasks/bucc)
 
 **CURRENT VERSION:**
-* We now provide an encoder which was trained on [**93 languages**](#supported-languages), written in 23 different alphabets [6].
-  This includes all European languages, many Asian and Indian languages, Arabic, Persian, Hebrew, ...,
-  as well as various minority languages and dialects.
-* We provide a [*test set for more than 100 languages*](data/tatoeba/v1)
-  based on the [*Tatoeba corpus*](https://tatoeba.org/eng).
-* Switch to PyTorch 1.0
+* We now provide updated LASER models which support over 200 languages. Please see [here](nllb/README.md) for more details including how to download the models and perform inference.
 
-All these languages are encoded by the same BiLSTM encoder, and there is no need
-to specify the input language (but tokenization is language specific).
 According to our experience, the sentence encoder also supports code-switching, i.e.
 the same sentences can contain words in several different languages.
 
-We have also some evidence that the encoder can generalizes to other
+We have also some evidence that the encoder can generalize to other
 languages which have not been seen during training, but which are in
 a language family which is covered by other languages.
 
-A detailed description how the multilingual sentence embeddings are trained can
-be found in [6], together with an extensive experimental evaluation.
+A detailed description of how the multilingual sentence embeddings are trained can
+be found in [10], together with an experimental evaluation.
 
 ## Dependencies
 * Python 3.6
@@ -41,13 +36,15 @@ be found in [6], together with an extensive experimental evaluation.
 * [mecab 0.996](https://pypi.org/project/JapaneseTokenizer/), Japanese segmenter
 * tokenization from the Moses encoder (installed automatically)
 * [FastBPE](https://github.com/glample/fastBPE), fast C++ implementation of byte-pair encoding (installed automatically)
-* [Fairseq](https://github.com/pytorch/fairseq), sequence modeling toolkit (`pip install fairseq==0.10.2`)
+* [Fairseq](https://github.com/pytorch/fairseq), sequence modeling toolkit (`pip install fairseq==0.12.1`)
+* [tabulate](https://pypi.org/project/tabulate), pretty-print tabular data (`pip install tabulate`)
+* [pandas](https://pypi.org/project/pandas), data analysis toolkit (`pip install pandas`)
 * [Sentencepiece](https://github.com/google/sentencepiece), subword tokenization (installed automatically)
 
 ## Installation
 * set the environment variable 'LASER' to the root of the installation, e.g.
   `export LASER="${HOME}/projects/laser"`
-* download encoders from Amazon s3 by `bash ./install_models.sh`
+* download encoders from Amazon s3 by e.g. `bash ./nllb/download_models.sh` 
 * download third party software by `bash ./install_external_tools.sh`
 * download the data used in the example tasks (see description for each task)
 
@@ -76,7 +73,7 @@ LASER is BSD-licensed, as found in the [`LICENSE`](LICENSE) file in the root dir
 
 ## Supported languages
 
-Our model was trained on the following languages:
+The original LASER model was trained on the following languages:
 
 Afrikaans, Albanian, Amharic, Arabic, Armenian, Aymara, Azerbaijani, Basque, Belarusian, Bengali,
 Berber languages, Bosnian, Breton, Bulgarian, Burmese, Catalan, Central/Kadazan Dusun, Central Khmer,
@@ -93,6 +90,10 @@ We have also observed that the model seems to generalize well to other (minority
 
 Asturian, Egyptian Arabic, Faroese, Kashubian, North Moluccan Malay, Nynorsk Norwegian, Piedmontese, Sorbian, Swabian,
 Swiss German or Western Frisian.
+
+### LASER3
+
+Updated LASER models referred to as *[LASER3](nllb/README.md)* supplement the above list with support for 147 languages. The full list of supported languages can be seen [here](nllb/README.md#list-of-available-laser3-encoders).
 
 ## References
 
@@ -130,3 +131,5 @@ Swiss German or Western Frisian.
 [9] Paul-Ambroise Duquenne, Hongyu Gong, Holger Schwenk,
     [*Multimodal and Multilingual Embeddings for Large-Scale Speech Mining,*](https://papers.nips.cc/paper/2021/hash/8466f9ace6a9acbe71f75762ffc890f1-Abstract.html), NeurIPS 2021, pages 15748-15761.
 
+[10] Kevin Heffernan, Onur Celebi, and Holger Schwenk,
+     [*Bitext Mining Using Distilled Sentence Representations for Low-Resource Languages*](https://arxiv.org/abs/2205.12654)
