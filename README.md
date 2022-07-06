@@ -4,7 +4,7 @@ LASER is a library to calculate and use multilingual sentence embeddings.
 
 **NEWS**
 * 2022/07/06 Updated LASER models with support for over 200 languages are [**now available**](nllb/README.md)
-* 2022/07/06 New powerful and flexible mining library [**stopes**](https://www.overleaf.com/project/61b8b4ad69ff92fc35238c9b)
+* 2022/07/06 New powerful and flexible mining library [**stopes**](https://github.com/facebookresearch/LASER/blob/main/README.md)
 * 2022/07/06 Multilingual similarity search (**xsim**) evaluation pipeline [**released**](tasks/xsim/README.md)
 * 2022/05/03 [**Librivox S2S is available**](tasks/librivox-s2s): Speech-to-Speech translations automatically mined in Librivox [9]
 * 2019/11/08 [**CCMatrix is available**](tasks/CCMatrix): Mining billions of high-quality parallel sentences on the WEB [8]
