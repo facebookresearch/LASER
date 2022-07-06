@@ -7,6 +7,8 @@ has a particular focus language which it supports, and the full list of availabl
 
 We have also included an updated version of the original LASER encoder: LASER2. This improved model supports the same [languages](https://github.com/facebookresearch/LASER/#supported-languages) which LASER was trained on. In order to find more details on how both the LASER2 and LASER3 encoders were trained, please see [Heffernan et. al, 2022](https://arxiv.org/abs/2205.12654).
 
+We also provide code to [train LASER3 teacher-student models](https://github.com/facebookresearch/fairseq/blob/nllb/examples/nllb/laser_distillation/README.md) and a new [powerful and flexible mining library](https://github.com/facebookresearch/stopes)
+
 ## Downloading encoders
 
 To download the available encoders, please run the `download_models.sh` script within this directory. 
