@@ -18,9 +18,8 @@ import os
 import sys
 import logging
 from pathlib import Path
-import fastBPE
 import numpy as np
-from subprocess import run, check_output, DEVNULL
+from subprocess import run, check_output, CalledProcessError, DEVNULL
 
 logging.basicConfig(
     stream=sys.stdout,
@@ -42,7 +41,7 @@ REM_NON_PRINT_CHAR = MOSES_BDIR + 'remove-non-printing-char.perl'
 SPM_DIR = LASER + '/tools-external/sentencepiece-master/build/src/'
 SPM = 'LD_LIBRARY_PATH=' + SPM_DIR + ' ' + SPM_DIR + '/spm_encode --output_format=piece'
 
-# Romanization (Greek only)
+# Romanization (and lower casing)
 ROMAN_LC = 'python3 ' + LASER + '/source/lib/romanize_lc.py -l '
 
 # Mecab tokenizer for Japanese
@@ -134,31 +133,22 @@ def SPMApply(inp_fname, out_fname, spm_model, lang='en',
                          '(de-escaped)' if descape else ''))
 
         assert os.path.isfile(spm_model), f'SPM model {spm_model} not found'
-        check_output(cat + inp_fname
+        command = (cat + inp_fname
             + '|' + REM_NON_PRINT_CHAR
             + '|' + NORM_PUNC + lang
             + ('|' + DESCAPE if descape else '')
             + '|' + ROMAN_LC + 'none'
             + '|' + SPM + " --model=" + spm_model
-            + ' > ' + out_fname,
-            shell=True, stderr=DEVNULL)
+            + ' > ' + out_fname)
+        try:
+            run(["/bin/bash", "-o", "pipefail", "-c", command], check=True, capture_output=True)
+        except CalledProcessError as e:
+            logger.error(e.stderr.decode().strip())
+            sys.exit(1)
+
     elif not over_write and verbose:
         logger.info('SPM encoded file {} exists already'
               .format(os.path.basename(out_fname)))
-
-
-###############################################################################
-#
-# Apply FastBPE on one line of text
-#
-###############################################################################
-
-def BPEfastLoad(line, bpe_codes):
-    bpe_vocab = bpe_codes.replace('fcodes', 'fvocab')
-    return fastBPE.fastBPE(bpe_codes, bpe_vocab)
-
-def BPEfastApplyLine(line, bpe):
-    return bpe.apply([line])[0]
 
 
 ###############################################################################
