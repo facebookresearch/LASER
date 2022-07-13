@@ -23,7 +23,7 @@ languages which have not been seen during training, but which are in
 a language family which is covered by other languages.
 
 A detailed description of how the multilingual sentence embeddings are trained can
-be found in [10], together with an experimental evaluation.
+be found [here](https://arxiv.org/abs/2205.12654), together with an experimental evaluation.
 
 ## Dependencies
 * Python 3.6
