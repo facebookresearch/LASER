@@ -406,7 +406,7 @@ def EncodeFilep(
         encoded.tofile(out_file)
         n += len(sentences)
         if verbose and n % 10000 == 0:
-            loger.info("encoded {:d} sentences".format(n))
+            logger.info("encoded {:d} sentences".format(n))
     if verbose:
         logger.info(f"encoded {n} sentences in {EncodeTime(t)}")
 
