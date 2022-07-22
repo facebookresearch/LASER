@@ -154,7 +154,7 @@ def split_clean():
             print(f"{line_stripped}\t{sentence}")
         else:
             print(
-                f"Couldn't match sentence for paragraph {paragraph_digest}",
+                f"Couldn't match sentence for paragraph: {paragraph_digest} sentence: {sentence_digest} lang: {lang}",
                 file=sys.stderr,
             )
 
