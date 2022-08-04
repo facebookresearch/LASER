@@ -26,7 +26,7 @@ A detailed description of how the multilingual sentence embeddings are trained c
 be found in [10], together with an experimental evaluation.
 
 ## Dependencies
-* Python 3.6
+* Python >= 3.7
 * [PyTorch 1.0](http://pytorch.org/)
 * [NumPy](http://www.numpy.org/), tested with 1.15.4
 * [Cython](https://pypi.org/project/Cython/), needed by Python wrapper of FastBPE, tested with 0.29.6
