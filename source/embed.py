@@ -157,24 +157,22 @@ class SentenceEncoder:
             )
 
         batch_tokens, batch_lengths, batch_indices = [], [], []
-        ntokens = nsentences = 0
-        num_tokens_padded = 0
+        nsentences = 0
+        num_tokens_padded = -1
         for i in indices:
-            if num_tokens_padded == 0:
+            if num_tokens_padded == -1:
                 num_tokens_padded = tokens[i].shape[0]
-            if nsentences > 0 and (
-                (self.max_tokens is not None and ntokens + num_tokens_padded > self.max_tokens)
-                or (self.max_sentences is not None and nsentences == self.max_sentences)
-            ):
-                yield batch(batch_tokens, batch_lengths, batch_indices)
-                ntokens = nsentences = 0
-                batch_tokens, batch_lengths, batch_indices = [], [], []
-                num_tokens_padded = 0
             batch_tokens.append(tokens[i])
             batch_lengths.append(lengths[i])
             batch_indices.append(i)
-            ntokens += num_tokens_padded
             nsentences += 1
+            if ((self.max_tokens is not None and (nsentences + 1) * num_tokens_padded > self.max_tokens)
+                    or (self.max_sentences is not None and nsentences + 1 == self.max_sentences)):
+                yield batch(batch_tokens, batch_lengths, batch_indices)
+                nsentences = 0
+                batch_tokens, batch_lengths, batch_indices = [], [], []
+                num_tokens_padded = -1
+
         if nsentences > 0:
             yield batch(batch_tokens, batch_lengths, batch_indices)
 
