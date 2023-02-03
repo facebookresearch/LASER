@@ -108,6 +108,6 @@ for l in args.lang:
     all_data.append(d)
     all_index.append(idx)
 
-err = IndexSearchMultiple(all_data, all_index, texts=all_texts,
+err = IndexSearchMultiple(all_data, all_index, args.lang, texts=all_texts,
                           verbose=False, print_errors=False)
 IndexPrintConfusionMatrix(err, args.lang)

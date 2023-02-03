@@ -15,29 +15,65 @@
 # bash script to calculate sentence embeddings for arbitrary
 # text file
 
-if [ -z ${LASER+x} ] ; then
+#############################
+# BEGIN PARAMETERS TO SET
+#############################
+# location of models (e.g. /path/to/models); no trailing slash
+model_dir=""
+
+# version number for LASER3 models
+version=1
+#############################
+# END PARAMETERS TO SET
+#############################
+
+if [ -z ${model_dir} ]; then
+    echo "Please set model directory within script"
+    exit 1
+elif [ ! -d ${model_dir} ]; then
+    echo "Can't find model directory: $model_dir"
+    exit 1
+fi
+
+if [ -z ${LASER} ] ; then
   echo "Please set the environment variable 'LASER'"
-  exit
+  exit 1
 fi
 
-if [ $# -ne 3 ] ; then
-  echo "usage embed.sh input-file language output-file"
-  exit
+if [ $# -lt 2 ] ; then
+  echo "usage: embed.sh input-file output-file [language]"
+  exit 1
 fi
 
-ifile=$1
-lang=$2
-ofile=$3
+infile=$1
+outfile=$2
+language=$3
 
-# encoder
-model_dir="${LASER}/models"
-encoder="${model_dir}/bilstm.93langs.2018-12-26.pt"
-bpe_codes="${model_dir}/93langs.fcodes"
+# default to laser2
+model_file=${model_dir}/laser2.pt
+spm=${model_dir}/laser2.spm
 
-cat $ifile \
-  | python3 ${LASER}/source/embed.py \
-    --encoder ${encoder} \
-    --token-lang ${lang} \
-    --bpe-codes ${bpe_codes} \
-    --output ${ofile} \
+if [ ! -z ${language} ]; then
+    model_file=${model_dir}/laser3-$language.v$version.pt
+    lang_specific_spm=${model_dir}/laser3-$language.v$version.spm
+    if [[ -s $lang_specific_spm ]]; then
+        spm=$lang_specific_spm
+    fi
+fi
+
+if [[ ! -s $model_file ]]; then
+    echo "couldn't find model file: $model_file"
+    exit 1
+fi
+
+if [[ ! -s $spm ]]; then
+    echo "couldn't find spm: $spm"
+    exit 1
+fi
+
+python3 ${LASER}/source/embed.py \
+    --input     ${infile}        \
+    --encoder   ${model_file}    \
+    --spm-model $spm             \
+    --output    ${outfile}       \
     --verbose

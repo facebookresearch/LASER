@@ -19,7 +19,7 @@ import os
 import sys
 import faiss
 import argparse
-import tempfile
+import torch
 import numpy as np
 
 # get environment
@@ -29,7 +29,7 @@ LASER = os.environ['LASER']
 sys.path.append(LASER + '/source')
 sys.path.append(LASER + '/source/tools')
 from embed import SentenceEncoder, EncodeLoad, EncodeFile, EmbedLoad
-from text_processing import Token, BPEfastApply
+from lib.text_processing import Token, BPEfastApply
 
 
 ###############################################################################
@@ -196,7 +196,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     print('LASER: tool to search, score or mine bitexts')
-    if args.gpu:
+    use_gpu = torch.cuda.is_available() and args.gpu
+    if use_gpu:
         print(' - knn will run on all available GPUs (recommended)')
     else:
         print(' - knn will run on CPU (slow)')
@@ -221,16 +222,16 @@ if __name__ == '__main__':
     faiss.normalize_L2(y)
 
     # calculate knn in both directions
-    if args.retrieval is not 'bwd':
+    if args.retrieval != 'bwd':
         if args.verbose:
             print(' - perform {:d}-nn source against target'.format(args.neighborhood))
-        x2y_sim, x2y_ind = knn(x, y, min(y.shape[0], args.neighborhood), args.gpu)
+        x2y_sim, x2y_ind = knn(x, y, min(y.shape[0], args.neighborhood), use_gpu)
         x2y_mean = x2y_sim.mean(axis=1)
 
-    if args.retrieval is not 'fwd':
+    if args.retrieval != 'fwd':
         if args.verbose:
             print(' - perform {:d}-nn target against source'.format(args.neighborhood))
-        y2x_sim, y2x_ind = knn(y, x, min(x.shape[0], args.neighborhood), args.gpu)
+        y2x_sim, y2x_ind = knn(y, x, min(x.shape[0], args.neighborhood), use_gpu)
         y2x_mean = y2x_sim.mean(axis=1)
 
     # margin function
@@ -297,4 +298,3 @@ if __name__ == '__main__':
                         print(scores[i], src_sents[src_ind], trg_sents[trg_ind], sep='\t', file=fout)
 
     fout.close()
-

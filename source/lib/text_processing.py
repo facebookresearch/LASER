@@ -16,10 +16,16 @@
 
 import os
 import sys
-import tempfile
-import fastBPE
+import logging
+from pathlib import Path
 import numpy as np
-from subprocess import run, check_output, DEVNULL
+from subprocess import run, check_output, CalledProcessError, DEVNULL
+
+logging.basicConfig(
+    stream=sys.stdout,
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s")
+logger = logging.getLogger("preprocess")
 
 # get environment
 assert os.environ.get('LASER'), 'Please set the enviornment variable LASER'
@@ -32,12 +38,16 @@ MOSES_LC = MOSES_BDIR + 'lowercase.perl'
 NORM_PUNC = MOSES_BDIR + 'normalize-punctuation.perl -l '
 DESCAPE = MOSES_BDIR + 'deescape-special-chars.perl'
 REM_NON_PRINT_CHAR = MOSES_BDIR + 'remove-non-printing-char.perl'
+SPM_DIR = LASER + '/tools-external/sentencepiece-master/build/src/'
+SPM = 'LD_LIBRARY_PATH=' + SPM_DIR + ' ' + SPM_DIR + '/spm_encode --output_format=piece'
 
-# Romanization (Greek only)
+# Romanization (and lower casing)
 ROMAN_LC = 'python3 ' + LASER + '/source/lib/romanize_lc.py -l '
 
 # Mecab tokenizer for Japanese
 MECAB = LASER + '/tools-external/mecab'
+
+
 
 
 ###############################################################################
@@ -83,7 +93,7 @@ def Token(inp_fname, out_fname, lang='en',
         if lang in ('jpn'):
             lang = 'ja'
         if verbose:
-            print(' - Tokenizer: {} in language {} {} {}'
+            logger.info('tokenizing {} in language {} {} {}'
                   .format(os.path.basename(inp_fname), lang,
                           '(gzip)' if gzip else '',
                           '(de-escaped)' if descape else '',
@@ -100,22 +110,45 @@ def Token(inp_fname, out_fname, lang='en',
             env=dict(os.environ, LD_LIBRARY_PATH=MECAB + '/lib'),
             shell=True)
     elif not over_write and verbose:
-        print(' - Tokenizer: {} exists already'
+        logger.info('tokenized file {} exists already'
               .format(os.path.basename(out_fname), lang))
 
 
 ###############################################################################
 #
-# Apply FastBPE on one line of text
+# Apply SPM on a whole file
 #
 ###############################################################################
 
-def BPEfastLoad(line, bpe_codes):
-    bpe_vocab = bpe_codes.replace('fcodes', 'fvocab')
-    return fastBPE.fastBPE(bpe_codes, bpe_vocab)
+def SPMApply(inp_fname, out_fname, spm_model, lang='en',
+             lower_case=True, descape=False,
+             verbose=False, over_write=False, gzip=False):
+    assert lower_case, 'lower case is needed by all the models'
+    if not os.path.isfile(out_fname):
+        cat = 'zcat ' if gzip else 'cat '
+        if verbose:
+            logger.info('SPM processing {} {} {}'
+                  .format(os.path.basename(inp_fname),
+                         '(gzip)' if gzip else '',
+                         '(de-escaped)' if descape else ''))
 
-def BPEfastApplyLine(line, bpe):
-    return bpe.apply([line])[0]
+        assert os.path.isfile(spm_model), f'SPM model {spm_model} not found'
+        command = (cat + inp_fname
+            + '|' + REM_NON_PRINT_CHAR
+            + '|' + NORM_PUNC + lang
+            + ('|' + DESCAPE if descape else '')
+            + '|' + ROMAN_LC + 'none'
+            + '|' + SPM + " --model=" + spm_model
+            + ' > ' + out_fname)
+        try:
+            run(["/bin/bash", "-o", "pipefail", "-c", command], check=True, capture_output=True)
+        except CalledProcessError as e:
+            logger.error(e.stderr.decode().strip())
+            sys.exit(1)
+
+    elif not over_write and verbose:
+        logger.info('SPM encoded file {} exists already'
+              .format(os.path.basename(out_fname)))
 
 
 ###############################################################################
@@ -128,18 +161,16 @@ def BPEfastApply(inp_fname, out_fname, bpe_codes,
                  verbose=False, over_write=False):
     if not os.path.isfile(out_fname):
         if verbose:
-            print(' - fast BPE: processing {}'
+            logger.info('fastBPE: processing {}'
                   .format(os.path.basename(inp_fname)))
         bpe_vocab = bpe_codes.replace('fcodes', 'fvocab')
-        if not os.path.isfile(bpe_vocab):
-            print(' - fast BPE: focab file not found {}'.format(bpe_vocab))
-            bpe_vocab = ''
+        assert os.path.isfile(bpe_vocab), f'fastBPE: vocab file {bpe_vocab} not found'
         run(FASTBPE + ' applybpe '
             + out_fname + ' ' + inp_fname
             + ' ' + bpe_codes
             + ' ' + bpe_vocab, shell=True, stderr=DEVNULL)
     elif not over_write and verbose:
-        print(' - fast BPE: {} exists already'
+        logger.info('fastBPE: {} exists already'
               .format(os.path.basename(out_fname)))
 
 
