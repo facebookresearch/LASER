@@ -492,9 +492,9 @@ def embed_sentences(
 
     if encoder_path:
         encoder = load_model(
-            encoder_path,
-            spm_model,
-            bpe_codes,
+            str(encoder_path),
+            str(spm_model),
+            str(bpe_codes),
             verbose=verbose,
             hugging_face=hugging_face,
             max_sentences=max_sentences,
@@ -508,7 +508,7 @@ def embed_sentences(
         if token_lang != "--":
             tok_fname = os.path.join(tmpdir, "tok")
             Token(
-                ifname,
+                str(ifname),
                 tok_fname,
                 lang=token_lang,
                 romanize=True if token_lang == "el" else False,
@@ -525,7 +525,7 @@ def embed_sentences(
                 run(f'cat > {ifname}', shell=True)
             bpe_fname = os.path.join(tmpdir, "bpe")
             BPEfastApply(
-                ifname, bpe_fname, bpe_codes, verbose=verbose, over_write=False
+                str(ifname), bpe_fname, str(bpe_codes), verbose=verbose, over_write=False
             )
             ifname = bpe_fname
 
@@ -534,7 +534,7 @@ def embed_sentences(
             SPMApply(
                 ifname,
                 spm_fname,
-                spm_model,
+                str(spm_model),
                 lang=spm_lang,
                 lower_case=True,
                 verbose=verbose,
@@ -544,7 +544,7 @@ def embed_sentences(
 
         EncodeFile(
             encoder,
-            ifname,
+            str(ifname),
             output,
             verbose=verbose,
             over_write=False,
