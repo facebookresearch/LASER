@@ -447,8 +447,8 @@ def EncodeFile(
 
 
 # Load existing embeddings
-def EmbedLoad(fname, dim=1024, verbose=False):
-    x = np.fromfile(fname, dtype=np.float32, count=-1)
+def EmbedLoad(fname, dim=1024, verbose=False, fp16=False):
+    x = np.fromfile(fname, dtype=(np.float16 if fp16 else np.float32), count=-1)
     x.resize(x.shape[0] // dim, dim)
     if verbose:
         print(" - Embeddings: {:s}, {:d}x{:d}".format(fname, x.shape[0], dim))

@@ -193,6 +193,8 @@ if __name__ == '__main__':
         help='Precomputed target sentence embeddings')
     parser.add_argument('--dim', type=int, default=1024,
         help='Embedding dimensionality')
+    parser.add_argument('--fp16', action='store_true',
+        help='Load precomputed embeddings in float16 format')
     args = parser.parse_args()
 
     print('LASER: tool to search, score or mine bitexts')
@@ -211,12 +213,12 @@ if __name__ == '__main__':
             print(' - unify embeddings: {:d} -> {:d}'.format(len(emb), len(aux)))
         return emb[[aux[i] for i in range(len(aux))]]
 
-    # load the embeddings
-    x = EmbedLoad(args.src_embeddings, args.dim, verbose=args.verbose)
+    # load the embeddings and store as np.float32 (required for FAISS)
+    x = EmbedLoad(args.src_embeddings, args.dim, verbose=args.verbose, fp16=args.fp16).astype(np.float32)
     if args.unify:
         x = unique_embeddings(x, src_inds, args.verbose)
     faiss.normalize_L2(x)
-    y = EmbedLoad(args.trg_embeddings, args.dim, verbose=args.verbose)
+    y = EmbedLoad(args.trg_embeddings, args.dim, verbose=args.verbose, fp16=args.fp16).astype(np.float32)
     if args.unify:
         y = unique_embeddings(y, trg_inds, args.verbose)
     faiss.normalize_L2(y)
