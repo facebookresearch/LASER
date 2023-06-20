@@ -465,15 +465,15 @@ def EmbedMmap(fname, dim=1024, dtype=np.float32, verbose=False):
 
 
 def embed_sentences(
-    ifname: Path,
-    output: Path,
+    ifname: str,
+    output: str,
     encoder: Union[SentenceEncoder, HuggingFaceEncoder] = None,
-    encoder_path: Path = None,
+    encoder_path: str = None,
     hugging_face = False,
     token_lang: Optional[str] = "--",
-    bpe_codes: Optional[Path] = None,
+    bpe_codes: Optional[str] = None,
     spm_lang: Optional[str] = "en",
-    spm_model: Optional[Path] = None,
+    spm_model: Optional[str] = None,
     verbose: bool = False,
     buffer_size: int = 10000,
     max_tokens: int = 12000,
@@ -492,9 +492,9 @@ def embed_sentences(
 
     if encoder_path:
         encoder = load_model(
-            str(encoder_path),
-            str(spm_model),
-            str(bpe_codes),
+            encoder_path,
+            spm_model,
+            bpe_codes,
             verbose=verbose,
             hugging_face=hugging_face,
             max_sentences=max_sentences,
@@ -508,7 +508,7 @@ def embed_sentences(
         if token_lang != "--":
             tok_fname = os.path.join(tmpdir, "tok")
             Token(
-                str(ifname),
+                ifname,
                 tok_fname,
                 lang=token_lang,
                 romanize=True if token_lang == "el" else False,
@@ -525,7 +525,7 @@ def embed_sentences(
                 run(f'cat > {ifname}', shell=True)
             bpe_fname = os.path.join(tmpdir, "bpe")
             BPEfastApply(
-                str(ifname), bpe_fname, str(bpe_codes), verbose=verbose, over_write=False
+                ifname, bpe_fname, bpe_codes, verbose=verbose, over_write=False
             )
             ifname = bpe_fname
 
@@ -544,7 +544,7 @@ def embed_sentences(
 
         EncodeFile(
             encoder,
-            str(ifname),
+            ifname,
             output,
             verbose=verbose,
             over_write=False,
