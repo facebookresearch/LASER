@@ -534,7 +534,7 @@ def embed_sentences(
             SPMApply(
                 ifname,
                 spm_fname,
-                str(spm_model),
+                spm_model,
                 lang=spm_lang,
                 lower_case=True,
                 verbose=verbose,
