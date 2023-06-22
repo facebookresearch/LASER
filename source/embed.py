@@ -465,15 +465,15 @@ def EmbedMmap(fname, dim=1024, dtype=np.float32, verbose=False):
 
 
 def embed_sentences(
-    ifname: Path,
-    output: Path,
+    ifname: str,
+    output: str,
     encoder: Union[SentenceEncoder, HuggingFaceEncoder] = None,
-    encoder_path: Path = None,
+    encoder_path: str = None,
     hugging_face = False,
     token_lang: Optional[str] = "--",
-    bpe_codes: Optional[Path] = None,
+    bpe_codes: Optional[str] = None,
     spm_lang: Optional[str] = "en",
-    spm_model: Optional[Path] = None,
+    spm_model: Optional[str] = None,
     verbose: bool = False,
     buffer_size: int = 10000,
     max_tokens: int = 12000,
