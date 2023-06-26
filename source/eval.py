@@ -21,20 +21,23 @@ import argparse
 import pandas
 import tempfile
 import numpy as np
+from pathlib import Path
 import itertools
 import logging
 import sys
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 from tabulate import tabulate
-from pathlib import Path
+from collections import defaultdict
 from xsim import xSIM
-from embed import embed_sentences, SentenceEncoder, HuggingFaceEncoder, load_model
+from embed import embed_sentences, load_model
 
 logging.basicConfig(
     stream=sys.stdout,
     level=logging.INFO,
-    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s")
-logger = logging.getLogger('eval')
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+)
+logger = logging.getLogger("eval")
+
 
 class Eval:
     def __init__(self, args):
@@ -47,14 +50,13 @@ class Eval:
         self.encoder_args = {
             k: v
             for k, v in args._get_kwargs()
-            if k
-            in ["max_sentences", "max_tokens", "cpu", "fp16", "sort_kind", "verbose"]
+            if k in ["max_sentences", "max_tokens", "cpu", "sort_kind", "verbose"]
         }
         self.src_bpe_codes = args.src_bpe_codes
         self.tgt_bpe_codes = args.tgt_bpe_codes
         self.src_spm_model = args.src_spm_model
         self.tgt_spm_model = args.tgt_spm_model
-        logger.info('loading src encoder')
+        logger.info("loading src encoder")
         self.src_encoder = load_model(
             args.src_encoder,
             self.src_spm_model,
@@ -63,7 +65,7 @@ class Eval:
             **self.encoder_args,
         )
         if args.tgt_encoder:
-            logger.info('loading tgt encoder')
+            logger.info("loading tgt encoder")
             self.tgt_encoder = load_model(
                 args.tgt_encoder,
                 self.tgt_spm_model,
@@ -72,7 +74,7 @@ class Eval:
                 **self.encoder_args,
             )
         else:
-            logger.info('encoding tgt using src encoder')
+            logger.info("encoding tgt using src encoder")
             self.tgt_encoder = self.src_encoder
             self.tgt_bpe_codes = self.src_bpe_codes
             self.tgt_spm_model = self.src_spm_model
@@ -81,40 +83,63 @@ class Eval:
         self.fp16 = args.fp16
         self.margin = args.margin
 
-    def _embed(self, tmpdir, langs, encoder, spm_model, bpe_codes) -> List[List[str]]:
+    def _embed(
+        self, tmpdir, langs, encoder, spm_model, bpe_codes, tgt_aug_langs=[]
+    ) -> List[List[str]]:
         emb_data = []
         for lang in langs:
+            augjson = None
             fname = f"{lang}.{self.split}"
-            infile = os.path.join(self.base_dir, self.corpus, self.split, fname)
-            outfile = os.path.join(tmpdir, fname)
+            infile = self.base_dir / self.corpus / self.split / fname
+            assert infile.exists(), f"{infile} does not exist"
+            outfile = tmpdir / fname
+            if lang in tgt_aug_langs:
+                fname = f"{lang}_augmented.{self.split}"
+                fjname = f"{lang}_errtype.{self.split}.json"
+                augment_dir = self.base_dir / self.corpus / (self.split + "_augmented")
+                augjson = augment_dir / fjname
+                auginfile = augment_dir / fname
+                assert augjson.exists(), f"{augjson} does not exist"
+                assert auginfile.exists(), f"{auginfile} does not exist"
+                combined_infile = tmpdir / f"combined_{lang}"
+                with open(combined_infile, "w") as newfile:
+                    for f in [infile, auginfile]:
+                        with open(f) as fin:
+                            newfile.write(fin.read())
+                infile = combined_infile
             embed_sentences(
-                infile,
-                outfile,
+                str(infile),
+                str(outfile),
                 encoder=encoder,
                 spm_model=spm_model,
                 bpe_codes=bpe_codes,
                 token_lang=lang if bpe_codes else "--",
                 buffer_size=self.buffer_size,
+                fp16=self.fp16,
                 **self.encoder_args,
             )
             assert (
                 os.path.isfile(outfile) and os.path.getsize(outfile) > 0
             ), f"Error encoding {infile}"
-            emb_data.append([lang, infile, outfile])
+            emb_data.append([lang, infile, outfile, augjson])
         return emb_data
 
-    def _xsim(self, src_emb, src_lang, tgt_emb, tgt_lang, tgt_txt) -> Tuple[int, int]:
-        err, nbex = xSIM(
+    def _xsim(
+        self, src_emb, src_lang, tgt_emb, tgt_lang, tgt_txt, augjson=None
+    ) -> Tuple[int, int, Dict[str, int]]:
+        return xSIM(
             src_emb,
             tgt_emb,
             margin=self.margin,
             dim=self.emb_dimension,
             fp16=self.fp16,
             eval_text=tgt_txt if not self.index_comparison else None,
+            augmented_json=augjson,
         )
-        return err, nbex
 
-    def calc_xsim(self, embdir, src_langs, tgt_langs, err_sum=0, totl_nbex=0) -> None:
+    def calc_xsim(
+        self, embdir, src_langs, tgt_langs, tgt_aug_langs, err_sum=0, totl_nbex=0
+    ) -> None:
         outputs = []
         src_emb_data = self._embed(
             embdir,
@@ -129,13 +154,19 @@ class Eval:
             self.tgt_encoder,
             self.tgt_spm_model,
             self.tgt_bpe_codes,
+            tgt_aug_langs,
         )
+        aug_df = defaultdict(lambda: defaultdict())
         combs = list(itertools.product(src_emb_data, tgt_emb_data))
-        for (src_lang, src_txt, src_emb), (tgt_lang, tgt_txt, tgt_emb) in combs:
+        for (src_lang, _, src_emb, _), (tgt_lang, tgt_txt, tgt_emb, augjson) in combs:
             if src_lang == tgt_lang:
                 continue
-            err, nbex = self._xsim(src_emb, src_lang, tgt_emb, tgt_lang, tgt_txt)
+            err, nbex, aug_report = self._xsim(
+                src_emb, src_lang, tgt_emb, tgt_lang, tgt_txt, augjson
+            )
             result = round(100 * err / nbex, 2)
+            if tgt_lang in tgt_aug_langs:
+                aug_df[tgt_lang][src_lang] = aug_report
             if nbex < self.min_sents:
                 result = "skipped"
             else:
@@ -154,9 +185,22 @@ class Eval:
         )
         print(
             tabulate(
-                outputs, tablefmt="psql", headers=["dataset", "src-tgt", "xsim", "nbex"]
+                outputs,
+                tablefmt="psql",
+                headers=[
+                    "dataset",
+                    "src-tgt",
+                    "xsim" + ("(++)" if tgt_aug_langs else ""),
+                    "nbex",
+                ],
             )
         )
+        for tgt_aug_lang in tgt_aug_langs:
+            df = pandas.DataFrame.from_dict(aug_df[tgt_aug_lang]).fillna(0).T
+            print(
+                f"\nAbsolute error under augmented transformations for: {tgt_aug_lang}"
+            )
+            print(f"{tabulate(df, df.columns, floatfmt='.2f', tablefmt='grid')}")
 
     def calc_xsim_nway(self, embdir, langs) -> None:
         err_matrix = np.zeros((len(langs), len(langs)))
@@ -167,12 +211,14 @@ class Eval:
             self.src_spm_model,
             self.src_bpe_codes,
         )
-        for i1, (src_lang, src_txt, src_emb) in enumerate(emb_data):
-            for i2, (tgt_lang, tgt_txt, tgt_emb) in enumerate(emb_data):
+        for i1, (src_lang, _, src_emb, _) in enumerate(emb_data):
+            for i2, (tgt_lang, tgt_txt, tgt_emb, _) in enumerate(emb_data):
                 if src_lang == tgt_lang:
                     err_matrix[i1, i2] = 0
                 else:
-                    err, nbex = self._xsim(src_emb, src_lang, tgt_emb, tgt_lang, tgt_txt)
+                    err, nbex, _ = self._xsim(
+                        src_emb, src_lang, tgt_emb, tgt_lang, tgt_txt
+                    )
                     err_matrix[i1, i2] = 100 * err / nbex
         df = pandas.DataFrame(err_matrix, columns=langs, index=langs)
         df.loc["avg"] = df.sum() / float(df.shape[0] - 1)  # exclude diagonal in average
@@ -188,8 +234,9 @@ def run_eval(args) -> None:
         embed_dir = args.embed_dir
     else:
         tmp_dir = tempfile.TemporaryDirectory()
-        embed_dir = tmp_dir.name
+        embed_dir = Path(tmp_dir.name)
     src_langs = sorted(args.src_langs.split(","))
+    tgt_aug_langs = sorted(args.tgt_aug_langs.split(",")) if args.tgt_aug_langs else []
     if evaluation.nway:
         evaluation.calc_xsim_nway(embed_dir, src_langs)
     else:
@@ -197,7 +244,7 @@ def run_eval(args) -> None:
             args.tgt_langs
         ), "Please provide tgt langs when not performing n-way comparison"
         tgt_langs = sorted(args.tgt_langs.split(","))
-        evaluation.calc_xsim(embed_dir, src_langs, tgt_langs)
+        evaluation.calc_xsim(embed_dir, src_langs, tgt_langs, tgt_aug_langs)
     if tmp_dir:
         tmp_dir.cleanup()  # remove temporary directory
 
@@ -208,7 +255,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--base-dir",
-        type=str,
+        type=Path,
         default=None,
         help="Base directory for evaluation files",
         required=True,
@@ -244,7 +291,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--embed-dir",
-        type=str,
+        type=Path,
         default=None,
         help="Store/load embeddings from specified directory (default temporary)",
     )
@@ -298,6 +345,13 @@ if __name__ == "__main__":
         type=str,
         default=None,
         help="Target-side languages for evaluation",
+    )
+    parser.add_argument(
+        "--tgt-aug-langs",
+        type=str,
+        default=None,
+        help="languages with augmented data",
+        required=False,
     )
     parser.add_argument(
         "--fp16",
