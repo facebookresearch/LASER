@@ -14,8 +14,8 @@
 #
 # Helper functions for tokenization
 
-import os
 import sys
+import gzip
 import logging
 from pathlib import Path
 import sentencepiece as spm
@@ -45,44 +45,43 @@ class LaserTokenizer:
         self.descape = descape
         self.verbose = verbose
         self.over_write = over_write
+
+        assert Path(spm_model).exists(), f"spm model file: {spm_model} does not exist"
         self.moses_punct_normalizer = MosesPunctNormalizer(self.lang)
         self.moses_detokenizer = MosesDetokenizer()
         self.spm_encoder = spm.SentencePieceProcessor(model_file=self.spm_model)
 
-    def tokenize(self, text: str) -> list[str]:
+    def tokenize(self, text: str) -> str:
         # Preprocessing
         sentence_text = "".join(c for c in text if c.isprintable())
         sentence_text = self.moses_punct_normalizer.normalize(sentence_text)
         if self.descape:
             sentence_text = self.moses_detokenizer.unescape_xml(text=sentence_text)
-        sentence_text = sentence_text.lower()
+        if self.lower_case:
+            sentence_text = sentence_text.lower()
 
         # SentencePiece encoding
-        spm_encoder = self.spm_encoder
-        encoded_text = " ".join(spm_encoder.encode(sentence_text, out_type=str))
-
+        encoded_text = " ".join(self.spm_encoder.encode(sentence_text, out_type=str))
         return encoded_text
 
-    def tokenize_file(self, inp_fname: Path, out_fname: Path, gzip: bool = False):
-        if not os.path.isfile(out_fname):
-            cat = "zcat " if gzip else "cat "
+    def tokenize_file(self, inp_fname: Path, out_fname: Path) -> None:
+        inp_fname = Path(inp_fname)
+        out_fname = Path(out_fname)
+        mode = "w" if self.over_write else "x"
+        try:
             if self.verbose:
                 logger.info(
-                    "SPM processing {} {} {}".format(
-                        os.path.basename(inp_fname),
-                        "(gzip)" if gzip else "",
-                        "(de-escaped)" if self.descape else "",
-                    )
+                    f"SPM processing {inp_fname.name} {'(de-escaped)' if self.descape else ''}"
                 )
 
-            with inp_fname.open("r", encoding="utf-8") as file:
-                text = file.read()
-            encoded_text = self.tokenize(text)
+            file_opener = gzip.open if inp_fname.name.endswith(".gz") else open
+            with file_opener(inp_fname, "rt", encoding="utf-8") as file_in, open(
+                out_fname, mode, encoding="utf-8"
+            ) as file_out:
+                for line in file_in:
+                    tokens = self.tokenize(line.strip())
+                    file_out.write("".join(tokens) + "\n")
 
-            with out_fname.open("w", encoding="utf-8") as file:
-                file.write("".join(encoded_text))
-
-        elif not self.over_write and self.verbose:
-            logger.info(
-                "SPM encoded file {} exists already".format(os.path.basename(out_fname))
-            )
+        except FileExistsError:
+            if self.verbose:
+                logger.info(f"SPM encoded file {out_fname.name} exists already")
