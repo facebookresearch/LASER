@@ -46,10 +46,10 @@ class LaserTokenizer:
         self.verbose = verbose
         self.over_write = over_write
 
-        assert Path(spm_model).exists(), f"spm model file: {spm_model} does not exist"
+        assert spm_model.exists(), f"spm model file: {spm_model} does not exist"
         self.moses_punct_normalizer = MosesPunctNormalizer(self.lang)
         self.moses_detokenizer = MosesDetokenizer()
-        self.spm_encoder = spm.SentencePieceProcessor(model_file=self.spm_model)
+        self.spm_encoder = spm.SentencePieceProcessor(model_file=str(self.spm_model))
 
     def tokenize(self, text: str) -> str:
         # Preprocessing
@@ -65,8 +65,6 @@ class LaserTokenizer:
         return encoded_text
 
     def tokenize_file(self, inp_fname: Path, out_fname: Path) -> None:
-        inp_fname = Path(inp_fname)
-        out_fname = Path(out_fname)
         mode = "w" if self.over_write else "x"
         try:
             if self.verbose:
