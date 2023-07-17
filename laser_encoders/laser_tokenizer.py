@@ -18,6 +18,7 @@ import sys
 import gzip
 import logging
 from pathlib import Path
+import typing as tp
 import sentencepiece as spm
 from sacremoses import MosesPunctNormalizer, MosesDetokenizer
 
@@ -51,6 +52,13 @@ class LaserTokenizer:
         self.moses_detokenizer = MosesDetokenizer()
         self.spm_encoder = spm.SentencePieceProcessor(model_file=str(self.spm_model))
 
+    def open(self, file: Path, mode: str, encoding="utf-8") -> tp.IO:
+        return (
+            gzip.open(file, mode, encoding=encoding)
+            if file.name.endswith(".gz")
+            else open(file, mode, encoding=encoding)
+        )
+
     def tokenize(self, text: str) -> str:
         # Preprocessing
         sentence_text = "".join(c for c in text if c.isprintable())
@@ -65,21 +73,19 @@ class LaserTokenizer:
         return encoded_text
 
     def tokenize_file(self, inp_fname: Path, out_fname: Path) -> None:
-        mode = "w" if self.over_write else "x"
-        try:
+        if not self.over_write and out_fname.exists():
+            if self.verbose:
+                logger.info(f"tokenized file {out_fname.name} already exists")
+                return
+        else:
             if self.verbose:
                 logger.info(
                     f"SPM processing {inp_fname.name} {'(de-escaped)' if self.descape else ''}"
                 )
 
-            file_opener = gzip.open if inp_fname.name.endswith(".gz") else open
-            with file_opener(inp_fname, "rt", encoding="utf-8") as file_in, open(
-                out_fname, mode, encoding="utf-8"
+            with self.open(inp_fname, "rt") as file_in, open(
+                out_fname, "w"
             ) as file_out:
                 for line in file_in:
                     tokens = self.tokenize(line.strip())
-                    file_out.write("".join(tokens) + "\n")
-
-        except FileExistsError:
-            if self.verbose:
-                logger.info(f"SPM encoded file {out_fname.name} exists already")
+                    file_out.write(tokens + "\n")
