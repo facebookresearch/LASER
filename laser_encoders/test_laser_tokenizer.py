@@ -9,14 +9,12 @@ from laser_tokenizer import LaserTokenizer
 
 @pytest.fixture
 def tokenizer():
-    with NamedTemporaryFile(delete=False) as f:
+    with NamedTemporaryFile() as f:
         with urllib.request.urlopen(
             "https://dl.fbaipublicfiles.com/nllb/laser/laser2.spm"
         ) as response:
             f.write(response.read())
-    f.close()  # Manually close the file
-    return LaserTokenizer(spm_model=Path(f.name))
-
+        return LaserTokenizer(spm_model=Path(f.name))
 
 def test_tokenize(tokenizer):
     test_data = "This is a test sentence."
@@ -42,9 +40,3 @@ def test_lowercase(tokenizer):
     expected_output = "▁TH IS ▁ OU TP UT ▁ MU ST ▁BE ▁ UP PER CA SE"
     tokenizer.lower_case = False
     assert tokenizer.tokenize(test_data) == expected_output
-
-
-def test_file_does_not_exist(tokenizer):
-    os.remove(tokenizer.spm_model)
-    assert not os.path.exists(tokenizer.spm_model.name)
-
