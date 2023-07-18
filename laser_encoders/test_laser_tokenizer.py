@@ -40,3 +40,20 @@ def test_lowercase(tokenizer):
     expected_output = "▁TH IS ▁ OU TP UT ▁ MU ST ▁BE ▁ UP PER CA SE"
     tokenizer.lower_case = False
     assert tokenizer.tokenize(test_data) == expected_output
+
+
+def test_tokenize_file(tokenizer):
+    test_data = "This is a test sentence."
+    with TemporaryDirectory() as temp_dir:
+        input_file = os.path.join(temp_dir, "input.txt")
+        output_file = os.path.join(temp_dir, "output.txt")
+        with open(input_file, "w") as file:
+            file.write(test_data)
+
+        tokenizer.tokenize_file(inp_fname=Path(input_file), out_fname=Path(output_file))
+
+        with open(output_file, "r") as file:
+            output = file.read().strip()
+
+        expected_output = "▁this ▁is ▁a ▁test ▁sent ence ."
+        assert output == expected_output
