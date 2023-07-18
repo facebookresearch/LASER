@@ -16,6 +16,7 @@ def tokenizer():
             f.write(response.read())
         return LaserTokenizer(spm_model=Path(f.name))
 
+
 def test_tokenize(tokenizer):
     test_data = "This is a test sentence."
     expected_output = "▁this ▁is ▁a ▁test ▁sent ence ."
@@ -39,6 +40,12 @@ def test_lowercase(tokenizer):
     test_data = "THIS OUTPUT MUST BE UPPERCASE"
     expected_output = "▁TH IS ▁ OU TP UT ▁ MU ST ▁BE ▁ UP PER CA SE"
     tokenizer.lower_case = False
+    assert tokenizer.tokenize(test_data) == expected_output
+
+
+def test_is_printable(tokenizer):
+    test_data = "Hello, \tWorld! ABC\x1f123"
+    expected_output = "▁hel lo , ▁world ! ▁ab c 12 3"
     assert tokenizer.tokenize(test_data) == expected_output
 
 

@@ -59,9 +59,13 @@ class LaserTokenizer:
             else open(file, mode, encoding=encoding)
         )
 
+    def log(self, message):
+        if self.verbose:
+            logger.info(message)
+
     def tokenize(self, text: str) -> str:
         # Preprocessing
-        sentence_text = "".join(c for c in text if c.isprintable())
+        sentence_text = "".join(c for c in text if c.isprintable)
         sentence_text = self.moses_punct_normalizer.normalize(sentence_text)
         if self.descape:
             sentence_text = self.moses_detokenizer.unescape_xml(text=sentence_text)
@@ -74,14 +78,15 @@ class LaserTokenizer:
 
     def tokenize_file(self, inp_fname: Path, out_fname: Path) -> None:
         if not self.over_write and out_fname.exists():
-            if self.verbose:
-                logger.info(f"tokenized file {out_fname.name} already exists")
-                return
+            self.log(f"tokenized file {out_fname.name} already exists")
+            return
         else:
-            if self.verbose:
-                logger.info(
-                    f"SPM processing {inp_fname.name} {'(de-escaped)' if self.descape else ''}"
-                )
+            self.log(
+                f"tokenizing {inp_fname.name}"
+                + f"{' (de-escaped)' if self.descape else ''}"
+                + f"{' (lower-cased)' if self.lower_case else ' (cased)'} "
+                + f"(punctuation-normalization lang: {self.lang})"
+            )
 
             with self.open(inp_fname, "rt") as file_in, open(
                 out_fname, "w"
