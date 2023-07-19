@@ -59,7 +59,7 @@ class LaserTokenizer:
             else open(file, mode, encoding=encoding)
         )
 
-    def log(self, message):
+    def log(self, message :str) -> None:
         if self.verbose:
             logger.info(message)
 
