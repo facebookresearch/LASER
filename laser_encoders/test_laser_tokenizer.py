@@ -18,11 +18,11 @@ def tokenizer():
 
 
 @pytest.fixture
-def input_text():
+def input_text() -> str:
     return "This is a test sentence."
 
 
-def test_tokenize(tokenizer, input_text):
+def test_tokenize(tokenizer, input_text :str):
     expected_output = "▁this ▁is ▁a ▁test ▁sent ence ."
     assert tokenizer.tokenize(input_text) == expected_output
 
@@ -53,7 +53,7 @@ def test_is_printable(tokenizer):
     assert tokenizer.tokenize(test_data) == expected_output
 
 
-def test_tokenize_file(tokenizer, input_text):
+def test_tokenize_file(tokenizer, input_text :str):
     with TemporaryDirectory() as temp_dir:
         input_file = os.path.join(temp_dir, "input.txt")
         output_file = os.path.join(temp_dir, "output.txt")
@@ -70,7 +70,7 @@ def test_tokenize_file(tokenizer, input_text):
         assert output == expected_output
 
 
-def test_tokenize_file_overwrite(tokenizer, input_text):
+def test_tokenize_file_overwrite(tokenizer, input_text :str):
     with TemporaryDirectory() as temp_dir:
         input_file = os.path.join(temp_dir, "input.txt")
         output_file = os.path.join(temp_dir, "output.txt")
