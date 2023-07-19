@@ -17,10 +17,14 @@ def tokenizer():
         return LaserTokenizer(spm_model=Path(f.name))
 
 
-def test_tokenize(tokenizer):
-    test_data = "This is a test sentence."
+@pytest.fixture
+def input_text():
+    return "This is a test sentence."
+
+
+def test_tokenize(tokenizer, input_text):
     expected_output = "▁this ▁is ▁a ▁test ▁sent ence ."
-    assert tokenizer.tokenize(test_data) == expected_output
+    assert tokenizer.tokenize(input_text) == expected_output
 
 
 def test_normalization(tokenizer):
@@ -49,14 +53,45 @@ def test_is_printable(tokenizer):
     assert tokenizer.tokenize(test_data) == expected_output
 
 
-def test_tokenize_file(tokenizer):
-    test_data = "This is a test sentence."
+def test_tokenize_file(tokenizer, input_text):
     with TemporaryDirectory() as temp_dir:
         input_file = os.path.join(temp_dir, "input.txt")
         output_file = os.path.join(temp_dir, "output.txt")
-        with open(input_file, "w") as file:
-            file.write(test_data)
 
+        with open(input_file, "w") as file:
+            file.write(input_text)
+
+        tokenizer.tokenize_file(inp_fname=Path(input_file), out_fname=Path(output_file))
+
+        with open(output_file, "r") as file:
+            output = file.read().strip()
+
+        expected_output = "▁this ▁is ▁a ▁test ▁sent ence ."
+        assert output == expected_output
+
+
+def test_tokenize_file_overwrite(tokenizer, input_text):
+    with TemporaryDirectory() as temp_dir:
+        input_file = os.path.join(temp_dir, "input.txt")
+        output_file = os.path.join(temp_dir, "output.txt")
+
+        with open(input_file, "w") as file:
+            file.write(input_text)
+
+        with open(output_file, "w") as file:
+            file.write("Existing output")
+
+        # Test when over_write is False
+        tokenizer.over_write = False
+        tokenizer.tokenize_file(inp_fname=Path(input_file), out_fname=Path(output_file))
+
+        with open(output_file, "r") as file:
+            output = file.read().strip()
+
+        assert output == "Existing output"
+
+        # Test when over_write is True
+        tokenizer.over_write = True
         tokenizer.tokenize_file(inp_fname=Path(input_file), out_fname=Path(output_file))
 
         with open(output_file, "r") as file:
