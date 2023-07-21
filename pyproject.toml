@@ -1,0 +1,73 @@
+[project]
+name = "laser_encoder"
+version = "0.0.1"
+authors = [{name = "Facebook AI Research"}]
+description = "LASER  Language-Agnostic SEntence Representations is a toolkit to calculate multilingual sentence embeddings and to use them for document classification, bitext filtering and mining"
+readme = "README.md"
+requires-python = ">=3.8"
+dynamic = ["version", "description"]
+classifiers=[
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering",
+    "Development Status :: 4 - Beta",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/facebookresearch/LASER"
+"Bug Tracker" = "https://github.com/facebookresearch/LASER/issues"
+
+
+[build-system]
+requires = ["flit_core >=3.2,<4", "setuptools"]
+
+dependencies = [
+'sacremoses==0.0.53',
+'sentencepiece==0.1.99',
+]
+
+classifiers=[
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering",
+    "Development Status :: 4 - Beta",
+]
+
+[project.optional-dependencies]
+  dev = [
+      # Test
+      "pytest>=4.3.0",
+      # Format
+      "black==22.3.0",
+      "isort>=5.10.1",
+      # Linters
+      "mypy>=0.782",
+      "types-emoji",
+      "pylint>=2.8.0",
+      # Release
+      "flit>=3.5.1"
+  ]
+
+[tool.black]
+# Black defaults are great !
+
+[tool.isort]
+profile = "black"
+skip_gitignore = true
+skip_glob = ["website/*", "*.pyx"]
+
+[tool.mypy]
+python_version = "3.8"
+show_error_codes = true
+check_untyped_defs = true
+
+files = [
+  "laser_encoders/"
+]
+
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["laser_encoders"]
+python_files = [
+  "test_*.py",
+]
+asyncio_mode = "auto"
