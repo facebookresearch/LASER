@@ -32,11 +32,6 @@ classifiers=[
 ]
 
 [project.optional-dependencies]
-  mono = [
-    "sacremoses",
-    "sentencepiece",
-    "emoji",
-  ]
   dev = [
       # Test
       "pytest>=4.3.0",

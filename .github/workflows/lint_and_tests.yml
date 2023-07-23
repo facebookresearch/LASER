@@ -26,7 +26,7 @@ jobs:
         python --version
         python -m pip install --upgrade 'pip>=22.1.2'
         python -m pip show pip
-        python -m pip install -e '.[dev,mono]'
+        python -m pip install -e '.[dev]'
         
     # - name: isort
     #   run: isort --check --diff .
