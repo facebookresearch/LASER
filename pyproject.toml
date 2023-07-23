@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 src-layout = "laser_encoders"
 
 [project]
-name = "laser_encoder"
+name = "laser_encoders"
 version = "0.0.1"
 authors = [{name = "Facebook AI Research"}]
 description = "LASER  Language-Agnostic SEntence Representations is a toolkit to calculate multilingual sentence embeddings and to use them for document classification, bitext filtering and mining"
