@@ -3,44 +3,35 @@ name: lint_and_tests
 on: [push, pull_request]
 
 jobs:
-  linting:
-    name: Linting
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      max-parallel: 1
+      matrix:
+        platform: [ubuntu-latest]
+        python-version: [3.8]
+
+    runs-on: ${{ matrix.platform }}
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
 
-      - name: Install Poetry
-        run: curl -sSL https://install.python-poetry.org | python -
-
-      - name: Install dependencies
-        run: poetry install
-
-      - name: Lint Python code
-        run: poetry run flake8 laser_encoders
+    - name: Install dependencies
+      run: |
+        python --version
+        python -m pip install --upgrade 'pip>=22.1.2'
+        python -m pip show pip
+        python -m pip install -e '.[dependencies]'
 
   tests:
-    name: Tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-
-      - name: Install Poetry
-        run: curl -sSL https://install.python-poetry.org | python -
-
-      - name: Install dependencies
-        run: poetry install
-
-      - name: Run tests
-        run: poetry run pytest laser_encoders
+    - name: isort
+      run: isort --check --diff .
+    - name: black
+      run: black --check --diff .
+    - name: pytest
+      run: pytest laser_encoders
