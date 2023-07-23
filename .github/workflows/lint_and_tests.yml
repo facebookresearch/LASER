@@ -1,4 +1,4 @@
-name: Laser Package Tests
+name: lint_and_tests
 
 on: [push, pull_request]
 
@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.4.0
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v2.5.2
         with:
           python-version: 3.8
 
@@ -29,10 +29,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.4.0
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v2.5.2
         with:
           python-version: 3.8
 
