@@ -13,21 +13,16 @@ classifiers=[
     "Topic :: Scientific/Engineering",
     "Development Status :: 4 - Beta",
 ]
-
-[project.urls]
-"Homepage" = "https://github.com/facebookresearch/LASER"
-"Bug Tracker" = "https://github.com/facebookresearch/LASER/issues"
-
 dependencies = [
 'sacremoses==0.0.53',
 'sentencepiece==0.1.99',
 ]
 
-classifiers=[
-    "License :: OSI Approved :: MIT License",
-    "Topic :: Scientific/Engineering",
-    "Development Status :: 4 - Beta",
-]
+[project.urls]
+"Homepage" = "https://github.com/facebookresearch/LASER"
+"Bug Tracker" = "https://github.com/facebookresearch/LASER/issues"
+
+
 
 [project.optional-dependencies]
   dev = [
