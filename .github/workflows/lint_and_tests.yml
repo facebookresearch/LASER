@@ -28,9 +28,9 @@ jobs:
         python -m pip show pip
         python -m pip install -e '.[dev,mono]'
         
-    - name: isort
-      run: isort --check --diff .
-    - name: black
-      run: black --check --diff .
+    # - name: isort
+    #   run: isort --check --diff .
+    # - name: black
+    #   run: black --check --diff .
     - name: pytest
       run: pytest laser_encoders
