@@ -3,25 +3,27 @@ requires = ["flit_core >=3.2,<4", "setuptools"]
 
 [project]
 name = "laser_encoder"
+version = "0.0.1"
 authors = [{name = "Facebook AI Research"}]
+description = "LASER  Language-Agnostic SEntence Representations is a toolkit to calculate multilingual sentence embeddings and to use them for document classification, bitext filtering and mining"
 readme = "README.md"
 requires-python = ">=3.8"
-dynamic = ["version", "description"]
-classifiers=[
-    "License :: OSI Approved :: MIT License",
-    "Topic :: Scientific/Engineering",
-    "Development Status :: 4 - Beta",
-]
+
 dependencies = [
 'sacremoses==0.0.53',
 'sentencepiece==0.1.99',
 ]
 
+classifiers=[
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering",
+    "Development Status :: 4 - Beta",
+]
+
+
 [project.urls]
 "Homepage" = "https://github.com/facebookresearch/LASER"
 "Bug Tracker" = "https://github.com/facebookresearch/LASER/issues"
-
-
 
 [project.optional-dependencies]
   dev = [
