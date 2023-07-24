@@ -1,7 +1,7 @@
 [build-system]
 requires = ["flit_core >=3.2,<4", "setuptools"]
 build-backend = "flit_core.buildapi"
-src-layout = "laser_encoders"
+# src-layout = "laser_encoders"
 
 [project]
 name = "laser_encoders"
@@ -12,12 +12,12 @@ readme = "README.md"
 requires-python = ">=3.8"
 
 dependencies = [
-'sacremoses==0.0.53',
-'sentencepiece==0.1.99',
+    'sacremoses==0.0.53',
+    'sentencepiece==0.1.99',
 ]
 
 classifiers=[
-    "License :: BSD",
+    "License :: BSD License",
     "Topic :: Scientific/Engineering",
     "Development Status :: 4 - Beta",
 ]
@@ -36,7 +36,6 @@ classifiers=[
       "isort>=5.10.1",
       # Linters
       "mypy>=0.782",
-      "types-emoji",
       "pylint>=2.8.0",
       # Release
       "flit>=3.5.1"
