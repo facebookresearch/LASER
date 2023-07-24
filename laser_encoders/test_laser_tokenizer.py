@@ -19,7 +19,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory, NamedTemporaryFile
 import urllib.request
 
-from laser_tokenizer import LaserTokenizer
+from laser_encoders.laser_tokenizer import LaserTokenizer
 
 
 @pytest.fixture
