@@ -14,12 +14,13 @@
 # Tests for LaserTokenizer
 
 import os
-import pytest
-from pathlib import Path
-from tempfile import TemporaryDirectory, NamedTemporaryFile
 import urllib.request
+from pathlib import Path
+from tempfile import NamedTemporaryFile, TemporaryDirectory
 
-from laser_tokenizer import LaserTokenizer
+import pytest
+
+from laser_encoders.laser_tokenizer import LaserTokenizer
 
 
 @pytest.fixture
@@ -37,7 +38,7 @@ def input_text() -> str:
     return "This is a test sentence."
 
 
-def test_tokenize(tokenizer, input_text :str):
+def test_tokenize(tokenizer, input_text: str):
     expected_output = "▁this ▁is ▁a ▁test ▁sent ence ."
     assert tokenizer.tokenize(input_text) == expected_output
 
@@ -68,7 +69,7 @@ def test_is_printable(tokenizer):
     assert tokenizer.tokenize(test_data) == expected_output
 
 
-def test_tokenize_file(tokenizer, input_text :str):
+def test_tokenize_file(tokenizer, input_text: str):
     with TemporaryDirectory() as temp_dir:
         input_file = os.path.join(temp_dir, "input.txt")
         output_file = os.path.join(temp_dir, "output.txt")
@@ -76,7 +77,10 @@ def test_tokenize_file(tokenizer, input_text :str):
         with open(input_file, "w") as file:
             file.write(input_text)
 
-        tokenizer.tokenize_file(inp_fname=Path(input_file), out_fname=Path(output_file))
+        tokenizer.tokenize_file(
+            inp_fname=Path(input_file),
+            out_fname=Path(output_file),
+        )
 
         with open(output_file, "r") as file:
             output = file.read().strip()
@@ -85,7 +89,7 @@ def test_tokenize_file(tokenizer, input_text :str):
         assert output == expected_output
 
 
-def test_tokenize_file_overwrite(tokenizer, input_text :str):
+def test_tokenize_file_overwrite(tokenizer, input_text: str):
     with TemporaryDirectory() as temp_dir:
         input_file = os.path.join(temp_dir, "input.txt")
         output_file = os.path.join(temp_dir, "output.txt")
@@ -98,7 +102,10 @@ def test_tokenize_file_overwrite(tokenizer, input_text :str):
 
         # Test when over_write is False
         tokenizer.over_write = False
-        tokenizer.tokenize_file(inp_fname=Path(input_file), out_fname=Path(output_file))
+        tokenizer.tokenize_file(
+            inp_fname=Path(input_file),
+            out_fname=Path(output_file),
+        )
 
         with open(output_file, "r") as file:
             output = file.read().strip()
@@ -107,7 +114,10 @@ def test_tokenize_file_overwrite(tokenizer, input_text :str):
 
         # Test when over_write is True
         tokenizer.over_write = True
-        tokenizer.tokenize_file(inp_fname=Path(input_file), out_fname=Path(output_file))
+        tokenizer.tokenize_file(
+            inp_fname=Path(input_file),
+            out_fname=Path(output_file),
+        )
 
         with open(output_file, "r") as file:
             output = file.read().strip()

@@ -14,13 +14,14 @@
 #
 # Helper functions for tokenization
 
-import sys
 import gzip
 import logging
-from pathlib import Path
+import sys
 import typing as tp
+from pathlib import Path
+
 import sentencepiece as spm
-from sacremoses import MosesPunctNormalizer, MosesDetokenizer
+from sacremoses import MosesDetokenizer, MosesPunctNormalizer
 
 logging.basicConfig(
     stream=sys.stdout,
@@ -59,7 +60,7 @@ class LaserTokenizer:
             else open(file, mode, encoding=encoding)
         )
 
-    def log(self, message :str) -> None:
+    def log(self, message: str) -> None:
         if self.verbose:
             logger.info(message)
 
