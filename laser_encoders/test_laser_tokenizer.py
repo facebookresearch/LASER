@@ -18,9 +18,11 @@ import urllib.request
 from pathlib import Path
 from tempfile import NamedTemporaryFile, TemporaryDirectory
 
+import numpy as np
 import pytest
 
 from laser_encoders.laser_tokenizer import LaserTokenizer
+from laser_encoders.models import SentenceEncoder
 
 
 @pytest.fixture
@@ -31,6 +33,16 @@ def tokenizer():
         ) as response:
             f.write(response.read())
         return LaserTokenizer(spm_model=Path(f.name))
+
+
+@pytest.fixture
+def encoder():
+    with NamedTemporaryFile() as f:
+        with urllib.request.urlopen(
+            "https://dl.fbaipublicfiles.com/nllb/laser/laser2.pt"
+        ) as response:
+            f.write(response.read())
+        return SentenceEncoder(model_path=Path(f.name))
 
 
 @pytest.fixture
@@ -124,3 +136,15 @@ def test_tokenize_file_overwrite(tokenizer, input_text: str):
 
         expected_output = "▁this ▁is ▁a ▁test ▁sent ence ."
         assert output == expected_output
+
+
+def test_sentence_encoder(tokenizer, encoder, input_text):
+    tokenized_text = tokenizer.tokenize(input_text)
+    sentence_embedding = encoder.encode_sentences([tokenized_text])
+    assert isinstance(sentence_embedding, np.ndarray)
+    assert sentence_embedding.shape == (1, 1024)
+
+    # Ensure the encoder handles large input well
+    large_input_embeddings = encoder.encode_sentences([tokenized_text] * 100)
+    assert isinstance(large_input_embeddings, np.ndarray)
+    assert large_input_embeddings.shape == (100, 1024)
