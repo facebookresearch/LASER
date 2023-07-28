@@ -33,6 +33,6 @@ jobs:
       
     - name: black
       run: cd laser_encoders && black --check --diff .
-      
+
     - name: pytest
       run: pytest laser_encoders
