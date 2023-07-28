@@ -164,25 +164,20 @@ def test_tokenize_file_overwrite(tokenizer, input_text: str):
     ],
 )
 def test_sentence_encoder(tokenizer, model_url, expected_array, input_text: str):
-    with NamedTemporaryFile() as f, NamedTemporaryFile() as g:
-        download_and_write_to_temp_file(model_url, f)
-        download_and_write_to_temp_file(
-            "https://dl.fbaipublicfiles.com/nllb/laser/laser2.cvocab", g
-        )
-
-        sentence_encoder = SentenceEncoder(
-            model_path=Path(f.name), spm_vocab=Path(g.name)
-        )
+    with NamedTemporaryFile() as f:
+        with urllib.request.urlopen(model_url) as response:
+            f.write(response.read())
+    with NamedTemporaryFile() as g:
+        with urllib.request.urlopen(
+            "https://dl.fbaipublicfiles.com/nllb/laser/laser2.cvocab"
+        ) as response:
+            g.write(response.read())
+        print("this is it", f.name, g.name)
+        sentence_encoder = SentenceEncoder(model_path=Path(f.name), spm_vocab=g.name)
 
         tokenized_text = tokenizer.tokenize(input_text)
         sentence_embedding = sentence_encoder.encode_sentences([tokenized_text])
-
         assert isinstance(sentence_embedding, np.ndarray)
         assert sentence_embedding.shape == (1, 1024)
 
         assert np.allclose(expected_array, sentence_embedding[:, :10])
-
-
-def download_and_write_to_temp_file(url, temp_file):
-    with urllib.request.urlopen(url) as response:
-        temp_file.write(response.read())
