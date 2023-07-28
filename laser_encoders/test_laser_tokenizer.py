@@ -170,12 +170,14 @@ def test_sentence_encoder(tokenizer, model_url, expected_array, input_text: str)
         ) as response:
             g.write(response.read())
 
-    with NamedTemporaryFile() as f:
-        with urllib.request.urlopen(model_url) as response:
-            f.write(response.read())
+        with NamedTemporaryFile() as f:
+            with urllib.request.urlopen(model_url) as response:
+                f.write(response.read())
 
-        print("this is it", f.name, g.name)
-        sentence_encoder = SentenceEncoder(model_path=Path(f.name), spm_vocab=g.name)
+                print("this is it", f.name, g.name)
+                sentence_encoder = SentenceEncoder(
+                    model_path=Path(f.name), spm_vocab=g.name
+                )
 
         tokenized_text = tokenizer.tokenize(input_text)
         sentence_embedding = sentence_encoder.encode_sentences([tokenized_text])
