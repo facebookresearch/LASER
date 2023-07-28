@@ -8,7 +8,7 @@ jobs:
       max-parallel: 1
       matrix:
         platform: [ubuntu-latest]
-        python-version: [3.8]
+        python-version: [3.9]
 
     runs-on: ${{ matrix.platform }}
 
