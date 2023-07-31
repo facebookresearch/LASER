@@ -178,9 +178,9 @@ def test_sentence_encoder(tokenizer, model_url, expected_array, input_text: str)
                         model_path=Path(laser_model.name), spm_vocab=laser_vocab.name
                     )
 
-        tokenized_text = tokenizer.tokenize(input_text)
-        sentence_embedding = sentence_encoder.encode_sentences([tokenized_text])
-        assert isinstance(sentence_embedding, np.ndarray)
-        assert sentence_embedding.shape == (1, 1024)
+                    tokenized_text = tokenizer.tokenize(input_text)
+                    sentence_embedding = sentence_encoder.encode_sentences([tokenized_text])
+                    assert isinstance(sentence_embedding, np.ndarray)
+                    assert sentence_embedding.shape == (1, 1024)
 
-        assert np.allclose(expected_array, sentence_embedding[:, :10])
+                    assert np.allclose(expected_array, sentence_embedding[:, :10])
