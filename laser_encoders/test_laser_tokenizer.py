@@ -27,12 +27,12 @@ from laser_encoders.models import SentenceEncoder
 
 @pytest.fixture
 def tokenizer():
-    with NamedTemporaryFile() as f:
-        with urllib.request.urlopen(
-            "https://dl.fbaipublicfiles.com/nllb/laser/laser2.spm"
-        ) as response:
-            f.write(response.read())
-        return LaserTokenizer(spm_model=Path(f.name))
+    token = NamedTemporaryFile()
+    with urllib.request.urlopen(
+        "https://dl.fbaipublicfiles.com/nllb/laser/laser2.spm"
+    ) as response:
+        token.write(response.read())
+    return LaserTokenizer(spm_model=Path(token.name))
 
 
 @pytest.fixture
@@ -164,25 +164,22 @@ def test_tokenize_file_overwrite(tokenizer, input_text: str):
     ],
 )
 def test_sentence_encoder(tokenizer, model_url, expected_array, input_text: str):
-    with NamedTemporaryFile() as laser_vocab:
-        with urllib.request.urlopen(
-            "https://dl.fbaipublicfiles.com/nllb/laser/laser2.cvocab"
-        ) as response:
-            laser_vocab.write(response.read())
+    laser_vocab = NamedTemporaryFile()
+    with urllib.request.urlopen(
+        "https://dl.fbaipublicfiles.com/nllb/laser/laser2.cvocab"
+    ) as response:
+        laser_vocab.write(response.read())
 
-            with NamedTemporaryFile() as laser_model:
-                with urllib.request.urlopen(model_url) as response:
-                    laser_model.write(response.read())
+    laser_model = NamedTemporaryFile()
+    with urllib.request.urlopen(model_url) as response:
+        laser_model.write(response.read())
 
-                    sentence_encoder = SentenceEncoder(
-                        model_path=Path(laser_model.name), spm_vocab=laser_vocab.name
-                    )
+    sentence_encoder = SentenceEncoder(
+        model_path=Path(laser_model.name), spm_vocab=laser_vocab.name
+    )
+    tokenized_text = tokenizer.tokenize(input_text)
+    sentence_embedding = sentence_encoder.encode_sentences([tokenized_text])
 
-                    tokenized_text = tokenizer.tokenize(input_text)
-                    sentence_embedding = sentence_encoder.encode_sentences(
-                        [tokenized_text]
-                    )
-                    assert isinstance(sentence_embedding, np.ndarray)
-                    assert sentence_embedding.shape == (1, 1024)
-
-                    assert np.allclose(expected_array, sentence_embedding[:, :10])
+    assert isinstance(sentence_embedding, np.ndarray)
+    assert sentence_embedding.shape == (1, 1024)
+    assert np.allclose(expected_array, sentence_embedding[:, :10])
