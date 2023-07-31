@@ -179,7 +179,9 @@ def test_sentence_encoder(tokenizer, model_url, expected_array, input_text: str)
                     )
 
                     tokenized_text = tokenizer.tokenize(input_text)
-                    sentence_embedding = sentence_encoder.encode_sentences([tokenized_text])
+                    sentence_embedding = sentence_encoder.encode_sentences(
+                        [tokenized_text]
+                    )
                     assert isinstance(sentence_embedding, np.ndarray)
                     assert sentence_embedding.shape == (1, 1024)
 
