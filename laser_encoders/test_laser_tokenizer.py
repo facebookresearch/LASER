@@ -164,19 +164,19 @@ def test_tokenize_file_overwrite(tokenizer, input_text: str):
     ],
 )
 def test_sentence_encoder(tokenizer, model_url, expected_array, input_text: str):
-    with NamedTemporaryFile() as g:
+    with NamedTemporaryFile() as laser_vocab:
         with urllib.request.urlopen(
             "https://dl.fbaipublicfiles.com/nllb/laser/laser2.cvocab"
         ) as response:
-            g.write(response.read())
+            laser_vocab.write(response.read())
 
-        with NamedTemporaryFile() as f:
-            with urllib.request.urlopen(model_url) as response:
-                f.write(response.read())
+            with NamedTemporaryFile() as laser_model:
+                with urllib.request.urlopen(model_url) as response:
+                    laser_model.write(response.read())
 
-                sentence_encoder = SentenceEncoder(
-                    model_path=Path(f.name), spm_vocab=g.name
-                )
+                    sentence_encoder = SentenceEncoder(
+                        model_path=Path(laser_model.name), spm_vocab=laser_vocab.name
+                    )
 
         tokenized_text = tokenizer.tokenize(input_text)
         sentence_embedding = sentence_encoder.encode_sentences([tokenized_text])
