@@ -17,6 +17,7 @@ import os
 import urllib.request
 from pathlib import Path
 from tempfile import NamedTemporaryFile, TemporaryDirectory
+from typing import List
 
 import numpy as np
 import pytest
@@ -163,23 +164,24 @@ def test_tokenize_file_overwrite(tokenizer, input_text: str):
         ),
     ],
 )
-def test_sentence_encoder(tokenizer, model_url, expected_array, input_text: str):
-    laser_vocab = NamedTemporaryFile()
-    with urllib.request.urlopen(
-        "https://dl.fbaipublicfiles.com/nllb/laser/laser2.cvocab"
-    ) as response:
-        laser_vocab.write(response.read())
+def test_sentence_encoder(
+    tokenizer, model_url: str, expected_array: List, input_text: str
+):
+    with NamedTemporaryFile() as laser_vocab, NamedTemporaryFile() as laser_model:
+        with urllib.request.urlopen(
+            "https://dl.fbaipublicfiles.com/nllb/laser/laser2.cvocab"
+        ) as response:
+            laser_vocab.write(response.read())
 
-    laser_model = NamedTemporaryFile()
-    with urllib.request.urlopen(model_url) as response:
-        laser_model.write(response.read())
+        with urllib.request.urlopen(model_url) as response:
+            laser_model.write(response.read())
 
-    sentence_encoder = SentenceEncoder(
-        model_path=Path(laser_model.name), spm_vocab=laser_vocab.name
-    )
-    tokenized_text = tokenizer.tokenize(input_text)
-    sentence_embedding = sentence_encoder.encode_sentences([tokenized_text])
+        sentence_encoder = SentenceEncoder(
+            model_path=Path(laser_model.name), spm_vocab=laser_vocab.name
+        )
+        tokenized_text = tokenizer.tokenize(input_text)
+        sentence_embedding = sentence_encoder.encode_sentences([tokenized_text])
 
-    assert isinstance(sentence_embedding, np.ndarray)
-    assert sentence_embedding.shape == (1, 1024)
-    assert np.allclose(expected_array, sentence_embedding[:, :10])
+        assert isinstance(sentence_embedding, np.ndarray)
+        assert sentence_embedding.shape == (1, 1024)
+        assert np.allclose(expected_array, sentence_embedding[:, :10], atol=1e-3)

@@ -11,9 +11,7 @@
 # and mining
 #
 # --------------------------------------------------------
-#
-# Tool to calculate to embed a text file
-# The functions can be also imported into another Python code
+
 
 
 import logging
