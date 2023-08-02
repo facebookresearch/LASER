@@ -17,20 +17,23 @@ import os
 import urllib.request
 from pathlib import Path
 from tempfile import NamedTemporaryFile, TemporaryDirectory
+from typing import List
 
+import numpy as np
 import pytest
 
 from laser_encoders.laser_tokenizer import LaserTokenizer
+from laser_encoders.models import SentenceEncoder
 
 
 @pytest.fixture
 def tokenizer():
-    with NamedTemporaryFile() as f:
-        with urllib.request.urlopen(
-            "https://dl.fbaipublicfiles.com/nllb/laser/laser2.spm"
-        ) as response:
-            f.write(response.read())
-        return LaserTokenizer(spm_model=Path(f.name))
+    token = NamedTemporaryFile()
+    with urllib.request.urlopen(
+        "https://dl.fbaipublicfiles.com/nllb/laser/laser2.spm"
+    ) as response:
+        token.write(response.read())
+    return LaserTokenizer(spm_model=Path(token.name))
 
 
 @pytest.fixture
@@ -124,3 +127,61 @@ def test_tokenize_file_overwrite(tokenizer, input_text: str):
 
         expected_output = "▁this ▁is ▁a ▁test ▁sent ence ."
         assert output == expected_output
+
+
+@pytest.mark.parametrize(
+    "model_url, expected_array",
+    [
+        (
+            "https://dl.fbaipublicfiles.com/nllb/laser/laser2.pt",
+            [
+                1.042462512850761414e-02,
+                6.325428839772939682e-03,
+                -3.032622225873637944e-05,
+                9.033476933836936951e-03,
+                2.937933895736932755e-04,
+                4.489220678806304932e-03,
+                2.334521152079105377e-03,
+                -9.427300537936389446e-04,
+                -1.571535394759848714e-04,
+                2.095808042213320732e-03,
+            ],
+        ),
+        (
+            "https://dl.fbaipublicfiles.com/nllb/laser/laser3-zul_Latn.v1.pt",
+            [
+                3.038274645805358887e-01,
+                4.151830971240997314e-01,
+                -2.458990514278411865e-01,
+                3.153458833694458008e-01,
+                -5.153598189353942871e-01,
+                -6.035178527235984802e-02,
+                2.210616767406463623e-01,
+                -2.701394855976104736e-01,
+                -4.902199506759643555e-01,
+                -3.126966953277587891e-02,
+            ],
+        ),
+    ],
+)
+def test_sentence_encoder(
+    tokenizer, model_url: str, expected_array: List, input_text: str
+):
+    with NamedTemporaryFile() as laser_vocab, NamedTemporaryFile() as laser_model:
+        with urllib.request.urlopen(
+            "https://dl.fbaipublicfiles.com/nllb/laser/laser2.cvocab"
+        ) as response:
+            laser_vocab.write(response.read())
+
+        with urllib.request.urlopen(model_url) as response:
+            laser_model.write(response.read())
+
+        sentence_encoder = SentenceEncoder(
+            model_path=Path(laser_model.name), spm_vocab=laser_vocab.name
+        )
+        tokenized_text = tokenizer.tokenize(input_text)
+        sentence_embedding = sentence_encoder.encode_sentences([tokenized_text])
+
+        assert isinstance(sentence_embedding, np.ndarray)
+        assert sentence_embedding.shape == (1, 1024)
+        assert np.allclose(expected_array, sentence_embedding[:, :10], atol=1e-3)

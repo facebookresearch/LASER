@@ -15,12 +15,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-        cache: 'pip'
-
     - name: Install dependencies
       run: |
         python --version
@@ -33,6 +27,6 @@ jobs:
       
     - name: black
       run: cd laser_encoders && black --check --diff .
-      
+
     - name: pytest
       run: pytest laser_encoders
