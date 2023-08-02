@@ -16,20 +16,24 @@
 # The functions can be also imported into another Python code
 
 
-import re
-import os
-import tempfile
-import sys
-import time
 import argparse
-import numpy as np
 import logging
+import os
+import re
+import sys
+import tempfile
+import time
 from collections import namedtuple
-from subprocess import run
 from pathlib import Path
+from subprocess import run
 from typing import Optional, Union
 
-from lib.text_processing import Token, BPEfastApply, SPMApply
+assert os.environ.get("LASER"), "Please set the environment variable LASER"
+LASER = os.environ["LASER"]
+sys.path.append(LASER)
+
+import numpy as np
+from lib.text_processing import BPEfastApply, SPMApply, Token
 from laser_encoders.models import SentenceEncoder
 
 SPACE_NORMALIZER = re.compile(r"\s+")
