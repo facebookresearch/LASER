@@ -9,8 +9,8 @@
 # is a toolkit to calculate multilingual sentence embeddings
 # and to use them for document classification, bitext filtering
 # and mining
-# 
-#-------------------------------------------------------
+#
+# -------------------------------------------------------
 #
 # This python script installs NLLB LASER2 and LASER3 sentence encoders from Amazon s3
 
@@ -30,6 +30,7 @@ logging.basicConfig(
     format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
 )
 logger = logging.getLogger("preprocess")
+
 
 class LaserModelDownloader:
     def __init__(self, model_dir):
@@ -53,12 +54,16 @@ class LaserModelDownloader:
 
     def download_laser3(self, lang, version="v1", spm=False):
         if lang not in LANGUAGE_MAPPING:
-            logger.info(f"Unsupported language name: {lang}. Please specify a supported language name.")
+            logger.info(
+                f"Unsupported language name: {lang}. Please specify a supported language name."
+            )
             return
-    
+
         if len(LANGUAGE_MAPPING[lang]) > 1:
-            options = ', '.join(f"'{opt}'" for opt in LANGUAGE_MAPPING[lang])
-            logger.info(f"Language '{lang}' has multiple options: {options}. Please specify.")
+            options = ", ".join(f"'{opt}'" for opt in LANGUAGE_MAPPING[lang])
+            logger.info(
+                f"Language '{lang}' has multiple options: {options}. Please specify."
+            )
             return
 
         lang = LANGUAGE_MAPPING[lang]
@@ -83,13 +88,18 @@ class LaserModelDownloader:
             logger.info("Please specify --laser. either laeser2 or laser3")
             return
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="LASER: Download Laser models")
     parser.add_argument("--laser", help="LASER model to download")
-    parser.add_argument("--lang", type=str, required=True, help="The language name in FLORES200 format")
+    parser.add_argument(
+        "--lang", type=str, required=True, help="The language name in FLORES200 format"
+    )
     parser.add_argument("--version", type=str, help="The encoder model version")
     parser.add_argument("--spm", help="Download the SPM model as well?")
-    parser.add_argument("--model_dir", type=str, help="The directory to download the models to")
+    parser.add_argument(
+        "--model_dir", type=str, help="The directory to download the models to"
+    )
     args = parser.parse_args()
     model_dir = args.model_dir or os.path.expanduser("~/.cache/laser_encoders")
     downloader = LaserModelDownloader(model_dir)
