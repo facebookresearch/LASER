@@ -23,6 +23,7 @@ import sys
 
 import requests
 from language_list import LANGUAGE_MAPPING, SPM_LANGUAGE
+from tqdm import tqdm
 
 logging.basicConfig(
     stream=sys.stdout,
@@ -35,7 +36,7 @@ logger = logging.getLogger("preprocess")
 class LaserModelDownloader:
     def __init__(self, model_dir: str):
         self.model_dir = model_dir
-        self.url = "https://dl.fbaipublicfiles.com/nllb/laser/"
+        self.url = "https://dl.fbaipublicfiles.com/nllb/laser"
 
     def download(self, url: str):
         if os.path.exists(os.path.join(self.model_dir, os.path.basename(url))):
@@ -43,9 +44,14 @@ class LaserModelDownloader:
         else:
             logger.info(f" - Downloading {os.path.basename(url)}")
             response = requests.get(url, stream=True)
+            total_size = int(response.headers.get("Content-Length", 0))
+            progress_bar = tqdm(total=total_size, unit="KB")
+            print(url)
             with open(os.path.join(self.model_dir, os.path.basename(url)), "wb") as f:
                 for chunk in response.iter_content(chunk_size=1024):
                     f.write(chunk)
+                    progress_bar.update(len(chunk))
+            progress_bar.close()
 
     def download_laser2(self):
         self.download(f"{self.url}/laser2.pt")
@@ -53,16 +59,14 @@ class LaserModelDownloader:
         self.download(f"{self.url}/laser2.cvocab")
 
     def download_laser3(self, lang: str, version: str = "v1", spm: bool = False):
+        print(version, "eiooritoritoritorioti", spm)
         if lang not in LANGUAGE_MAPPING:
-            logger.info(
-                f"Unsupported language name: {lang}. Please specify a supported language name."
-            )
-            return
+            raise ValueError(f"Unsupported language name: {lang}. Please specify a supported language name using --lang-model.")
 
-        if len(LANGUAGE_MAPPING[lang]) > 1:
+        if isinstance(LANGUAGE_MAPPING[lang], tuple):
             options = ", ".join(f"'{opt}'" for opt in LANGUAGE_MAPPING[lang])
             logger.info(
-                f"Language '{lang}' has multiple options: {options}. Please specify."
+                f"Language '{lang}' has multiple options: {options}. Please specify using --lang-model."
             )
             return
 
@@ -83,7 +87,7 @@ class LaserModelDownloader:
         if args.laser == "laser2":
             self.download_laser2()
         elif args.laser == "laser3":
-            self.download_laser3(lang=args.lang, version=args.version, spm=args.spm)
+            self.download_laser3(lang=args.lang_model, version=args.version, spm=args.spm)
         else:
             logger.info("Please specify --laser. either laeser2 or laser3")
             return
@@ -95,11 +99,10 @@ if __name__ == "__main__":
     parser.add_argument(
         "--lang-model",
         type=str,
-        required=True,
         help="The language name in FLORES200 format",
     )
-    parser.add_argument("--version", type=str, help="The encoder model version")
-    parser.add_argument("--spm-model", help="Download the SPM model as well?")
+    parser.add_argument("--version", type=str, default="v1", help="The encoder model version")
+    parser.add_argument("--spm", choices=[True, False], default=False, type=bool, help="Download the SPM model as well?")
     parser.add_argument(
         "--model-dir", type=str, help="The directory to download the models to"
     )
