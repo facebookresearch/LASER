@@ -33,11 +33,11 @@ logger = logging.getLogger("preprocess")
 
 
 class LaserModelDownloader:
-    def __init__(self, model_dir):
+    def __init__(self, model_dir: str):
         self.model_dir = model_dir
         self.url = "https://dl.fbaipublicfiles.com/nllb/laser/"
 
-    def download(self, url):
+    def download(self, url: str):
         if os.path.exists(os.path.join(self.model_dir, os.path.basename(url))):
             logger.info(f" - {os.path.basename(url)} already downloaded")
         else:
@@ -52,7 +52,7 @@ class LaserModelDownloader:
         self.download(f"{self.url}/laser2.spm")
         self.download(f"{self.url}/laser2.cvocab")
 
-    def download_laser3(self, lang, version="v1", spm=False):
+    def download_laser3(self, lang: str, version: str="v1", spm: bool=False):
         if lang not in LANGUAGE_MAPPING:
             logger.info(
                 f"Unsupported language name: {lang}. Please specify a supported language name."
@@ -93,12 +93,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="LASER: Download Laser models")
     parser.add_argument("--laser", help="LASER model to download")
     parser.add_argument(
-        "--lang", type=str, required=True, help="The language name in FLORES200 format"
+        "--lang-model", type=str, required=True, help="The language name in FLORES200 format"
     )
     parser.add_argument("--version", type=str, help="The encoder model version")
-    parser.add_argument("--spm", help="Download the SPM model as well?")
+    parser.add_argument("--spm-model", help="Download the SPM model as well?")
     parser.add_argument(
-        "--model_dir", type=str, help="The directory to download the models to"
+        "--model-dir", type=str, help="The directory to download the models to"
     )
     args = parser.parse_args()
     model_dir = args.model_dir or os.path.expanduser("~/.cache/laser_encoders")
