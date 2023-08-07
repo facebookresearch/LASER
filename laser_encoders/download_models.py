@@ -59,9 +59,10 @@ class LaserModelDownloader:
         self.download(f"{self.url}/laser2.cvocab")
 
     def download_laser3(self, lang: str, version: str = "v1", spm: bool = False):
-        print(version, "eiooritoritoritorioti", spm)
         if lang not in LANGUAGE_MAPPING:
-            raise ValueError(f"Unsupported language name: {lang}. Please specify a supported language name using --lang-model.")
+            raise ValueError(
+                f"Unsupported language name: {lang}. Please specify a supported language name using --lang-model."
+            )
 
         if isinstance(LANGUAGE_MAPPING[lang], tuple):
             options = ", ".join(f"'{opt}'" for opt in LANGUAGE_MAPPING[lang])
@@ -87,7 +88,9 @@ class LaserModelDownloader:
         if args.laser == "laser2":
             self.download_laser2()
         elif args.laser == "laser3":
-            self.download_laser3(lang=args.lang_model, version=args.version, spm=args.spm)
+            self.download_laser3(
+                lang=args.lang_model, version=args.version, spm=args.spm
+            )
         else:
             logger.info("Please specify --laser. either laeser2 or laser3")
             return
@@ -101,8 +104,16 @@ if __name__ == "__main__":
         type=str,
         help="The language name in FLORES200 format",
     )
-    parser.add_argument("--version", type=str, default="v1", help="The encoder model version")
-    parser.add_argument("--spm", choices=[True, False], default=False, type=bool, help="Download the SPM model as well?")
+    parser.add_argument(
+        "--version", type=str, default="v1", help="The encoder model version"
+    )
+    parser.add_argument(
+        "--spm",
+        choices=[True, False],
+        default=False,
+        type=bool,
+        help="Download the SPM model as well?",
+    )
     parser.add_argument(
         "--model-dir", type=str, help="The directory to download the models to"
     )
