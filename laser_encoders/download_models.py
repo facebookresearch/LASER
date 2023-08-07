@@ -52,7 +52,7 @@ class LaserModelDownloader:
         self.download(f"{self.url}/laser2.spm")
         self.download(f"{self.url}/laser2.cvocab")
 
-    def download_laser3(self, lang: str, version: str="v1", spm: bool=False):
+    def download_laser3(self, lang: str, version: str = "v1", spm: bool = False):
         if lang not in LANGUAGE_MAPPING:
             logger.info(
                 f"Unsupported language name: {lang}. Please specify a supported language name."
@@ -91,9 +91,12 @@ class LaserModelDownloader:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="LASER: Download Laser models")
-    parser.add_argument("--laser", help="LASER model to download")
+    parser.add_argument("--laser", required=True, help="LASER model to download")
     parser.add_argument(
-        "--lang-model", type=str, required=True, help="The language name in FLORES200 format"
+        "--lang-model",
+        type=str,
+        required=True,
+        help="The language name in FLORES200 format",
     )
     parser.add_argument("--version", type=str, help="The encoder model version")
     parser.add_argument("--spm-model", help="Download the SPM model as well?")
