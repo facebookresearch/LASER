@@ -23,7 +23,7 @@ import sys
 from pathlib import Path
 
 import requests
-from language_list import LASER3_LANGUAGE, LASER2_LANGUAGE, SPM_LANGUAGE
+from language_list import LASER2_LANGUAGE, LASER3_LANGUAGE, SPM_LANGUAGE
 from tqdm import tqdm
 
 assert os.environ.get("LASER"), "Please set the environment variable LASER"
@@ -95,24 +95,24 @@ class LaserModelDownloader:
                 f"Unsupported language name: {args.lang_model}. Please specify a supported language name using --lang-model."
             )
 
+
 def download_model(model_dir, version, lang_model, spm):
     if model_dir is None:
         model_dir = os.path.expanduser("~/.cache/laser_encoders")
-    file_path = ''
+    file_path = ""
     downloader = LaserModelDownloader(model_dir)
     if lang_model in LASER2_LANGUAGE:
         downloader.download_laser2()
         file_path = model_dir + "/laser2"
     elif lang_model in LASER3_LANGUAGE:
-        downloader.download_laser3(
-            lang=lang_model, version=version, spm=spm
-        )
+        downloader.download_laser3(lang=lang_model, version=version, spm=spm)
         file_path = f"{model_dir}/laser3-{lang_model}.{version}"
     else:
         raise ValueError(
             f"Unsupported language name: {lang_model}. Please specify a supported language name using --lang-model."
         )
     return file_path
+
 
 def initialize_encoder(lang_model, model_dir=None, version="v1", spm=False):
     file_path = download_model(model_dir, version, lang_model, spm)

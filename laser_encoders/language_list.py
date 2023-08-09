@@ -3,8 +3,8 @@ LASER3_LANGUAGE = {
     "central kanuri": ("knc_Latn", "knc_Arab"),
     "knc": ("knc_Latn", "knc_Arab"),
     "knc_Latn": "knc_Latn",
-    "amh_Ethi":"amh_Ethi",
-    "zul_Latn":"zul_Latn",
+    "amh_Ethi": "amh_Ethi",
+    "zul_Latn": "zul_Latn",
 }
 
 LASER2_LANGUAGE = {
