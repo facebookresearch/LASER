@@ -1,13 +1,16 @@
 # Language mapping to handle different language codes and names
-LANGUAGE_MAPPING = {
+LASER3_LANGUAGE = {
     "central kanuri": ("knc_Latn", "knc_Arab"),
     "knc": ("knc_Latn", "knc_Arab"),
     "knc_Latn": "knc_Latn",
+    "amh_Ethi":"amh_Ethi",
+    "zul_Latn":"zul_Latn",
 }
-# LANGUAGE_MAPPING = {
-#     ('french', 'fra', 'fr', 'fra_Latn'): 'fra_Latn',
-#     ('english', 'eng', 'en', 'eng_Latn'): 'eng_Latn',
-# }
+
+LASER2_LANGUAGE = {
+    "Afrikaans": "afr_Latn",
+    "afr_Latn": "afr_Latn",
+}
 
 # langs = ["aka_Latn", "als_Latn", "amh_Ethi", "asm_Beng", "awa_Deva", "ayr_Latn", "azb_Arab", "azj_Latn", "bak_Cyrl", "bam_Latn", "ban_Latn", "bel_Cyrl",
 #         "bem_Latn", "ben_Beng", "bho_Deva", "bjn_Latn", "bod_Tibt", "bug_Latn", "ceb_Latn", "cjk_Latn", "ckb_Arab", "crh_Latn", "cym_Latn", "dik_Latn", "diq_Latn",

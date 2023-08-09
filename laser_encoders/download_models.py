@@ -20,10 +20,18 @@ import argparse
 import logging
 import os
 import sys
+from pathlib import Path
 
 import requests
-from language_list import LANGUAGE_MAPPING, SPM_LANGUAGE
+from language_list import LASER3_LANGUAGE, LASER2_LANGUAGE, SPM_LANGUAGE
 from tqdm import tqdm
+
+assert os.environ.get("LASER"), "Please set the environment variable LASER"
+LASER = os.environ["LASER"]
+sys.path.append(LASER)
+
+from laser_encoders.laser_tokenizer import LaserTokenizer
+from laser_encoders.models import SentenceEncoder
 
 logging.basicConfig(
     stream=sys.stdout,
@@ -46,7 +54,6 @@ class LaserModelDownloader:
             response = requests.get(url, stream=True)
             total_size = int(response.headers.get("Content-Length", 0))
             progress_bar = tqdm(total=total_size, unit="KB")
-            print(url)
             with open(os.path.join(self.model_dir, os.path.basename(url)), "wb") as f:
                 for chunk in response.iter_content(chunk_size=1024):
                     f.write(chunk)
@@ -59,49 +66,72 @@ class LaserModelDownloader:
         self.download(f"{self.url}/laser2.cvocab")
 
     def download_laser3(self, lang: str, version: str = "v1", spm: bool = False):
-        if lang not in LANGUAGE_MAPPING:
-            raise ValueError(
-                f"Unsupported language name: {lang}. Please specify a supported language name using --lang-model."
-            )
-
-        if isinstance(LANGUAGE_MAPPING[lang], tuple):
-            options = ", ".join(f"'{opt}'" for opt in LANGUAGE_MAPPING[lang])
+        lang_3_4 = LASER3_LANGUAGE[lang]
+        if isinstance(lang_3_4, tuple):
+            options = ", ".join(f"'{opt}'" for opt in lang_3_4)
             logger.info(
-                f"Language '{lang}' has multiple options: {options}. Please specify using --lang-model."
+                f"Language '{lang_3_4}' has multiple options: {options}. Please specify using --lang-model."
             )
             return
 
-        lang = LANGUAGE_MAPPING[lang]
-        file_name = f"{self.url}/laser3-{lang}.{version}.pt"
-        self.download(file_name)
+        self.download(f"{self.url}/laser3-{lang_3_4}.{version}.pt")
         if spm:
-            if lang in SPM_LANGUAGE:
-                file_name = f"{self.url}/laser3-{lang}.{version}.spm"
-                self.download(file_name)
-                file_name = f"{self.url}/laser3-{lang}.{version}.cvocab"
-                self.download(file_name)
+            if lang_3_4 in SPM_LANGUAGE:
+                self.download(f"{self.url}/laser3-{lang_3_4}.{version}.spm")
+                self.download(f"{self.url}/laser3-{lang_3_4}.{version}.cvocab")
             else:
                 self.download(f"{self.url}/laser2.spm")
                 self.download(f"{self.url}/laser2.cvocab")
 
     def main(self, args):
-        if args.laser == "laser2":
+        if args.lang_model in LASER2_LANGUAGE:
             self.download_laser2()
-        elif args.laser == "laser3":
+        elif args.lang_model in LASER3_LANGUAGE:
             self.download_laser3(
                 lang=args.lang_model, version=args.version, spm=args.spm
             )
         else:
-            logger.info("Please specify --laser. either laeser2 or laser3")
-            return
+            raise ValueError(
+                f"Unsupported language name: {args.lang_model}. Please specify a supported language name using --lang-model."
+            )
+
+def download_model(model_dir, version, lang_model, spm):
+    if model_dir is None:
+        model_dir = os.path.expanduser("~/.cache/laser_encoders")
+    file_path = ''
+    downloader = LaserModelDownloader(model_dir)
+    if lang_model in LASER2_LANGUAGE:
+        downloader.download_laser2()
+        file_path = model_dir + "/laser2"
+    elif lang_model in LASER3_LANGUAGE:
+        downloader.download_laser3(
+            lang=lang_model, version=version, spm=spm
+        )
+        file_path = f"{model_dir}/laser3-{lang_model}.{version}"
+    else:
+        raise ValueError(
+            f"Unsupported language name: {lang_model}. Please specify a supported language name using --lang-model."
+        )
+    return file_path
+
+def initialize_encoder(lang_model, model_dir=None, version="v1", spm=False):
+    file_path = download_model(model_dir, version, lang_model, spm)
+    model_path = f"{file_path}.pt"
+    return SentenceEncoder(model_path=model_path)
+
+
+def initialize_tokenizer(lang_model, model_dir=None, version="v1", spm=False):
+    file_path = download_model(model_dir, version, lang_model, spm)
+    model_path = f"{file_path}.spm"
+    return LaserTokenizer(spm_model=Path(model_path))
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="LASER: Download Laser models")
-    parser.add_argument("--laser", required=True, help="LASER model to download")
     parser.add_argument(
         "--lang-model",
         type=str,
+        required=True,
         help="The language name in FLORES200 format",
     )
     parser.add_argument(
@@ -109,10 +139,8 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--spm",
-        choices=[True, False],
-        default=False,
-        type=bool,
-        help="Download the SPM model as well?",
+        action="store_false",
+        help="Do not download the SPM model?",
     )
     parser.add_argument(
         "--model-dir", type=str, help="The directory to download the models to"
