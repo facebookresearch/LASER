@@ -117,7 +117,11 @@ def download_model(model_dir, version, lang_model, spm):
 def initialize_encoder(lang_model, model_dir=None, version="v1", spm=False):
     file_path = download_model(model_dir, version, lang_model, spm)
     model_path = f"{file_path}.pt"
-    return SentenceEncoder(model_path=model_path)
+    spm_path = f"{file_path}.cvocab"
+    if not os.path.exists(spm_path):
+        model_dir, _ = os.path.split(spm_path)
+        spm_path = f'{model_dir}/laser2.cvocab'
+    return SentenceEncoder(model_path=model_path, spm_vocab=spm_path)
 
 
 def initialize_tokenizer(lang_model, model_dir=None, version="v1", spm=False):
