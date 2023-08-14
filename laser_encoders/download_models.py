@@ -23,9 +23,9 @@ import sys
 from pathlib import Path
 
 import requests
-from laser_encoders.language_list import LASER2_LANGUAGE, LASER3_LANGUAGE, SPM_LANGUAGE
 from tqdm import tqdm
 
+from laser_encoders.language_list import LASER2_LANGUAGE, LASER3_LANGUAGE, SPM_LANGUAGE
 from laser_encoders.laser_tokenizer import LaserTokenizer
 from laser_encoders.models import SentenceEncoder
 
