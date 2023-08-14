@@ -1,15 +1,50 @@
+#!/bin/bash
+# Copyright (c) Facebook, Inc. and its affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the BSD-style license found in the
+# LICENSE file in the root directory of this source tree.
+#
+# LASER  Language-Agnostic SEntence Representations
+# is a toolkit to calculate multilingual sentence embeddings
+# and to use them for document classification, bitext filtering
+# and mining
+#
+# -------------------------------------------------------
 # Language mapping to handle different language codes and names
+
+
 LASER3_LANGUAGE = {
     "central kanuri": ("knc_Latn", "knc_Arab"),
     "knc": ("knc_Latn", "knc_Arab"),
     "knc_Latn": "knc_Latn",
+    "knc_Arab": "knc_Arab",
     "amh_Ethi": "amh_Ethi",
     "zul_Latn": "zul_Latn",
+    "amh_Ethi": "amh_Ethi"
 }
 
 LASER2_LANGUAGE = {
-    "Afrikaans": "afr_Latn",
-    "afr_Latn": "afr_Latn",
+    "acehnese": ("ace_Latn", "ace_Arab"),
+    "ace": ("ace_Latn", "ace_Arab"),
+    "ace_Latn": "ace_Latn",
+    "ace_Arab": "ace_Arab",
+
+    "mesopotamian arabic": "acm_Arab",
+    "acm": "acm_Arab",
+    "acm_Arab": "acm_Arab",
+
+    "ta’izzi-adeni arabic": "acq_Arab",
+    "acq": "acq_Arab",
+    "acq_Arab": "acq_Arab",
+
+    "tunisian arabic": "aeb_Arab",
+    "aeb": "aeb_Arab",
+    "aeb_Arab": "aeb_Arab",
+
+    "afrikaans": "afr_Latn",
+    "afr": "afr_Latn",
+    "afr_Latn": "afr_Latn"
 }
 
 # langs = ["aka_Latn", "als_Latn", "amh_Ethi", "asm_Beng", "awa_Deva", "ayr_Latn", "azb_Arab", "azj_Latn", "bak_Cyrl", "bam_Latn", "ban_Latn", "bel_Cyrl",
