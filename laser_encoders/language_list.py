@@ -21,7 +21,7 @@ LASER3_LANGUAGE = {
     "knc_Arab": "knc_Arab",
     "amh_Ethi": "amh_Ethi",
     "zul_Latn": "zul_Latn",
-    "amh_Ethi": "amh_Ethi"
+    "amh_Ethi": "amh_Ethi",
 }
 
 LASER2_LANGUAGE = {
@@ -29,22 +29,18 @@ LASER2_LANGUAGE = {
     "ace": ("ace_Latn", "ace_Arab"),
     "ace_Latn": "ace_Latn",
     "ace_Arab": "ace_Arab",
-
     "mesopotamian arabic": "acm_Arab",
     "acm": "acm_Arab",
     "acm_Arab": "acm_Arab",
-
     "ta’izzi-adeni arabic": "acq_Arab",
     "acq": "acq_Arab",
     "acq_Arab": "acq_Arab",
-
     "tunisian arabic": "aeb_Arab",
     "aeb": "aeb_Arab",
     "aeb_Arab": "aeb_Arab",
-
     "afrikaans": "afr_Latn",
     "afr": "afr_Latn",
-    "afr_Latn": "afr_Latn"
+    "afr_Latn": "afr_Latn",
 }
 
 # langs = ["aka_Latn", "als_Latn", "amh_Ethi", "asm_Beng", "awa_Deva", "ayr_Latn", "azb_Arab", "azj_Latn", "bak_Cyrl", "bam_Latn", "ban_Latn", "bel_Cyrl",
