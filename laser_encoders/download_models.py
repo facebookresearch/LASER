@@ -23,12 +23,8 @@ import sys
 from pathlib import Path
 
 import requests
-from language_list import LASER2_LANGUAGE, LASER3_LANGUAGE, SPM_LANGUAGE
+from laser_encoders.language_list import LASER2_LANGUAGE, LASER3_LANGUAGE, SPM_LANGUAGE
 from tqdm import tqdm
-
-assert os.environ.get("LASER"), "Please set the environment variable LASER"
-LASER = os.environ["LASER"]
-sys.path.append(LASER)
 
 from laser_encoders.laser_tokenizer import LaserTokenizer
 from laser_encoders.models import SentenceEncoder
