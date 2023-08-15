@@ -15,13 +15,26 @@
 
 
 LASER3_LANGUAGE = {
-    "central kanuri": ("knc_Latn", "knc_Arab"),
-    "knc": ("knc_Latn", "knc_Arab"),
-    "knc_Latn": "knc_Latn",
-    "knc_Arab": "knc_Arab",
+    # akan
+    "akan": "aka_Latn",
+    "aka": "aka_Latn",
+    "aka_Latn": "aka_Latn",
+    # amharic
+    "amharic": "amh_Ethi",
+    "amh": "amh_Ethi",
     "amh_Ethi": "amh_Ethi",
-    "zul_Latn": "zul_Latn",
-    "amh_Ethi": "amh_Ethi",
+    # assamese
+    "assamese": "asm_Beng",
+    "asm": "asm_Beng",
+    "asm_Beng": "asm_Beng",
+    # crimean tatar
+    "crimean tatar": "crh_Latn",
+    "crh": "crh_Latn",
+    "crh_Latn": "crh_Latn",
+    # chokwe
+    "chokwe": "cjk_Latn",
+    "cjk": "cjk_Latn",
+    "cjk_Latn": "cjk_Latn",
 }
 
 LASER2_LANGUAGE = {
@@ -29,18 +42,152 @@ LASER2_LANGUAGE = {
     "ace": ("ace_Latn", "ace_Arab"),
     "ace_Latn": "ace_Latn",
     "ace_Arab": "ace_Arab",
+    # mesopotamian
     "mesopotamian arabic": "acm_Arab",
     "acm": "acm_Arab",
     "acm_Arab": "acm_Arab",
+    # ta’izzi-adeni
     "ta’izzi-adeni arabic": "acq_Arab",
     "acq": "acq_Arab",
     "acq_Arab": "acq_Arab",
+    # tunisian
     "tunisian arabic": "aeb_Arab",
     "aeb": "aeb_Arab",
     "aeb_Arab": "aeb_Arab",
+    # afrikaans
     "afrikaans": "afr_Latn",
     "afr": "afr_Latn",
     "afr_Latn": "afr_Latn",
+    # south levantine arabic
+    "south levantine arabic": "ajp_Arab",
+    "ajp": "ajp_Arab",
+    "ajp_Arab": "ajp_Arab",
+    # akan
+    "akan": "aka_Latn",
+    "aka": "aka_Latn",
+    "aka_Latn": "aka_Latn",
+    # amharic
+    "amharic": "amh_Ethi",
+    "amh": "amh_Ethi",
+    "amh_Ethi": "amh_Ethi",
+    # north levantine arabic
+    "north levantine arabic": "apc_Arab",
+    "apc": "apc_Arab",
+    "apc_Arab": "apc_Arab",
+    # modern standard arabic
+    "modern standard arabic": ("arb_Latn", "arb_Arab"),
+    "arb": ("arb_Latn", "arb_Arab"),
+    "arb_Arab": "arb_Arab",
+    "arb_Latn": "arb_Latn",
+    # najdi arabic
+    "najdi arabic": "ars_Arab",
+    "ars": "ars_Arab",
+    "ars_Arab": "ars_Arab",
+    # moroccan arabic
+    "moroccan arabic": "ary_Arab",
+    "ary": "ary_Arab",
+    "ary_Arab": "ary_Arab",
+    # egyptian arabic
+    "egyptian arabic": "arz_Arab",
+    "arz": "arz_Arab",
+    "arz_Arab": "arz_Arab",
+    # assamese
+    "assamese": "asm_Beng",
+    "asm": "asm_Beng",
+    "asm_Beng": "asm_Beng",
+    # asturian
+    "asturian": "ast_Latn",
+    "ast": "ast_Latn",
+    "ast_Latn": "ast_Latn",
+    # awadhi
+    "awadhi": "awa_Deva",
+    "awa": "awa_Deva",
+    "awa_Deva": "awa_Deva",
+    # central aymara
+    "central aymara": "ayr_Latn",
+    "ayr": "ayr_Latn",
+    "ayr_Latn": "ayr_Latn",
+    # south azerbaijani
+    "south azerbaijani": "azb_Arab",
+    "azb": "azb_Arab",
+    "azb_Arab": "azb_Arab",
+    # north azerbaijani
+    "north azerbaijani": "azj_Latn",
+    "azj": "azj_Latn",
+    "azj_Latn": "azj_Latn",
+    # bashkir
+    "bashkir": "bak_Cyrl",
+    "bak": "bak_Cyrl",
+    "bak_Cyrl": "bak_Cyrl",
+    # bambara
+    "bambara": "bam_Latn",
+    "bam": "bam_Latn",
+    "bam_Latn": "bam_Latn",
+    # balinese
+    "balinese": "ban_Latn",
+    "ban": "ban_Latn",
+    "ban_Latn": "ban_Latn",
+    # belarusian
+    "belarusian": "bel_Cyrl",
+    "bel": "bel_Cyrl",
+    "bel_Cyrl": "bel_Cyrl",
+    # bemba
+    "bemba": "bem_Latn",
+    "bem": "bem_Latn",
+    "bem_Latn": "bem_Latn",
+    # bengali
+    "bengali": "ben_Beng",
+    "ben": "ben_Beng",
+    "ben_Beng": "ben_Beng",
+    # bhojpuri
+    "bhojpuri": "bho_Deva",
+    "bho": "bho_Deva",
+    "bho_Deva": "bho_Deva",
+    # banjar
+    "banjar": ("bjn_Latn", "bjn_Arab"),
+    "bjn": ("bjn_Latn", "bjn_Arab"),
+    "bjn_Latn": "bjn_Latn",
+    "bjn_Arab": "bjn_Arab",
+    # standard tibetan
+    "standard tibetan": "bod_Tibt",
+    "bod": "bod_Tibt",
+    "bod_Tibt": "bod_Tibt",
+    # bosnian
+    "bosnian": "bos_Latn",
+    "bos": "bos_Latn",
+    "bos_Latn": "bos_Latn",
+    # buginese
+    "buginese": "bug_Latn",
+    "bug": "bug_Latn",
+    "bug_Latn": "bug_Latn",
+    # bulgarian
+    "bulgarian": "bul_Cyrl",
+    "bul": "bul_Cyrl",
+    "bul_Cyrl": "bul_Cyrl",
+    # catalan
+    "catalan": "cat_Latn",
+    "cat": "cat_Latn",
+    "cat_Latn": "cat_Latn",
+    # cebuano
+    "cebuano": "ceb_Latn",
+    "ceb": "ceb_Latn",
+    "ceb_Latn": "ceb_Latn",
+    # czech
+    "czech": "ces_Latn",
+    "ces": "ces_Latn",
+    "ces_Latn": "ces_Latn",
+    # chokwe
+    "chokwe": "cjk_Latn",
+    "cjk": "cjk_Latn",
+    "cjk_Latn": "cjk_Latn",
+    # central kurdish
+    "central kurdish": "ckb_Arab",
+    "ckb": "ckb_Arab",
+    "ckb_Arab": "ckb_Arab",
+    # crimean tatar
+    "crimean tatar": "crh_Latn",
+    "crh": "crh_Latn",
+    "crh_Latn": "crh_Latn",
 }
 
 # langs = ["aka_Latn", "als_Latn", "amh_Ethi", "asm_Beng", "awa_Deva", "ayr_Latn", "azb_Arab", "azj_Latn", "bak_Cyrl", "bam_Latn", "ban_Latn", "bel_Cyrl",
