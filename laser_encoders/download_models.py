@@ -86,60 +86,88 @@ class LaserModelDownloader:
                 self.download(f"laser2.cvocab")
 
     def main(self, args):
-        if args.lang in LASER2_LANGUAGE:
-            self.download_laser2(args.lang)
-        elif args.lang in LASER3_LANGUAGE:
-            self.download_laser3(lang=args.lang, version=args.version, spm=args.spm)
+        if args.laser:
+            if args.laser == "laser2":
+                self.download_laser2(args.lang)
+            elif args.laser == "laser3":
+                self.download_laser3(lang=args.lang, version=args.version, spm=args.spm)
         else:
-            raise ValueError(
-                f"Unsupported language name: {args.lang}. Please specify a supported language name using --lang."
-            )
+            if args.lang in LASER3_LANGUAGE:
+                self.download_laser3(lang=args.lang, version=args.version, spm=args.spm)
+            elif args.lang in LASER2_LANGUAGE:
+                self.download_laser2(args.lang)
+            else:
+                raise ValueError(
+                    f"Unsupported language name: {args.lang}. Please specify a supported language name using --lang."
+                )
 
 
 def initialize_encoder(
-    lang: str, model_dir: str = None, version: str = "v1", spm: bool = True
+    lang: str,
+    model_dir: str = None,
+    version: str = "v1",
+    spm: bool = True,
+    laser: str = None,
 ):
     if model_dir is None:
         model_dir = os.path.expanduser("~/.cache/laser_encoders")
 
     downloader = LaserModelDownloader(model_dir)
-    if lang in LASER2_LANGUAGE:
-        downloader.download_laser2(lang)
-        file_path = "laser2"
-    elif lang in LASER3_LANGUAGE:
-        downloader.download_laser3(lang=lang, version=version, spm=spm)
-        file_path = f"laser3-{lang}.{version}"
+    if laser is not None:
+        if laser == "laser3":
+            downloader.download_laser3(lang=lang, version=version, spm=spm)
+            file_path = f"laser3-{lang}.{version}"
+        elif laser == "laser2":
+            downloader.download_laser2(lang)
+            file_path = "laser2"
+        else:
+            raise ValueError(f"Unsupported laser model: {laser}.")
     else:
-        raise ValueError(
-            f"Unsupported language name: {lang}. Please specify a supported language name."
-        )
+        if lang in LASER3_LANGUAGE:
+            downloader.download_laser3(lang=lang, version=version, spm=spm)
+            file_path = f"laser3-{lang}.{version}"
+        elif lang in LASER2_LANGUAGE:
+            downloader.download_laser2(lang)
+            file_path = "laser2"
+        else:
+            raise ValueError(
+                f"Unsupported language name: {lang}. Please specify a supported language name."
+            )
     model_path = f"{model_dir}/{file_path}.pt"
     spm_path = f"{model_dir}/{file_path}.cvocab"
     if not os.path.exists(spm_path):
         # if there is no cvocab for the laser3 lang use laser2 cvocab
-        model_dir, _ = os.path.split(spm_path)
-        spm_path = f"{model_dir}/laser2.cvocab"
+        spm_path = os.path.join(model_dir, "laser2.cvocab")
     return SentenceEncoder(model_path=model_path, spm_vocab=spm_path)
 
 
-def initialize_tokenizer(lang: str, model_dir: str = None, version: str = "v1"):
+def initialize_tokenizer(
+    lang: str, model_dir: str = None, version: str = "v1", laser: str = None
+):
     if model_dir is None:
         model_dir = os.path.expanduser("~/.cache/laser_encoders")
 
     downloader = LaserModelDownloader(model_dir)
-    if lang in LASER2_LANGUAGE:
-        _ = downloader.get_language_code(LASER2_LANGUAGE, lang)
-        filename = "laser2.spm"
-    elif lang in LASER3_LANGUAGE:
-        lang = downloader.get_language_code(LASER3_LANGUAGE, lang)
-        if lang in SPM_LANGUAGE:
+    if laser is not None:
+        if laser == "laser3":
+            lang = downloader.get_language_code(LASER3_LANGUAGE, lang)
             filename = f"laser3-{lang}.{version}.spm"
-        else:
+        elif laser == "laser2":
             filename = "laser2.spm"
+        else:
+            raise ValueError(f"Unsupported laser model: {laser}.")
     else:
-        raise ValueError(
-            f"Unsupported language name: {lang}. Please specify a supported language name."
-        )
+        if lang in LASER3_LANGUAGE or lang in LASER2_LANGUAGE:
+            lang = downloader.get_language_code(LASER3_LANGUAGE, lang)
+            if lang in SPM_LANGUAGE:
+                filename = f"laser3-{lang}.{version}.spm"
+            else:
+                filename = "laser2.spm"
+        else:
+            raise ValueError(
+                f"Unsupported language name: {lang}. Please specify a supported language name."
+            )
+
     downloader.download(filename)
     model_path = model_dir + filename
     return LaserTokenizer(spm_model=Path(model_path))
@@ -147,6 +175,12 @@ def initialize_tokenizer(lang: str, model_dir: str = None, version: str = "v1"):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="LASER: Download Laser models")
+    parser.add_argument(
+        "--laser",
+        type=str,
+        required=False,
+        help="Laser model to download",
+    )
     parser.add_argument(
         "--lang",
         type=str,
