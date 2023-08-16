@@ -1420,7 +1420,3 @@ LASER2_LANGUAGE = {
     "zsm": "zsm_Latn",
     "zsm_Latn": "zsm_Latn",
 }
-
-
-
-
