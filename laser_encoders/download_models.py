@@ -37,7 +37,11 @@ logger = logging.getLogger(__name__)
 
 
 class LaserModelDownloader:
-    def __init__(self, model_dir: str):
+    def __init__(self, model_dir: str=None):
+        if model_dir is None:
+            model_dir = os.path.expanduser("~/.cache/laser_encoders")
+            os.makedirs(model_dir, exist_ok=True)
+
         self.model_dir = Path(model_dir)
         self.base_url = "https://dl.fbaipublicfiles.com/nllb/laser"
 
@@ -72,19 +76,18 @@ class LaserModelDownloader:
                 f"language name: {lang} not found in language list. Specify a supported language name"
             )
 
-    def download_laser2(self, lang: str):
-        _ = self.get_language_code(LASER2_LANGUAGE, lang)
+    def download_laser2(self):
         self.download("laser2.pt")
         self.download("laser2.spm")
         self.download("laser2.cvocab")
 
-    def download_laser3(self, lang: str, version: str = "v1", spm: bool = False):
+    def download_laser3(self, lang: str, spm: bool = False):
         lang = self.get_language_code(LASER3_LANGUAGE, lang)
-        self.download(f"laser3-{lang}.{version}.pt")
+        self.download(f"laser3-{lang}.v1.pt")
         if spm:
             if lang in SPM_LANGUAGE:
-                self.download(f"laser3-{lang}.{version}.spm")
-                self.download(f"laser3-{lang}.{version}.cvocab")
+                self.download(f"laser3-{lang}.v1.spm")
+                self.download(f"laser3-{lang}.v1.cvocab")
             else:
                 self.download(f"laser2.spm")
                 self.download(f"laser2.cvocab")
@@ -92,18 +95,18 @@ class LaserModelDownloader:
     def main(self, args):
         if args.laser:
             if args.laser == "laser2":
-                self.download_laser2(args.lang)
+                self.download_laser2()
             elif args.laser == "laser3":
-                self.download_laser3(lang=args.lang, version=args.version, spm=args.spm)
+                self.download_laser3(lang=args.lang, spm=args.spm)
             else:
                 raise ValueError(
                     f"Unsupported laser model: {args.laser}. Choose either laser2 or laser3."
                 )
         else:
             if args.lang in LASER3_LANGUAGE:
-                self.download_laser3(lang=args.lang, version=args.version, spm=args.spm)
+                self.download_laser3(lang=args.lang, spm=args.spm)
             elif args.lang in LASER2_LANGUAGE:
-                self.download_laser2(args.lang)
+                self.download_laser2()
             else:
                 raise ValueError(
                     f"Unsupported language name: {args.lang}. Please specify a supported language name using --lang."
@@ -111,22 +114,19 @@ class LaserModelDownloader:
 
 
 def initialize_encoder(
-    lang: str,
+    lang: str = None,
     model_dir: str = None,
-    version: str = "v1",
     spm: bool = True,
     laser: str = None,
 ):
-    if model_dir is None:
-        model_dir = os.path.expanduser("~/.cache/laser_encoders")
 
     downloader = LaserModelDownloader(model_dir)
     if laser is not None:
         if laser == "laser3":
-            downloader.download_laser3(lang=lang, version=version, spm=spm)
-            file_path = f"laser3-{lang}.{version}"
+            downloader.download_laser3(lang=lang, spm=spm)
+            file_path = f"laser3-{lang}.v1"
         elif laser == "laser2":
-            downloader.download_laser2(lang)
+            downloader.download_laser2()
             file_path = "laser2"
         else:
             raise ValueError(
@@ -134,17 +134,20 @@ def initialize_encoder(
             )
     else:
         if lang in LASER3_LANGUAGE:
-            downloader.download_laser3(lang=lang, version=version, spm=spm)
-            file_path = f"laser3-{lang}.{version}"
+            downloader.download_laser3(lang=lang, spm=spm)
+            file_path = f"laser3-{lang}.v1"
         elif lang in LASER2_LANGUAGE:
-            downloader.download_laser2(lang)
+            downloader.download_laser2()
             file_path = "laser2"
         else:
             raise ValueError(
                 f"Unsupported language name: {lang}. Please specify a supported language name."
             )
-    model_path = f"{model_dir}/{file_path}.pt"
-    spm_path = f"{model_dir}/{file_path}.cvocab"
+
+    model_dir = downloader.model_dir
+    model_path = os.path.join(model_dir, f"{file_path}.pt")
+    spm_path = os.path.join(model_dir,f"{file_path}.cvocab")
+
     if not os.path.exists(spm_path):
         # if there is no cvocab for the laser3 lang use laser2 cvocab
         spm_path = os.path.join(model_dir, "laser2.cvocab")
@@ -152,16 +155,13 @@ def initialize_encoder(
 
 
 def initialize_tokenizer(
-    lang: str, model_dir: str = None, version: str = "v1", laser: str = None
+    lang: str = None, model_dir: str = None, laser: str = None
 ):
-    if model_dir is None:
-        model_dir = os.path.expanduser("~/.cache/laser_encoders")
-
     downloader = LaserModelDownloader(model_dir)
     if laser is not None:
         if laser == "laser3":
             lang = downloader.get_language_code(LASER3_LANGUAGE, lang)
-            filename = f"laser3-{lang}.{version}.spm"
+            filename = f"laser3-{lang}.v1.spm"
         elif laser == "laser2":
             filename = "laser2.spm"
         else:
@@ -172,7 +172,7 @@ def initialize_tokenizer(
         if lang in LASER3_LANGUAGE or lang in LASER2_LANGUAGE:
             lang = downloader.get_language_code(LASER3_LANGUAGE, lang)
             if lang in SPM_LANGUAGE:
-                filename = f"laser3-{lang}.{version}.spm"
+                filename = f"laser3-{lang}.v1.spm"
             else:
                 filename = "laser2.spm"
         else:
@@ -181,7 +181,7 @@ def initialize_tokenizer(
             )
 
     downloader.download(filename)
-    model_path = model_dir + filename
+    model_path = os.path.join(downloader.model_dir, filename)
     return LaserTokenizer(spm_model=Path(model_path))
 
 
@@ -190,17 +190,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "--laser",
         type=str,
-        required=False,
         help="Laser model to download",
     )
     parser.add_argument(
         "--lang",
         type=str,
-        required=True,
         help="The language name in FLORES200 format",
-    )
-    parser.add_argument(
-        "--version", type=str, default="v1", help="The encoder model version"
     )
     parser.add_argument(
         "--spm",
@@ -211,6 +206,5 @@ if __name__ == "__main__":
         "--model-dir", type=str, help="The directory to download the models to"
     )
     args = parser.parse_args()
-    model_dir = args.model_dir or os.path.expanduser("~/.cache/laser_encoders")
-    downloader = LaserModelDownloader(model_dir)
+    downloader = LaserModelDownloader(args.model_dir)
     downloader.main(args)
