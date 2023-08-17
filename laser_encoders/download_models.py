@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 
 
 class LaserModelDownloader:
-    def __init__(self, model_dir: str=None):
+    def __init__(self, model_dir: str = None):
         if model_dir is None:
             model_dir = os.path.expanduser("~/.cache/laser_encoders")
             os.makedirs(model_dir, exist_ok=True)
@@ -119,7 +119,6 @@ def initialize_encoder(
     spm: bool = True,
     laser: str = None,
 ):
-
     downloader = LaserModelDownloader(model_dir)
     if laser is not None:
         if laser == "laser3":
@@ -146,7 +145,7 @@ def initialize_encoder(
 
     model_dir = downloader.model_dir
     model_path = os.path.join(model_dir, f"{file_path}.pt")
-    spm_path = os.path.join(model_dir,f"{file_path}.cvocab")
+    spm_path = os.path.join(model_dir, f"{file_path}.cvocab")
 
     if not os.path.exists(spm_path):
         # if there is no cvocab for the laser3 lang use laser2 cvocab
@@ -154,9 +153,7 @@ def initialize_encoder(
     return SentenceEncoder(model_path=model_path, spm_vocab=spm_path)
 
 
-def initialize_tokenizer(
-    lang: str = None, model_dir: str = None, laser: str = None
-):
+def initialize_tokenizer(lang: str = None, model_dir: str = None, laser: str = None):
     downloader = LaserModelDownloader(model_dir)
     if laser is not None:
         if laser == "laser3":
