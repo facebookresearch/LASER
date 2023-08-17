@@ -56,7 +56,7 @@ SPM_LANGUAGE = [
 ##################################
 
 LASER3_LANGUAGE = {
-    # acehnese 
+    # acehnese
     "acehnese": "ace_Latn",
     "ace": "ace_Latn",
     "ace_Latn": "ace_Latn",
@@ -120,7 +120,7 @@ LASER3_LANGUAGE = {
     "bhojpuri": "bho_Deva",
     "bho": "bho_Deva",
     "bho_Deva": "bho_Deva",
-    # banjar 
+    # banjar
     "banjar": "bjn_Latn",
     "bjn": "bjn_Latn",
     "bjn_Latn": "bjn_Latn",
@@ -378,7 +378,7 @@ LASER3_LANGUAGE = {
     "marathi": "mar_Deva",
     "mar": "mar_Deva",
     "mar_Deva": "mar_Deva",
-    # minangkabau 
+    # minangkabau
     "minangkabau": "min_Latn",
     "min": "min_Latn",
     "min_Latn": "min_Latn",
@@ -526,7 +526,7 @@ LASER3_LANGUAGE = {
     "tamil": "tam_Taml",
     "tam": "tam_Taml",
     "tam_Taml": "tam_Taml",
-    # tamasheq 
+    # tamasheq
     "tamasheq": "taq_Latn",
     "taq": "taq_Latn",
     "taq_Latn": "taq_Latn",
@@ -1326,7 +1326,7 @@ LASER2_LANGUAGE = {
     "tigrinya": "tir_Ethi",
     "tir": "tir_Ethi",
     "tir_Ethi": "tir_Ethi",
-    # tamasheq 
+    # tamasheq
     "tamasheq": ["taq_Latn", "taq_Tfng"],
     "taq": ["taq_Latn", "taq_Tfng"],
     "taq_Latn": "taq_Latn",
