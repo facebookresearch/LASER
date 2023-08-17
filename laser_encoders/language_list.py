@@ -56,8 +56,8 @@ SPM_LANGUAGE = [
 ##################################
 
 LASER3_LANGUAGE = {
-    # acehnese (latin script)
-    "acehnese (latin script)": "ace_Latn",
+    # acehnese 
+    "acehnese": "ace_Latn",
     "ace": "ace_Latn",
     "ace_Latn": "ace_Latn",
     # akan
@@ -120,8 +120,8 @@ LASER3_LANGUAGE = {
     "bhojpuri": "bho_Deva",
     "bho": "bho_Deva",
     "bho_Deva": "bho_Deva",
-    # banjar (latin script)
-    "banjar (latin script)": "bjn_Latn",
+    # banjar 
+    "banjar": "bjn_Latn",
     "bjn": "bjn_Latn",
     "bjn_Latn": "bjn_Latn",
     # standard tibetan
@@ -262,8 +262,8 @@ LASER3_LANGUAGE = {
     "kannada": "kan_Knda",
     "kan": "kan_Knda",
     "kan_Knda": "kan_Knda",
-    # kashmiri (arabic script)
-    "kashmiri (arabic script)": ["kas_Arab", "kas_Deva"],
+    # kashmiri
+    "kashmiri": ["kas_Arab", "kas_Deva"],
     "kas": ["kas_Arab", "kas_Deva"],
     "kas_Arab": "kas_Arab",
     "kas_Deva": "kas_Deva",
@@ -311,8 +311,8 @@ LASER3_LANGUAGE = {
     "northern kurdish": "kmr_Latn",
     "kmr": "kmr_Latn",
     "kmr_Latn": "kmr_Latn",
-    # central kanuri (arabic script)
-    "central kanuri (arabic script)": ["knc_Arab", "knc_Latn"],
+    # central kanuri
+    "central kanuri": ["knc_Arab", "knc_Latn"],
     "knc": ["knc_Arab", "knc_Latn"],
     "knc_Arab": "knc_Arab",
     "knc_Latn": "knc_Latn",
@@ -378,16 +378,16 @@ LASER3_LANGUAGE = {
     "marathi": "mar_Deva",
     "mar": "mar_Deva",
     "mar_Deva": "mar_Deva",
-    # minangkabau (latin script)
-    "minangkabau (latin script)": "min_Latn",
+    # minangkabau 
+    "minangkabau": "min_Latn",
     "min": "min_Latn",
     "min_Latn": "min_Latn",
     # maltese
     "maltese": "mlt_Latn",
     "mlt": "mlt_Latn",
     "mlt_Latn": "mlt_Latn",
-    # meitei (bengali script)
-    "meitei (bengali script)": "mni_Beng",
+    # meitei
+    "meitei": "mni_Beng",
     "mni": "mni_Beng",
     "mni_Beng": "mni_Beng",
     # mossi
@@ -526,8 +526,8 @@ LASER3_LANGUAGE = {
     "tamil": "tam_Taml",
     "tam": "tam_Taml",
     "tam_Taml": "tam_Taml",
-    # tamasheq (latin script)
-    "tamasheq (latin script)": "taq_Latn",
+    # tamasheq 
+    "tamasheq": "taq_Latn",
     "taq": "taq_Latn",
     "taq_Latn": "taq_Latn",
     # tatar
@@ -629,6 +629,10 @@ LASER3_LANGUAGE = {
     "standard malay": "zsm_Latn",
     "zsm": "zsm_Latn",
     "zsm_Latn": "zsm_Latn",
+    # zulu
+    "zulu": "zul_Latn",
+    "zul": "zul_Latn",
+    "zul_Latn": "zul_Latn",
 }
 
 ##################################
@@ -636,8 +640,8 @@ LASER3_LANGUAGE = {
 ##################################
 
 LASER2_LANGUAGE = {
-    # acehnese (arabic script)
-    "acehnese (arabic script)": ["ace_Arab", "ace_Latn"],
+    # acehnese
+    "acehnese": ["ace_Arab", "ace_Latn"],
     "ace": ["ace_Arab", "ace_Latn"],
     "ace_Arab": "ace_Arab",
     "ace_Latn": "ace_Latn",
@@ -742,8 +746,8 @@ LASER2_LANGUAGE = {
     "bhojpuri": "bho_Deva",
     "bho": "bho_Deva",
     "bho_Deva": "bho_Deva",
-    # banjar (arabic script)
-    "banjar (arabic script)": ["bjn_Arab", "bjn_Latn"],
+    # banjar
+    "banjar": ["bjn_Arab", "bjn_Latn"],
     "bjn": ["bjn_Arab", "bjn_Latn"],
     "bjn_Arab": "bjn_Arab",
     "bjn_Latn": "bjn_Latn",
@@ -957,8 +961,8 @@ LASER2_LANGUAGE = {
     "kannada": "kan_Knda",
     "kan": "kan_Knda",
     "kan_Knda": "kan_Knda",
-    # kashmiri (arabic script)
-    "kashmiri (arabic script)": ["kas_Arab", "kas_Deva"],
+    # kashmiri
+    "kashmiri": ["kas_Arab", "kas_Deva"],
     "kas": ["kas_Arab", "kas_Deva"],
     "kas_Arab": "kas_Arab",
     "kas_Deva": "kas_Deva",
@@ -966,8 +970,8 @@ LASER2_LANGUAGE = {
     "georgian": "kat_Geor",
     "kat": "kat_Geor",
     "kat_Geor": "kat_Geor",
-    # central kanuri (arabic script)
-    "central kanuri (arabic script)": ["knc_Arab", "knc_Latn"],
+    # central kanuri
+    "central kanuri": ["knc_Arab", "knc_Latn"],
     "knc": ["knc_Arab", "knc_Latn"],
     "knc_Arab": "knc_Arab",
     "knc_Latn": "knc_Latn",
@@ -1081,8 +1085,8 @@ LASER2_LANGUAGE = {
     "marathi": "mar_Deva",
     "mar": "mar_Deva",
     "mar_Deva": "mar_Deva",
-    # minangkabau (arabic script)
-    "minangkabau (arabic script)": ["min_Arab", "min_Latn"],
+    # minangkabau
+    "minangkabau": ["min_Arab", "min_Latn"],
     "min": ["min_Arab", "min_Latn"],
     "min_Arab": "min_Arab",
     "min_Latn": "min_Latn",
@@ -1098,8 +1102,8 @@ LASER2_LANGUAGE = {
     "maltese": "mlt_Latn",
     "mlt": "mlt_Latn",
     "mlt_Latn": "mlt_Latn",
-    # meitei (bengali script)
-    "meitei (bengali script)": "mni_Beng",
+    # meitei
+    "meitei": "mni_Beng",
     "mni": "mni_Beng",
     "mni_Beng": "mni_Beng",
     # halh mongolian
@@ -1322,8 +1326,8 @@ LASER2_LANGUAGE = {
     "tigrinya": "tir_Ethi",
     "tir": "tir_Ethi",
     "tir_Ethi": "tir_Ethi",
-    # tamasheq (latin script)
-    "tamasheq (latin script)": ["taq_Latn", "taq_Tfng"],
+    # tamasheq 
+    "tamasheq": ["taq_Latn", "taq_Tfng"],
     "taq": ["taq_Latn", "taq_Tfng"],
     "taq_Latn": "taq_Latn",
     "taq_Tfng": "taq_Tfng",
@@ -1410,8 +1414,8 @@ LASER2_LANGUAGE = {
     "yue chinese": "yue_Hant",
     "yue": "yue_Hant",
     "yue_Hant": "yue_Hant",
-    # chinese (simplified)
-    "chinese (simplified)": ["zho_Hans", "zho_Hant"],
+    # chinese
+    "chinese": ["zho_Hans", "zho_Hant"],
     "zho": ["zho_Hans", "zho_Hant"],
     "zho_Hans": "zho_Hans",
     "zho_Hant": "zho_Hant",
@@ -1419,4 +1423,8 @@ LASER2_LANGUAGE = {
     "standard malay": "zsm_Latn",
     "zsm": "zsm_Latn",
     "zsm_Latn": "zsm_Latn",
+    # zulu
+    "zulu": "zul_Latn",
+    "zul": "zul_Latn",
+    "zul_Latn": "zul_Latn",
 }
