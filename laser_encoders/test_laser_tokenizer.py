@@ -14,26 +14,20 @@
 # Tests for LaserTokenizer
 
 import os
-import urllib.request
 from pathlib import Path
-from tempfile import NamedTemporaryFile, TemporaryDirectory
+from tempfile import TemporaryDirectory
 from typing import List
 
 import numpy as np
 import pytest
 
-from laser_encoders.laser_tokenizer import LaserTokenizer
-from laser_encoders.models import SentenceEncoder
+from laser_encoders import initialize_encoder, initialize_tokenizer
 
 
 @pytest.fixture
-def tokenizer():
-    token = NamedTemporaryFile()
-    with urllib.request.urlopen(
-        "https://dl.fbaipublicfiles.com/nllb/laser/laser2.spm"
-    ) as response:
-        token.write(response.read())
-    return LaserTokenizer(spm_model=Path(token.name))
+def tokenizer(tmp_path: Path):
+    tokenizer_instance = initialize_tokenizer(model_dir=tmp_path, laser="laser2")
+    return tokenizer_instance
 
 
 @pytest.fixture
@@ -130,10 +124,10 @@ def test_tokenize_file_overwrite(tokenizer, input_text: str):
 
 
 @pytest.mark.parametrize(
-    "model_url, expected_array",
+    "laser, expected_array, lang",
     [
         (
-            "https://dl.fbaipublicfiles.com/nllb/laser/laser2.pt",
+            "laser2",
             [
                 1.042462512850761414e-02,
                 6.325428839772939682e-03,
@@ -146,9 +140,10 @@ def test_tokenize_file_overwrite(tokenizer, input_text: str):
                 -1.571535394759848714e-04,
                 2.095808042213320732e-03,
             ],
+            None,
         ),
         (
-            "https://dl.fbaipublicfiles.com/nllb/laser/laser3-zul_Latn.v1.pt",
+            "laser3",
             [
                 3.038274645805358887e-01,
                 4.151830971240997314e-01,
@@ -161,27 +156,22 @@ def test_tokenize_file_overwrite(tokenizer, input_text: str):
                 -4.902199506759643555e-01,
                 -3.126966953277587891e-02,
             ],
+            "zul_Latn",
         ),
     ],
 )
 def test_sentence_encoder(
-    tokenizer, model_url: str, expected_array: List, input_text: str
+    tmp_path: Path,
+    tokenizer,
+    laser: str,
+    expected_array: List,
+    lang: str,
+    input_text: str,
 ):
-    with NamedTemporaryFile() as laser_vocab, NamedTemporaryFile() as laser_model:
-        with urllib.request.urlopen(
-            "https://dl.fbaipublicfiles.com/nllb/laser/laser2.cvocab"
-        ) as response:
-            laser_vocab.write(response.read())
+    sentence_encoder = initialize_encoder(model_dir=tmp_path, laser=laser, lang=lang)
+    tokenized_text = tokenizer.tokenize(input_text)
+    sentence_embedding = sentence_encoder.encode_sentences([tokenized_text])
 
-        with urllib.request.urlopen(model_url) as response:
-            laser_model.write(response.read())
-
-        sentence_encoder = SentenceEncoder(
-            model_path=Path(laser_model.name), spm_vocab=laser_vocab.name
-        )
-        tokenized_text = tokenizer.tokenize(input_text)
-        sentence_embedding = sentence_encoder.encode_sentences([tokenized_text])
-
-        assert isinstance(sentence_embedding, np.ndarray)
-        assert sentence_embedding.shape == (1, 1024)
-        assert np.allclose(expected_array, sentence_embedding[:, :10], atol=1e-3)
+    assert isinstance(sentence_embedding, np.ndarray)
+    assert sentence_embedding.shape == (1, 1024)
+    assert np.allclose(expected_array, sentence_embedding[:, :10], atol=1e-3)
