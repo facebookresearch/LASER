@@ -7,7 +7,13 @@ laser_encoders is the official Python package for the Facebook [LASER](https://g
 ## Dependencies
 
 - Python >= 3.8
-- [PyTorch](http://pytorch.org/)
+- [PyTorch >= 2.0](http://pytorch.org/)
+- sacremoses
+- sentencepiece
+- numpy
+- fairseq 
+
+You can find a full list of requirements [here](requirements.txt)
 
 ## Installation
 
@@ -17,22 +23,45 @@ You can install laser_encoders using pip:
  pip install laser_encoders
 ```
 
-## Downloading the pre-trained models
-
-```sh
-python laser_encoders download_models.py --lang=your_prefered_language #eg --lang="igbo"
-```
-
-This will by default download the models to the `~/.cache/laser_encoders` directory. 
-To download the models to a specific location use 
-```sh
-python laser_encoders download_models.py --model-dir=path/to/model/directory
-```
-use the `--help` command to get the full list of various args that can be passed.
-
 ## Usage
 
-The laser_encoders package provides an easy-to-use interface to calculate multilingual sentence embeddings. Here's a simple example of how you can use it:
+Here's a simple example of how you can download and initialise the tokenizer and encoder with just one step.
+
+**Note:** By default, the models will be downloaded to the` ~/.cache/laser_encoders` directory. To specify a different download location, you can provide the argument `model_dir=path/to/model/directory` to the initialize_tokenizer and initialize_encoder functions
+
+```py
+from laser_encoders import initialize_encoder, initialize_tokenizer
+
+# Initialize the LASER tokenizer
+tokenizer = initialize_tokenizer(lang="igbo")
+tokenized_sentence = tokenizer.tokenize("nnọọ, kedu ka ị mere")
+
+# Initialize the LASER sentence encoder
+encoder = initialize_encoder(lang="igbo")
+
+# Encode sentences into embeddings
+embeddings = encoder.encode_sentences([tokenized_sentence])
+```
+
+**Supported Languages:** You can specify any language from the [FLORES200](https://github.com/facebookresearch/flores/blob/main/flores200/README.md#languages-in-flores-200) dataset. This includes both languages identified by their full codes (like "ibo_Latn") and simpler alternatives (like "igbo").
+
+## Downloading the pre-trained models
+
+If you prefer to download the models individually, you can use the following command:
+
+```sh
+python -m laser_encoders.download_models --lang=your_prefered_language  # e.g., --lang="igbo""
+```
+
+By default, the downloaded models will be stored in the `~/.cache/laser_encoders` directory. To specify a different download location, utilize the following command:
+
+```sh
+python -m laser_encoders.download_models --model-dir=path/to/model/directory
+```
+
+> For a comprehensive list of available arguments, you can use the `--help` command with the download_models script.
+
+Once you have successfully downloaded the models, you can utilize the `LaserTokenizer` to tokenize text in your desired language. Here's an example of how you can achieve this:
 
 ```py
 from laser_encoders.laser_tokenizer import LaserTokenizer
@@ -46,25 +75,12 @@ tokenized_sentence = tokenizer.tokenize("This is a test sentence.")
 encoder = SentenceEncoder(model_path=path/to/downloaded/model, spm_vocab=path/to/cvocab)
 embeddings = encoder.encode_sentences([tokenized_sentence])
 ```
-To tokenize a file use
+
+For tokenizing a file instead of a string, you can use the following:
+
 ```py
 tokenized_sentence = tokenizer.tokenize_file(inp_fname=Path(path/to/input_file.txt), out_fname=Path(path/to/output_file.txt))
 ```
-**Alternatively**, you can download and initialise the tokenizer and encoder with just one step
-```py
-from laser_encoders import initialize_encoder, initialize_tokenizer
-
-# Load the LASER tokenizer
-tokenizer = initialiize_tokenizer(lang="igbo")
-tokenized_sentence = tokenizer.tokenize("nnọọ, kedu ka ị mere")
-
-# Load the LASER sentence encoder
-encoder = initialize_encoder(lang="igbo")
-
-# Encode sentences into embeddings
-embeddings = encoder.encode_sentences([tokenized_sentence])
-```
-
 
 ## Now you can use these embeddings for downstream tasks
 
