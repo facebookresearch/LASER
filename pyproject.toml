@@ -7,7 +7,7 @@ name = "laser_encoders"
 version = "0.0.1"
 authors = [{name = "Facebook AI Research"}]
 description = "LASER  Language-Agnostic SEntence Representations is a toolkit to calculate multilingual sentence embeddings and to use them for document classification, bitext filtering and mining"
-readme = "README.md"
+readme = "laser_encoders/README.md"
 requires-python = ">=3.8"
 
 dependencies = [
@@ -19,7 +19,7 @@ dependencies = [
 ]
 
 classifiers=[
-    "License :: BSD License",
+    "License :: OSI Approved :: BSD License",
     "Topic :: Scientific/Engineering",
     "Development Status :: 4 - Beta",
 ]
