@@ -15,7 +15,6 @@
 # This python script installs NLLB LASER2 and LASER3 sentence encoders from Amazon s3
 # default to download to current directory
 
-import argparse
 import logging
 import os
 import sys
@@ -180,6 +179,7 @@ def initialize_tokenizer(lang: str = None, model_dir: str = None, laser: str = N
     downloader.download(filename)
     model_path = os.path.join(downloader.model_dir, filename)
     return LaserTokenizer(spm_model=Path(model_path))
+
 
 def download_models(args):
     downloader = LaserModelDownloader(args.model_dir)

@@ -1,5 +1,6 @@
-from laser_encoders.download_models import download_models
 import argparse
+
+from laser_encoders.download_models import download_models
 
 
 def main():
