@@ -82,16 +82,29 @@ For tokenizing a file instead of a string, you can use the following:
 tokenized_sentence = tokenizer.tokenize_file(inp_fname=Path(path/to/input_file.txt), out_fname=Path(path/to/output_file.txt))
 ```
 
-## Now you can use these embeddings for downstream tasks
+### Now you can use these embeddings for downstream tasks
 
 For more advanced usage and options, please refer to the official LASER repository documentation.
 
-### Contributing
+## Contributing
 
 We welcome contributions from the developer community to enhance and improve laser_encoders. If you'd like to contribute, you can:
 
 1. Submit bug reports or feature requests through GitHub issues.
 1. Fork the repository, make changes, and submit pull requests for review.
+
+Please follow our [Contribution Guidelines](https://github.com/facebookresearch/LASER/blob/main/CONTRIBUTING.md) to ensure a smooth process.
+
+### Code of Conduct
+
+We expect all contributors to adhere to our [Code of Conduct](https://github.com/facebookresearch/LASER/blob/main/CODE_OF_CONDUCT.md).
+
+
+### Contributors
+The following people have contributed to this project:
+
+- [CaptainVee](https://github.com/CaptainVee)
+
 
 ### License
 
@@ -103,4 +116,6 @@ For any questions, feedback, or support, you can contact Facebook AI Research.
 
 ### Acknowledgments
 
-This package is based on the [LASER](https://github.com/facebookresearch/LASER) project by Facebook AI Research.
+This package is based on the [LASER](https://github.com/facebookresearch/LASER) project by Facebook AI Research. 
+
+Special thanks to [heffernankevin](https://github.com/heffernankevin) and [avidale](https://github.com/avidale/), the maintainers of the LASER project for their valuable contributions and guidance.
