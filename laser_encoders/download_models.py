@@ -181,27 +181,6 @@ def initialize_tokenizer(lang: str = None, model_dir: str = None, laser: str = N
     model_path = os.path.join(downloader.model_dir, filename)
     return LaserTokenizer(spm_model=Path(model_path))
 
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="LASER: Download Laser models")
-    parser.add_argument(
-        "--laser",
-        type=str,
-        help="Laser model to download",
-    )
-    parser.add_argument(
-        "--lang",
-        type=str,
-        help="The language name in FLORES200 format",
-    )
-    parser.add_argument(
-        "--spm",
-        action="store_false",
-        help="Do not download the SPM model?",
-    )
-    parser.add_argument(
-        "--model-dir", type=str, help="The directory to download the models to"
-    )
-    args = parser.parse_args()
+def download_models(args):
     downloader = LaserModelDownloader(args.model_dir)
     downloader.main(args)
