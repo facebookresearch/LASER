@@ -13,7 +13,6 @@
 # -------------------------------------------------------
 #
 # This python script installs NLLB LASER2 and LASER3 sentence encoders from Amazon s3
-# default to download to current directory
 
 import argparse
 import logging
