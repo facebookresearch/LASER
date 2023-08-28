@@ -6,12 +6,12 @@ laser_encoders is the official Python package for the Facebook [LASER](https://g
 
 ## Dependencies
 
-- Python >= 3.8
-- [PyTorch >= 2.0](http://pytorch.org/)
-- sacremoses
-- sentencepiece
-- numpy
-- fairseq 
+- Python `>= 3.8`
+- [PyTorch `>= 2.0`](http://pytorch.org/)
+- sacremoses `>=0.0.53`
+- sentencepiece `>=0.1.99`
+- numpy `>=1.25.0`
+- fairseq `>=0.12.2`
 
 You can find a full list of requirements [here](requirements.txt)
 
@@ -50,13 +50,13 @@ embeddings = encoder.encode_sentences([tokenized_sentence])
 If you prefer to download the models individually, you can use the following command:
 
 ```sh
-python -m laser_encoders download_models --lang=your_prefered_language  # e.g., --lang="igbo""
+python -m laser_encoders.download_models --lang=your_prefered_language  # e.g., --lang="igbo""
 ```
 
 By default, the downloaded models will be stored in the `~/.cache/laser_encoders` directory. To specify a different download location, utilize the following command:
 
 ```sh
-python -m laser_encoders download_models --model-dir=path/to/model/directory
+python -m laser_encoders.download_models --model-dir=path/to/model/directory
 ```
 
 > For a comprehensive list of available arguments, you can use the `--help` command with the download_models script.
