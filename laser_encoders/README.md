@@ -99,12 +99,11 @@ Please follow our [Contribution Guidelines](https://github.com/facebookresearch/
 
 We expect all contributors to adhere to our [Code of Conduct](https://github.com/facebookresearch/LASER/blob/main/CODE_OF_CONDUCT.md).
 
-
 ### Contributors
+
 The following people have contributed to this project:
 
 - [CaptainVee](https://github.com/CaptainVee)
-
 
 ### License
 
@@ -116,6 +115,6 @@ For any questions, feedback, or support, you can contact Facebook AI Research.
 
 ### Acknowledgments
 
-This package is based on the [LASER](https://github.com/facebookresearch/LASER) project by Facebook AI Research. 
+This package is based on the [LASER](https://github.com/facebookresearch/LASER) project by Facebook AI Research.
 
 Special thanks to [heffernankevin](https://github.com/heffernankevin) and [avidale](https://github.com/avidale/), the maintainers of the LASER project for their valuable contributions and guidance.
