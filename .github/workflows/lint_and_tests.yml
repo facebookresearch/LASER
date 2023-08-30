@@ -20,7 +20,7 @@ jobs:
         python --version
         python -m pip install --upgrade 'pip>=23.2.1'
         python -m pip show pip
-        python -m pip install ./laser_encoders[dev]'
+        python -m pip install "./laser_encoder[dev]"
         
     - name: isort
       run: cd laser_encoders && isort --check --diff .
