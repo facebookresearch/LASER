@@ -15,12 +15,16 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Create and activate virtual environment
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+
     - name: Install dependencies
       run: |
-        python --version
-        python -m pip install --upgrade 'pip>=23.2.1'
-        python -m pip show pip
-        python -m pip install './laser_encoders'
+        python -m pip install --upgrade pip
+        python -m pip install -e './laser_encoders'
+        python -m pip install './laser_encoders[dev]'
         
     - name: isort
       run: cd laser_encoders && isort --check --diff .
