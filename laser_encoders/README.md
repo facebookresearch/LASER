@@ -27,7 +27,7 @@ You can install laser_encoders using pip:
 
 Here's a simple example of how you can download and initialise the tokenizer and encoder with just one step.
 
-**Note:** By default, the models will be downloaded to the` ~/.cache/laser_encoders` directory. To specify a different download location, you can provide the argument `model_dir=path/to/model/directory` to the initialize_tokenizer and initialize_encoder functions
+**Note:** By default, the models will be downloaded to the `~/.cache/laser_encoders` directory. To specify a different download location, you can provide the argument `model_dir=path/to/model/directory` to the initialize_tokenizer and initialize_encoder functions
 
 ```py
 from laser_encoders import initialize_encoder, initialize_tokenizer
@@ -103,18 +103,15 @@ We expect all contributors to adhere to our [Code of Conduct](https://github.com
 
 The following people have contributed to this project:
 
-- [CaptainVee](https://github.com/CaptainVee)
+- [Victor Joseph](https://github.com/CaptainVee)
+- [David Dale](https://github.com/avidale/)
+- [Holger Schwenk](https://github.com/hoschwenk)
+- [Kevin Heffernan](https://github.com/heffernankevin)
 
 ### License
 
-This package is released under the [LASER](https://github.com/facebookresearch/LASER/blob/main/LICENSE) Facebook BSD License.
+This package is released under the [LASER](https://github.com/facebookresearch/LASER/blob/main/LICENSE) BSD License.
 
 ### Contact
 
 For any questions, feedback, or support, you can contact Facebook AI Research.
-
-### Acknowledgments
-
-This package is based on the [LASER](https://github.com/facebookresearch/LASER) project by Facebook AI Research.
-
-Special thanks to [heffernankevin](https://github.com/heffernankevin) and [avidale](https://github.com/avidale/), the maintainers of the LASER project for their valuable contributions and guidance.

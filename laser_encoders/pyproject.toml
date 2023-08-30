@@ -7,7 +7,7 @@ name = "laser_encoders"
 version = "0.0.1"
 authors = [{name = "Facebook AI Research"}]
 description = "LASER  Language-Agnostic SEntence Representations is a toolkit to calculate multilingual sentence embeddings and to use them for document classification, bitext filtering and mining"
-readme = "laser_encoders/README.md"
+readme = "README.md"
 requires-python = ">=3.8"
 
 dependencies = [
@@ -56,14 +56,10 @@ python_version = "3.8"
 show_error_codes = true
 check_untyped_defs = true
 
-files = [
-  "laser_encoders/"
-]
-
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
-testpaths = ["laser_encoders"]
+testpaths = ["."]
 python_files = [
   "test_*.py",
 ]
