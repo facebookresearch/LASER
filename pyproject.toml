@@ -57,8 +57,12 @@ check_untyped_defs = true
 
 ignore_missing_imports = true
 
+files = [
+  "laser_encoders/"
+]
+
 [tool.pytest.ini_options]
-testpaths = ["."]
+testpaths = ["laser_encoders"]
 python_files = [
   "test_*.py",
 ]
