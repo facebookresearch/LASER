@@ -17,6 +17,7 @@ jobs:
 
     - name: Install dependencies
       run: |
+        cd laser_encoders
         python --version
         python -m pip install --upgrade 'pip>=23.2.1'
         python -m pip show pip
