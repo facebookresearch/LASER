@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
+requires = ["flit_core >=3.2,<4", "setuptools"]
+build-backend = "flit_core.buildapi"
 
 [project]
 name = "laser_encoders"
@@ -9,10 +9,6 @@ authors = [{name = "Facebook AI Research"}]
 description = "LASER  Language-Agnostic SEntence Representations is a toolkit to calculate multilingual sentence embeddings and to use them for document classification, bitext filtering and mining"
 readme = "laser_encoders/README.md"
 requires-python = ">=3.8"
-packages = [
-    "laser_encoders",
-]
-
 
 dependencies = [
     'sacremoses>=0.0.53',
