@@ -22,6 +22,7 @@ jobs:
         python -m pip show pip
         ls
         python -m pip install -e ./laser_encoders
+        python -m pip install -r ./laser_encoders/requirements.txt
         
     - name: isort
       run: cd laser_encoders && isort --check --diff .

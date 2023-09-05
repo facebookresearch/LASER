@@ -1,6 +1,6 @@
 [build-system]
-requires = ["flit_core >=3.2,<4", "setuptools"]
-build-backend = "flit_core.buildapi"
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "laser_encoders"
