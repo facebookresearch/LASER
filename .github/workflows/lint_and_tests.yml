@@ -17,11 +17,11 @@ jobs:
 
     - name: Install dependencies
       run: |
-        cd .. && cd laser_encoders
         python --version
         python -m pip install --upgrade 'pip>=23.2.1'
         python -m pip show pip
-        python -m pip install -e '.[dev]'
+        ls
+        python -m pip install -e .
         
     - name: isort
       run: cd laser_encoders && isort --check --diff .
