@@ -230,8 +230,8 @@ LASER3_LANGUAGE = {
     "armenian": "hye_Armn",
     "hye": "hye_Armn",
     "hye_Armn": "hye_Armn",
-    # igbo
-    "igbo": "ibo_Latn",
+    # ibo
+    "ibo": "ibo_Latn",
     "ibo": "ibo_Latn",
     "ibo_Latn": "ibo_Latn",
     # ilocano
