@@ -33,24 +33,24 @@ Here's a simple example of how you can download and initialise the tokenizer and
 from laser_encoders import initialize_encoder, initialize_tokenizer
 
 # Initialize the LASER tokenizer
-tokenizer = initialize_tokenizer(lang="ibo")
+tokenizer = initialize_tokenizer(lang="igbo")
 tokenized_sentence = tokenizer.tokenize("nnọọ, kedu ka ị mere")
 
 # Initialize the LASER sentence encoder
-encoder = initialize_encoder(lang="ibo")
+encoder = initialize_encoder(lang="igbo")
 
 # Encode sentences into embeddings
 embeddings = encoder.encode_sentences([tokenized_sentence])
 ```
 
-**Supported Languages:** You can specify any language from the [FLORES200](https://github.com/facebookresearch/flores/blob/main/flores200/README.md#languages-in-flores-200) dataset. This includes both languages identified by their full codes (like "ibo_Latn") and simpler alternatives (like "ibo").
+**Supported Languages:** You can specify any language from the [FLORES200](https://github.com/facebookresearch/flores/blob/main/flores200/README.md#languages-in-flores-200) dataset. This includes both languages identified by their full codes (like "ibo_Latn") and simpler alternatives (like "igbo").
 
 ## Downloading the pre-trained models
 
 If you prefer to download the models individually, you can use the following command:
 
 ```sh
-python -m laser_encoders.download_models --lang=your_prefered_language  # e.g., --lang="ibo""
+python -m laser_encoders.download_models --lang=your_prefered_language  # e.g., --lang="igbo""
 ```
 
 By default, the downloaded models will be stored in the `~/.cache/laser_encoders` directory. To specify a different download location, utilize the following command:
