@@ -13,7 +13,6 @@
 # -------------------------------------------------------
 #
 # This python script installs NLLB LASER2 and LASER3 sentence encoders from Amazon s3
-# default to download to current directory
 
 import argparse
 import logging
@@ -122,6 +121,7 @@ def initialize_encoder(
     downloader = LaserModelDownloader(model_dir)
     if laser is not None:
         if laser == "laser3":
+            lang = downloader.get_language_code(LASER3_LANGUAGE, lang)
             downloader.download_laser3(lang=lang, spm=spm)
             file_path = f"laser3-{lang}.v1"
         elif laser == "laser2":
@@ -132,6 +132,7 @@ def initialize_encoder(
                 f"Unsupported laser model: {laser}. Choose either laser2 or laser3."
             )
     else:
+        lang = downloader.get_language_code(LASER3_LANGUAGE, lang)
         if lang in LASER3_LANGUAGE:
             downloader.download_laser3(lang=lang, spm=spm)
             file_path = f"laser3-{lang}.v1"
@@ -158,7 +159,10 @@ def initialize_tokenizer(lang: str = None, model_dir: str = None, laser: str = N
     if laser is not None:
         if laser == "laser3":
             lang = downloader.get_language_code(LASER3_LANGUAGE, lang)
-            filename = f"laser3-{lang}.v1.spm"
+            if lang in SPM_LANGUAGE:
+                filename = f"laser3-{lang}.v1.spm"
+            else:
+                filename = "laser2.spm"
         elif laser == "laser2":
             filename = "laser2.spm"
         else:

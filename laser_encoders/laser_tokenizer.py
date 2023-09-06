@@ -16,12 +16,15 @@
 
 import gzip
 import logging
+import re
 import sys
-import typing as tp
 from pathlib import Path
+from typing import IO, List
 
 import sentencepiece as spm
 from sacremoses import MosesDetokenizer, MosesPunctNormalizer
+
+SPACE_NORMALIZER = re.compile(r"\s+")
 
 logging.basicConfig(
     stream=sys.stdout,
@@ -53,7 +56,7 @@ class LaserTokenizer:
         self.moses_detokenizer = MosesDetokenizer()
         self.spm_encoder = spm.SentencePieceProcessor(model_file=str(self.spm_model))
 
-    def open(self, file: Path, mode: str, encoding="utf-8") -> tp.IO:
+    def open(self, file: Path, mode: str, encoding="utf-8") -> IO:
         return (
             gzip.open(file, mode, encoding=encoding)
             if file.name.endswith(".gz")
@@ -95,3 +98,36 @@ class LaserTokenizer:
                 for line in file_in:
                     tokens = self.tokenize(line.strip())
                     file_out.write(tokens + "\n")
+
+    def __call__(self, text_or_batch, batch=False):
+        if not batch:
+            return self.tokenize(text_or_batch)
+        else:
+            return self.tokenize_batch(text_or_batch)
+
+    def tokenize_batch(self, batch: List[str]) -> List[List[str]]:
+        return [self.tokenize(text) for text in batch]
+
+    def convert_ids_to_tokens(self, ids: List[int]) -> List[str]:
+        return [self.spm_encoder.DecodeIds(ids) for ids in ids]
+
+    def convert_tokens_to_ids(self, tokens: List[str]) -> List[int]:
+        ids = []
+
+        for token in tokens:
+            # Apply the same tokenization logic as in _tokenize method
+            tokens = SPACE_NORMALIZER.sub(" ", token).strip().split()
+
+            # Initialize an empty tensor for this token's IDs
+            token_ids = []
+
+            for i, token in enumerate(tokens):
+                token_id = self.spm_encoder.PieceToId(token)
+                if token_id == 0:  # Handle out-of-vocabulary tokens
+                    token_id = self.spm_encoder.PieceToId("<unk>")
+                token_ids.append(token_id)
+
+            # Append token IDs to the final IDs tensor
+            ids.extend(token_ids)
+
+        return ids
