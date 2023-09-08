@@ -117,6 +117,7 @@ def initialize_encoder(
     model_dir: str = None,
     spm: bool = True,
     laser: str = None,
+    tokenize: bool = None,
 ):
     downloader = LaserModelDownloader(model_dir)
     if laser is not None:
@@ -147,11 +148,17 @@ def initialize_encoder(
     model_dir = downloader.model_dir
     model_path = os.path.join(model_dir, f"{file_path}.pt")
     spm_path = os.path.join(model_dir, f"{file_path}.cvocab")
+    spm_model = None
+    if tokenize:
+        spm_model = os.path.join(model_dir, f"{file_path}.spm")
 
     if not os.path.exists(spm_path):
         # if there is no cvocab for the laser3 lang use laser2 cvocab
         spm_path = os.path.join(model_dir, "laser2.cvocab")
-    return SentenceEncoder(model_path=model_path, spm_vocab=spm_path)
+        spm_model = os.path.join(model_dir, "laser2.spm")
+    return SentenceEncoder(
+        model_path=model_path, spm_vocab=spm_path, spm_model=spm_model
+    )
 
 
 def initialize_tokenizer(lang: str = None, model_dir: str = None, laser: str = None):

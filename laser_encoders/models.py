@@ -17,6 +17,7 @@ import logging
 import re
 import sys
 from collections import namedtuple
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -24,6 +25,8 @@ import torch.nn as nn
 from fairseq.data.dictionary import Dictionary
 from fairseq.models.transformer import Embedding, TransformerEncoder
 from fairseq.modules import LayerNorm
+
+from laser_encoders.laser_tokenizer import LaserTokenizer
 
 SPACE_NORMALIZER = re.compile(r"\s+")
 Batch = namedtuple("Batch", "srcs tokens lengths")
@@ -43,6 +46,7 @@ class SentenceEncoder:
         max_sentences=None,
         max_tokens=None,
         spm_vocab=None,
+        spm_model=None,
         cpu=False,
         fp16=False,
         verbose=False,
@@ -50,6 +54,7 @@ class SentenceEncoder:
     ):
         if verbose:
             logger.info(f"loading encoder: {model_path}")
+        self.spm_model = spm_model
         self.use_cuda = torch.cuda.is_available() and not cpu
         self.max_sentences = max_sentences
         self.max_tokens = max_tokens
@@ -148,6 +153,10 @@ class SentenceEncoder:
             yield batch(batch_tokens, batch_lengths, batch_indices)
 
     def encode_sentences(self, sentences):
+        if self.spm_model:
+            tokenizer = LaserTokenizer(spm_model=Path(self.spm_model))
+            sentences = tokenizer(sentences)
+
         indices = []
         results = []
         for batch, batch_indices in self._make_batches(sentences):
