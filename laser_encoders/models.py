@@ -55,6 +55,9 @@ class SentenceEncoder:
         if verbose:
             logger.info(f"loading encoder: {model_path}")
         self.spm_model = spm_model
+        if self.spm_model:
+            self.tokenizer = LaserTokenizer(spm_model=Path(self.spm_model))
+
         self.use_cuda = torch.cuda.is_available() and not cpu
         self.max_sentences = max_sentences
         self.max_tokens = max_tokens
@@ -87,6 +90,11 @@ class SentenceEncoder:
             self.encoder.cuda()
         self.encoder.eval()
         self.sort_kind = sort_kind
+
+    def __call__(self, sentences):
+        if self.spm_model:
+            sentences = self.tokenizer(sentences)
+            return self.encode_sentences(sentences)
 
     def _process_batch(self, batch):
         tokens = batch.tokens
@@ -153,10 +161,6 @@ class SentenceEncoder:
             yield batch(batch_tokens, batch_lengths, batch_indices)
 
     def encode_sentences(self, sentences):
-        if self.spm_model:
-            tokenizer = LaserTokenizer(spm_model=Path(self.spm_model))
-            sentences = tokenizer(sentences)
-
         indices = []
         results = []
         for batch, batch_indices in self._make_batches(sentences):
