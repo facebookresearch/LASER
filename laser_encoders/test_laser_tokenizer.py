@@ -173,5 +173,5 @@ def test_sentence_encoder(
     sentence_embedding = sentence_encoder.encode_sentences([tokenized_text])
 
     assert isinstance(sentence_embedding, np.ndarray)
-    # assert sentence_embedding.shape == (1, 1024)
+    assert sentence_embedding.shape == (1, 1024)
     assert np.allclose(expected_array, sentence_embedding[:, :10], atol=1e-3)

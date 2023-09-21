@@ -95,6 +95,10 @@ class SentenceEncoder:
         if self.spm_model:
             sentences = self.tokenizer(sentences)
             return self.encode_sentences(sentences)
+        else:
+            raise ValueError(
+                "Either initialize the encoder with an spm_model or pre-tokenize and use the encode_sentences method."
+            )
 
     def _process_batch(self, batch):
         tokens = batch.tokens
