@@ -43,6 +43,13 @@ encoder = initialize_encoder(lang="igbo")
 embeddings = encoder.encode_sentences([tokenized_sentence])
 ```
 
+When initializing the encoder, you have the option to enable both tokenization and encoding by setting the `tokenize` flag to `True`. Below is an example of how to use it:
+```py
+encoder = initialize_encoder(lang="igbo", spm=True, tokenize=True)
+embeddings = encoder("nnọọ, kedu ka ị mere")
+```
+>setting the `spm` flag to `True` tells the encoder to also download the accompanying spm model
+
 **Supported Languages:** You can specify any language from the [FLORES200](https://github.com/facebookresearch/flores/blob/main/flores200/README.md#languages-in-flores-200) dataset. This includes both languages identified by their full codes (like "ibo_Latn") and simpler alternatives (like "igbo").
 
 ## Downloading the pre-trained models
@@ -61,12 +68,18 @@ python -m laser_encoders.download_models --model-dir=path/to/model/directory
 
 > For a comprehensive list of available arguments, you can use the `--help` command with the download_models script.
 
-Once you have successfully downloaded the models, you can utilize the `LaserTokenizer` to tokenize text in your desired language. Here's an example of how you can achieve this:
+Once you have successfully downloaded the models, you can utilize the `SentenceEncoder` to tokenize and encode your text in your desired language. Here's an example of how you can achieve this:
 
 ```py
-from laser_encoders.laser_tokenizer import LaserTokenizer
 from laser_encoders.models import SentenceEncoder
 from pathlib import Path
+
+encoder = SentenceEncoder(model_path=path/to/downloaded/model, spm_model=Path(path/to/spm_model), spm_vocab=path/to/cvocab)
+embeddings = encoder("This is a test sentence.")
+```
+If you want to perform tokenization seperately, you can do this below:
+```py
+from laser_encoders.laser_tokenizer import LaserTokenizer
 
 tokenizer = LaserTokenizer(spm_model=Path(path/to/spm_model))
 
