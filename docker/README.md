@@ -33,7 +33,7 @@ http://127.0.0.1:[CHANGEME_LOCAL_PORT]/vectorize?q=[YOUR_SENTENCE_URL_ENCODED]&l
 Example:
 
 ```
-http://127.0.0.1:80/vectorize?q=ki%20lo%20'orukọ%20ẹ&lang=yor
+http://127.0.0.1:8081/vectorize?q=ki%20lo%20'orukọ%20ẹ&lang=yor
 ```
 
 Sample response:
