@@ -1,6 +1,14 @@
-Flask
-scipy
-numpy
-Cython
+fairseq==0.12.2
+numpy==1.25.0
+pytest==7.4.0
+Requests==2.31.0
+sacremoses==0.0.53
+sentencepiece==0.1.99
+tqdm==4.65.0
+Flask==2.3.3
+
+--extra-index-url https://download.pytorch.org/whl/cpu
 torch
-transliterate
+
+--extra-index-url https://test.pypi.org/simple/
+laser-encoders==0.0.3
