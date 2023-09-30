@@ -1,5 +1,7 @@
 FROM continuumio/miniconda3
 
+MAINTAINER Gilles Bodart <gillesbodart@users.noreply.github.com>
+
 # Install build-essential (compiler and development tools)
 RUN apt-get update && \
     apt-get install -y build-essential && \
