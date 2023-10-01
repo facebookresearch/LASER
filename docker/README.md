@@ -14,14 +14,14 @@ docker run -it laser
 **Note:** If you want to expose a local port to the REST server on top of the embed task, you can do so by executing the following command instead of the last command:
 
 ```
-docker run -it -p [CHANGEME_LOCAL_PORT]:80 laser
+docker run -it -p [CHANGEME_LOCAL_PORT]:80 laser python app.py
 ```
 This will override the command line entrypoint of the Docker container.
 
 Example:
 
 ```
-docker run -it -p 8081:80 laser
+docker run -it -p 8081:80 laser python app.py
 ```
 
 This Flask server will serve a REST Api that can be use by calling your server with this URL :
