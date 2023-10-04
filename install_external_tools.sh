@@ -174,6 +174,24 @@ InstallMecab () {
   fi
 }
 
+###################################################################
+#
+# SACREMOSES
+#
+###################################################################
+
+InstallSacremoses () {
+  cd ${tools_ext}
+  if [ ! -d sacremoses ] ; then
+    echo " - download sacremoses from github"
+    git clone https://github.com/alvations/sacremoses.git
+    if [ ! -s /usr/local/bin/sacremoses ] ; then
+      echo " - building code "
+      cd sacremoses
+      python3 setup.py install --prefix=./
+    fi
+  fi
+}
 
 ###################################################################
 #
@@ -183,9 +201,10 @@ InstallMecab () {
 
 echo "Installing external tools"
 
-InstallMosesTools
-InstallFastBPE
-InstallSentencePiece
+# InstallMosesTools
+# InstallFastBPE
+# InstallSentencePiece
+InstallSacremoses
 
 #InstallMecab
 echo ""
