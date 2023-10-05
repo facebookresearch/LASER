@@ -184,7 +184,7 @@ InstallSacremoses () {
   cd ${tools_ext}
   if [ ! -d sacremoses ] ; then
     echo " - download sacremoses from github"
-    git clone https://github.com/alvations/sacremoses.git
+    git clone https://github.com/hplt-project/sacremoses.git
     if [ ! -s /usr/local/bin/sacremoses ] ; then
       echo " - building code "
       cd sacremoses
