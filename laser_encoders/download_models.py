@@ -48,7 +48,7 @@ class LaserModelDownloader:
         url = os.path.join(self.base_url, filename)
 
         local_file_path = os.path.join(self.model_dir, filename)
-        temp_file_path = os.path.join('/tmp', filename)
+        temp_file_path = os.path.join("/tmp", filename)
 
         if os.path.exists(local_file_path):
             logger.info(f" - {filename} already downloaded")
@@ -61,7 +61,7 @@ class LaserModelDownloader:
             response = requests.get(url, stream=True)
             total_size = int(response.headers.get("Content-Length", 0))
             progress_bar = tqdm(total=total_size, unit_scale=True, unit="B")
-            
+
             # Download to /tmp first
             with open(temp_file_path, "wb") as f:
                 for chunk in response.iter_content(chunk_size=1024):
