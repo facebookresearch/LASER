@@ -47,7 +47,6 @@ class LaserModelDownloader:
 
     def download(self, filename: str):
         url = os.path.join(self.base_url, filename)
-
         local_file_path = os.path.join(self.model_dir, filename)
 
         if os.path.exists(local_file_path):
