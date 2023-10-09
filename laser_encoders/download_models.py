@@ -18,6 +18,7 @@ import argparse
 import logging
 import os
 import sys
+import tempfile
 from pathlib import Path
 
 import requests
@@ -48,26 +49,24 @@ class LaserModelDownloader:
         url = os.path.join(self.base_url, filename)
 
         local_file_path = os.path.join(self.model_dir, filename)
-        temp_file_path = os.path.join("/tmp", filename)
 
         if os.path.exists(local_file_path):
             logger.info(f" - {filename} already downloaded")
         else:
             logger.info(f" - Downloading {filename}")
 
-            if os.path.exists(temp_file_path):
-                os.remove(temp_file_path)
+            tf = tempfile.NamedTemporaryFile(delete=False)
+            temp_file_path = tf.name
 
-            response = requests.get(url, stream=True)
-            total_size = int(response.headers.get("Content-Length", 0))
-            progress_bar = tqdm(total=total_size, unit_scale=True, unit="B")
+            with tf:
+                response = requests.get(url, stream=True)
+                total_size = int(response.headers.get("Content-Length", 0))
+                progress_bar = tqdm(total=total_size, unit_scale=True, unit="B")
 
-            # Download to /tmp first
-            with open(temp_file_path, "wb") as f:
                 for chunk in response.iter_content(chunk_size=1024):
-                    f.write(chunk)
+                    tf.write(chunk)
                     progress_bar.update(len(chunk))
-            progress_bar.close()
+                progress_bar.close()
 
             os.rename(temp_file_path, local_file_path)
 
