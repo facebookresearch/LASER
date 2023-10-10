@@ -201,9 +201,9 @@ InstallSacremoses () {
 
 echo "Installing external tools"
 
-# InstallMosesTools
-# InstallFastBPE
-# InstallSentencePiece
+InstallMosesTools
+InstallFastBPE
+InstallSentencePiece
 InstallSacremoses
 
 #InstallMecab
