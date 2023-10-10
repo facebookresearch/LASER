@@ -99,6 +99,13 @@ tokenized_sentence = tokenizer.tokenize_file(inp_fname=Path(path/to/input_file.t
 
 For more advanced usage and options, please refer to the official LASER repository documentation.
 
+## LASER Versions and Associated Packages
+
+For users familiar with the earlier version of LASER, you might have encountered the [`laserembeddings`](https://pypi.org/project/laserembeddings/) package. This package primarily dealt with LASER-1 model embeddings.
+
+For the latest LASER-2,3 models, use the newly introduced `laser_encoders` package, which offers better performance and support for a wider range of languages.
+
+
 ## Contributing
 
 We welcome contributions from the developer community to enhance and improve laser_encoders. If you'd like to contribute, you can:
@@ -125,6 +132,3 @@ The following people have contributed to this project:
 
 This package is released under the [LASER](https://github.com/facebookresearch/LASER/blob/main/LICENSE) BSD License.
 
-### Contact
-
-For any questions, feedback, or support, you can contact Facebook AI Research.
