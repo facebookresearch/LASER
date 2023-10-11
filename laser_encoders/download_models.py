@@ -17,6 +17,7 @@
 import argparse
 import logging
 import os
+import shutil
 import sys
 import tempfile
 from pathlib import Path
@@ -67,7 +68,7 @@ class LaserModelDownloader:
                     progress_bar.update(len(chunk))
                 progress_bar.close()
 
-            os.rename(temp_file_path, local_file_path)
+            shutil.move(temp_file_path, local_file_path)
 
     def get_language_code(self, language_list: dict, lang: str) -> str:
         try:
