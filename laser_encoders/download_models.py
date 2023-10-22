@@ -198,6 +198,25 @@ def initialize_tokenizer(lang: str = None, model_dir: str = None, laser: str = N
     return LaserTokenizer(spm_model=Path(model_path))
 
 
+class LaserEncoderPipeline:
+    def __init__(self, lang: str, model_dir: str = None, spm: bool = True, laser: str = None):
+
+        self.tokenizer = initialize_tokenizer(lang=lang, model_dir=model_dir, laser=laser)
+        self.encoder = initialize_encoder(lang=lang, model_dir=model_dir, spm=spm,laser=laser)
+    
+    def encode_sentences(self, sentences: list) -> list:
+        """
+        Tokenizes and encodes a list of sentences.
+        
+        Args:
+        - sentences (list of str): List of sentences to tokenize and encode.
+
+        Returns:
+        - List of embeddings for each sentence.
+        """
+        tokenized_sentences = [self.tokenizer.tokenize(sentence) for sentence in sentences]
+        return self.encoder.encode_sentences(tokenized_sentences)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="LASER: Download Laser models")
     parser.add_argument(
