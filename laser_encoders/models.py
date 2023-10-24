@@ -329,6 +329,7 @@ class LaserLstmEncoder(nn.Module):
             else None,
         }
 
+
 def initialize_encoder(
     lang: str = None,
     model_dir: str = None,
