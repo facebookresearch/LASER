@@ -21,7 +21,11 @@ from typing import List
 import numpy as np
 import pytest
 
-from laser_encoders import initialize_encoder, initialize_tokenizer
+from laser_encoders import (
+    LaserEncoderPipeline,
+    initialize_encoder,
+    initialize_tokenizer,
+)
 
 
 @pytest.fixture
@@ -33,6 +37,27 @@ def tokenizer(tmp_path: Path):
 @pytest.fixture
 def input_text() -> str:
     return "This is a test sentence."
+
+
+@pytest.fixture
+def test_readme_params() -> dict:
+    return {
+        "lang": "igbo",
+        "input_sentences": ["nnọọ, kedu ka ị mere"],
+        "expected_embedding_shape": (1, 1024),
+        "expected_array": [
+            0.3807628,
+            -0.27941525,
+            -0.17819545,
+            0.44144684,
+            -0.38985375,
+            0.04719935,
+            0.20238206,
+            -0.03934783,
+            0.0118901,
+            0.28986093,
+        ],
+    }
 
 
 def test_tokenize(tokenizer, input_text: str):
@@ -175,3 +200,36 @@ def test_sentence_encoder(
     assert isinstance(sentence_embedding, np.ndarray)
     assert sentence_embedding.shape == (1, 1024)
     assert np.allclose(expected_array, sentence_embedding[:, :10], atol=1e-3)
+
+
+def test_laser_encoder_pipeline(tmp_path: Path, test_readme_params: dict):
+    lang = test_readme_params["lang"]
+    input_sentences = test_readme_params["input_sentences"]
+    expected_embedding_shape = test_readme_params["expected_embedding_shape"]
+    expected_array = test_readme_params["expected_array"]
+
+    encoder = LaserEncoderPipeline(model_dir=tmp_path, lang=lang)
+    embeddings = encoder.encode_sentences(input_sentences)
+
+    assert isinstance(embeddings, np.ndarray)
+    assert embeddings.shape == expected_embedding_shape
+    assert np.allclose(expected_array, embeddings[:, :10], atol=1e-3)
+
+
+def test_separate_initialization_and_encoding(
+    tmp_path, tokenizer, test_readme_params: dict
+):
+    lang = test_readme_params["lang"]
+    input_sentences = test_readme_params["input_sentences"]
+    expected_embedding_shape = test_readme_params["expected_embedding_shape"]
+    expected_array = test_readme_params["expected_array"]
+
+    tokenized_sentence = tokenizer.tokenize(input_sentences[0])
+    sentence_encoder = initialize_encoder(model_dir=tmp_path, lang=lang)
+
+    # Encode tokenized sentences into embeddings
+    embeddings = sentence_encoder.encode_sentences([tokenized_sentence])
+
+    assert isinstance(embeddings, np.ndarray)
+    assert embeddings.shape == expected_embedding_shape
+    assert np.allclose(expected_array, embeddings[:, :10], atol=1e-3)
