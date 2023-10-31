@@ -4,6 +4,7 @@ models
 tools-external
 tasks/mldoc/MLDoc
 embed
+flores
 tasks/bucc/downloaded
 tasks/similarity/dev/
 tasks/xnli/XNLI-1.0*
