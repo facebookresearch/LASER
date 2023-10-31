@@ -16,6 +16,7 @@
 
 import gzip
 import logging
+import os
 import re
 import sys
 from pathlib import Path
@@ -23,6 +24,9 @@ from typing import IO, List
 
 import sentencepiece as spm
 from sacremoses import MosesDetokenizer, MosesPunctNormalizer
+
+from laser_encoders.download_models import LaserModelDownloader
+from laser_encoders.language_list import LASER2_LANGUAGE, LASER3_LANGUAGE, SPM_LANGUAGE
 
 SPACE_NORMALIZER = re.compile(r"\s+")
 
@@ -131,3 +135,35 @@ class LaserTokenizer:
             ids.extend(token_ids)
 
         return ids
+
+
+def initialize_tokenizer(lang: str = None, model_dir: str = None, laser: str = None):
+    downloader = LaserModelDownloader(model_dir)
+    if laser is not None:
+        if laser == "laser3":
+            lang = downloader.get_language_code(LASER3_LANGUAGE, lang)
+            if lang in SPM_LANGUAGE:
+                filename = f"laser3-{lang}.v1.spm"
+            else:
+                filename = "laser2.spm"
+        elif laser == "laser2":
+            filename = "laser2.spm"
+        else:
+            raise ValueError(
+                f"Unsupported laser model: {laser}. Choose either laser2 or laser3."
+            )
+    else:
+        if lang in LASER3_LANGUAGE or lang in LASER2_LANGUAGE:
+            lang = downloader.get_language_code(LASER3_LANGUAGE, lang)
+            if lang in SPM_LANGUAGE:
+                filename = f"laser3-{lang}.v1.spm"
+            else:
+                filename = "laser2.spm"
+        else:
+            raise ValueError(
+                f"Unsupported language name: {lang}. Please specify a supported language name."
+            )
+
+    downloader.download(filename)
+    model_path = os.path.join(downloader.model_dir, filename)
+    return LaserTokenizer(spm_model=Path(model_path))

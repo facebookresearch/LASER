@@ -25,10 +25,21 @@ You can install laser_encoders using pip:
 
 ## Usage
 
-Here's a simple example of how you can download and initialise the tokenizer and encoder with just one step.
+Here's a simple example on how to obtain embeddings for sentences using the `LaserEncoderPipeline`:
 
-**Note:** By default, the models will be downloaded to the `~/.cache/laser_encoders` directory. To specify a different download location, you can provide the argument `model_dir=path/to/model/directory` to the initialize_tokenizer and initialize_encoder functions
+>**Note:** By default, the models will be downloaded to the `~/.cache/laser_encoders` directory. To specify a different download location, you can provide the argument `model_dir=path/to/model/directory`
 
+```py
+from laser_encoders import LaserEncoderPipeline
+
+# Initialize the LASER encoder pipeline
+encoder = LaserEncoderPipeline(lang="igbo")
+
+# Encode sentences into embeddings
+embeddings = encoder.encode_sentences(["nnọọ, kedu ka ị mere"])
+```
+
+If you prefer more control over the tokenization and encoding process, you can initialize the tokenizer and encoder separately:
 ```py
 from laser_encoders import initialize_encoder, initialize_tokenizer
 
@@ -39,16 +50,10 @@ tokenized_sentence = tokenizer.tokenize("nnọọ, kedu ka ị mere")
 # Initialize the LASER sentence encoder
 encoder = initialize_encoder(lang="igbo")
 
-# Encode sentences into embeddings
+# Encode tokenized sentences into embeddings
 embeddings = encoder.encode_sentences([tokenized_sentence])
 ```
-
-When initializing the encoder, you have the option to enable both tokenization and encoding by setting the `tokenize` flag to `True`. Below is an example of how to use it:
-```py
-encoder = initialize_encoder(lang="igbo", spm=True, tokenize=True)
-embeddings = encoder("nnọọ, kedu ka ị mere")
-```
->setting the `spm` flag to `True` tells the encoder to also download the accompanying spm model
+>By default, the `spm` flag is set to `True` when initializing the encoder, ensuring the accompanying spm model is downloaded.
 
 **Supported Languages:** You can specify any language from the [FLORES200](https://github.com/facebookresearch/flores/blob/main/flores200/README.md#languages-in-flores-200) dataset. This includes both languages identified by their full codes (like "ibo_Latn") and simpler alternatives (like "igbo").
 

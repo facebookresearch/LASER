@@ -26,8 +26,6 @@ import requests
 from tqdm import tqdm
 
 from laser_encoders.language_list import LASER2_LANGUAGE, LASER3_LANGUAGE, SPM_LANGUAGE
-from laser_encoders.laser_tokenizer import LaserTokenizer
-from laser_encoders.models import SentenceEncoder
 
 logging.basicConfig(
     stream=sys.stdout,
@@ -119,88 +117,6 @@ class LaserModelDownloader:
                 raise ValueError(
                     f"Unsupported language name: {args.lang}. Please specify a supported language name using --lang."
                 )
-
-
-def initialize_encoder(
-    lang: str = None,
-    model_dir: str = None,
-    spm: bool = True,
-    laser: str = None,
-    tokenize: bool = False,
-):
-    downloader = LaserModelDownloader(model_dir)
-    if laser is not None:
-        if laser == "laser3":
-            lang = downloader.get_language_code(LASER3_LANGUAGE, lang)
-            downloader.download_laser3(lang=lang, spm=spm)
-            file_path = f"laser3-{lang}.v1"
-        elif laser == "laser2":
-            downloader.download_laser2()
-            file_path = "laser2"
-        else:
-            raise ValueError(
-                f"Unsupported laser model: {laser}. Choose either laser2 or laser3."
-            )
-    else:
-        lang = downloader.get_language_code(LASER3_LANGUAGE, lang)
-        if lang in LASER3_LANGUAGE:
-            downloader.download_laser3(lang=lang, spm=spm)
-            file_path = f"laser3-{lang}.v1"
-        elif lang in LASER2_LANGUAGE:
-            downloader.download_laser2()
-            file_path = "laser2"
-        else:
-            raise ValueError(
-                f"Unsupported language name: {lang}. Please specify a supported language name."
-            )
-
-    model_dir = downloader.model_dir
-    model_path = os.path.join(model_dir, f"{file_path}.pt")
-    spm_vocab = os.path.join(model_dir, f"{file_path}.cvocab")
-    spm_model = None
-    if not os.path.exists(spm_vocab):
-        # if there is no cvocab for the laser3 lang use laser2 cvocab
-        spm_vocab = os.path.join(model_dir, "laser2.cvocab")
-    if tokenize:
-        spm_model = os.path.join(model_dir, f"{file_path}.spm")
-        if not os.path.exists(spm_model):
-            spm_model = os.path.join(model_dir, "laser2.spm")
-
-    return SentenceEncoder(
-        model_path=model_path, spm_vocab=spm_vocab, spm_model=spm_model
-    )
-
-
-def initialize_tokenizer(lang: str = None, model_dir: str = None, laser: str = None):
-    downloader = LaserModelDownloader(model_dir)
-    if laser is not None:
-        if laser == "laser3":
-            lang = downloader.get_language_code(LASER3_LANGUAGE, lang)
-            if lang in SPM_LANGUAGE:
-                filename = f"laser3-{lang}.v1.spm"
-            else:
-                filename = "laser2.spm"
-        elif laser == "laser2":
-            filename = "laser2.spm"
-        else:
-            raise ValueError(
-                f"Unsupported laser model: {laser}. Choose either laser2 or laser3."
-            )
-    else:
-        if lang in LASER3_LANGUAGE or lang in LASER2_LANGUAGE:
-            lang = downloader.get_language_code(LASER3_LANGUAGE, lang)
-            if lang in SPM_LANGUAGE:
-                filename = f"laser3-{lang}.v1.spm"
-            else:
-                filename = "laser2.spm"
-        else:
-            raise ValueError(
-                f"Unsupported language name: {lang}. Please specify a supported language name."
-            )
-
-    downloader.download(filename)
-    model_path = os.path.join(downloader.model_dir, filename)
-    return LaserTokenizer(spm_model=Path(model_path))
 
 
 if __name__ == "__main__":

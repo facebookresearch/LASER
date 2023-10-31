@@ -12,4 +12,5 @@
 #
 # -------------------------------------------------------
 
-from laser_encoders.download_models import initialize_encoder, initialize_tokenizer
+from laser_encoders.laser_tokenizer import initialize_tokenizer
+from laser_encoders.models import LaserEncoderPipeline, initialize_encoder

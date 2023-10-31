@@ -14,6 +14,7 @@
 
 
 import logging
+import os
 import re
 import sys
 from collections import namedtuple
@@ -26,7 +27,9 @@ from fairseq.data.dictionary import Dictionary
 from fairseq.models.transformer import Embedding, TransformerEncoder
 from fairseq.modules import LayerNorm
 
-from laser_encoders.laser_tokenizer import LaserTokenizer
+from laser_encoders.download_models import LaserModelDownloader
+from laser_encoders.language_list import LASER2_LANGUAGE, LASER3_LANGUAGE
+from laser_encoders.laser_tokenizer import LaserTokenizer, initialize_tokenizer
 
 SPACE_NORMALIZER = re.compile(r"\s+")
 Batch = namedtuple("Batch", "srcs tokens lengths")
@@ -325,3 +328,73 @@ class LaserLstmEncoder(nn.Module):
             if encoder_padding_mask.any()
             else None,
         }
+
+
+def initialize_encoder(
+    lang: str = None,
+    model_dir: str = None,
+    spm: bool = True,
+    laser: str = None,
+):
+    downloader = LaserModelDownloader(model_dir)
+    if laser is not None:
+        if laser == "laser3":
+            lang = downloader.get_language_code(LASER3_LANGUAGE, lang)
+            downloader.download_laser3(lang=lang, spm=spm)
+            file_path = f"laser3-{lang}.v1"
+        elif laser == "laser2":
+            downloader.download_laser2()
+            file_path = "laser2"
+        else:
+            raise ValueError(
+                f"Unsupported laser model: {laser}. Choose either laser2 or laser3."
+            )
+    else:
+        lang = downloader.get_language_code(LASER3_LANGUAGE, lang)
+        if lang in LASER3_LANGUAGE:
+            downloader.download_laser3(lang=lang, spm=spm)
+            file_path = f"laser3-{lang}.v1"
+        elif lang in LASER2_LANGUAGE:
+            downloader.download_laser2()
+            file_path = "laser2"
+        else:
+            raise ValueError(
+                f"Unsupported language name: {lang}. Please specify a supported language name."
+            )
+
+    model_dir = downloader.model_dir
+    model_path = os.path.join(model_dir, f"{file_path}.pt")
+    spm_vocab = os.path.join(model_dir, f"{file_path}.cvocab")
+
+    if not os.path.exists(spm_vocab):
+        # if there is no cvocab for the laser3 lang use laser2 cvocab
+        spm_vocab = os.path.join(model_dir, "laser2.cvocab")
+
+    return SentenceEncoder(model_path=model_path, spm_vocab=spm_vocab, spm_model=None)
+
+
+class LaserEncoderPipeline:
+    def __init__(
+        self, lang: str, model_dir: str = None, spm: bool = True, laser: str = None
+    ):
+        self.tokenizer = initialize_tokenizer(
+            lang=lang, model_dir=model_dir, laser=laser
+        )
+        self.encoder = initialize_encoder(
+            lang=lang, model_dir=model_dir, spm=spm, laser=laser
+        )
+
+    def encode_sentences(self, sentences: list) -> list:
+        """
+        Tokenizes and encodes a list of sentences.
+
+        Args:
+        - sentences (list of str): List of sentences to tokenize and encode.
+
+        Returns:
+        - List of embeddings for each sentence.
+        """
+        tokenized_sentences = [
+            self.tokenizer.tokenize(sentence) for sentence in sentences
+        ]
+        return self.encoder.encode_sentences(tokenized_sentences)
