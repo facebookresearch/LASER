@@ -6,6 +6,7 @@ from laser_encoders.language_list import LASER2_LANGUAGE, LASER3_LANGUAGE
 from laser_encoders.laser_tokenizer import initialize_tokenizer
 from laser_encoders.models import initialize_encoder
 
+
 def validate_language_models_and_tokenize():
     with tempfile.TemporaryDirectory() as tmp_dir:
         print('Created temporary directory', tmp_dir)
