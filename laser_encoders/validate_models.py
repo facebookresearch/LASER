@@ -9,7 +9,7 @@ from laser_encoders.models import initialize_encoder
 
 def validate_language_models_and_tokenize():
     with tempfile.TemporaryDirectory() as tmp_dir:
-        print('Created temporary directory', tmp_dir)
+        print("Created temporary directory", tmp_dir)
 
         downloader = LaserModelDownloader(model_dir=tmp_dir)
 
