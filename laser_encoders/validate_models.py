@@ -25,6 +25,7 @@ def test_validate_language_models_and_tokenize_laser3(lang):
 
     print(f"{lang} language model validated and deleted successfully.")
 
+
 @pytest.mark.parametrize("lang", LASER2_LANGUAGE)
 def test_validate_language_models_and_tokenize_laser2(lang):
     with tempfile.TemporaryDirectory() as tmp_dir:
