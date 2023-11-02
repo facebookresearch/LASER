@@ -103,8 +103,8 @@ class LaserTokenizer:
                     tokens = self.tokenize(line.strip())
                     file_out.write(tokens + "\n")
 
-    def __call__(self, text_or_batch, batch=False):
-        if not batch:
+    def __call__(self, text_or_batch):
+        if isinstance(text_or_batch, str):
             return self.tokenize(text_or_batch)
         else:
             return self.tokenize_batch(text_or_batch)
