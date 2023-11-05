@@ -97,6 +97,8 @@ class SentenceEncoder:
     def __call__(self, text_or_batch):
         if self.spm_model:
             text_or_batch = self.tokenizer(text_or_batch)
+            if isinstance(text_or_batch, str):
+                text_or_batch = [text_or_batch]
             return self.encode_sentences(text_or_batch)
         else:
             raise ValueError(
