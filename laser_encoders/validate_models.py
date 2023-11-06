@@ -47,7 +47,6 @@ class MockLaserModelDownloader:
     def __init__(self, model_dir):
         self.model_dir = model_dir
 
-    
     def get_language_code(self, language_list: dict, lang: str) -> str:
         try:
             lang_3_4 = language_list[lang]
@@ -70,7 +69,6 @@ class MockLaserModelDownloader:
         else:
             return True
 
-    
     def download_laser2(self):
         files = ["laser2.pt", "laser2.spm", "laser2.cvocab"]
         for file_name in files:
@@ -79,6 +77,7 @@ class MockLaserModelDownloader:
                 return False
             else:
                 return True
+
 
 CACHE_DIR = "/home/user/.cache/models"  # Change this to the desired cache directory
 
