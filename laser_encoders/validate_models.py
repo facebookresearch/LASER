@@ -25,6 +25,7 @@ def test_validate_language_models_and_tokenize_laser3(lang):
 
     print(f"{lang} language model validated and deleted successfully.")
 
+
 @pytest.mark.parametrize("lang", LASER2_LANGUAGE)
 def test_validate_language_models_and_tokenize_laser2(lang):
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -41,9 +42,11 @@ def test_validate_language_models_and_tokenize_laser2(lang):
 
     print(f"{lang} language model validated and deleted successfully.")
 
+
 class MockLaserModelDownloader:
     def __init__(self, model_dir):
         self.model_dir = model_dir
+
     
     def get_language_code(self, language_list: dict, lang: str) -> str:
         try:
@@ -67,6 +70,7 @@ class MockLaserModelDownloader:
         else:
             return True
 
+    
     def download_laser2(self):
         files = ["laser2.pt", "laser2.spm", "laser2.cvocab"]
         for file_name in files:
@@ -90,6 +94,7 @@ def test_validate_language_models_and_tokenize_mock_laser3(lang):
     tokenizer = initialize_tokenizer(lang, model_dir=CACHE_DIR)
 
     tokenized = tokenizer.tokenize("This is a sample sentence.")
+
 
 # This uses the mock downloader
 @pytest.mark.parametrize("lang", LASER2_LANGUAGE)
