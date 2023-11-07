@@ -47,6 +47,7 @@ class LaserTokenizer:
         descape: bool = False,
         verbose: bool = False,
         over_write: bool = False,
+        normalize_punct: bool = True,
     ):
         self.spm_model = spm_model
         self.lang = lang
@@ -54,6 +55,7 @@ class LaserTokenizer:
         self.descape = descape
         self.verbose = verbose
         self.over_write = over_write
+        self.normalize_punct = normalize_punct
 
         assert spm_model.exists(), f"spm model file: {spm_model} does not exist"
         self.moses_punct_normalizer = MosesPunctNormalizer(self.lang, perl_parity=True)
@@ -74,7 +76,8 @@ class LaserTokenizer:
     def tokenize(self, text: str) -> str:
         # Preprocessing
         sentence_text = "".join(c for c in text if c.isprintable)
-        sentence_text = self.moses_punct_normalizer.normalize(sentence_text)
+        if self.normalize_punct:
+            sentence_text = self.moses_punct_normalizer.normalize(sentence_text)
         if self.descape:
             sentence_text = self.moses_detokenizer.unescape_xml(text=sentence_text)
         if self.lower_case:
