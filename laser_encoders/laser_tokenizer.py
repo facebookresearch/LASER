@@ -56,7 +56,7 @@ class LaserTokenizer:
         self.over_write = over_write
 
         assert spm_model.exists(), f"spm model file: {spm_model} does not exist"
-        self.moses_punct_normalizer = MosesPunctNormalizer(self.lang)
+        self.moses_punct_normalizer = MosesPunctNormalizer(self.lang, perl_parity=True)
         self.moses_detokenizer = MosesDetokenizer()
         self.spm_encoder = spm.SentencePieceProcessor(model_file=str(self.spm_model))
 

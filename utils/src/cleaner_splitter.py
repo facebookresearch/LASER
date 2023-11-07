@@ -20,7 +20,7 @@ class SentenceSplitClean:
         self.splitter = get_split_algo(splitter_lang, split_algo=split_algo)
 
         # setup "moses" normalization
-        self.mpn = MosesPunctNormalizer(lang="en")  # TODO
+        self.mpn = MosesPunctNormalizer(lang="en", perl_parity=True)  # TODO
         self.replace_nonprint = non_printing_char_replacer(" ")
 
     def __call__(self, line):

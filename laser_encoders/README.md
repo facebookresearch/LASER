@@ -8,7 +8,7 @@ laser_encoders is the official Python package for the Facebook [LASER](https://g
 
 - Python `>= 3.8`
 - [PyTorch `>= 2.0`](http://pytorch.org/)
-- sacremoses `>=0.0.53`
+- sacremoses `>=0.1.0`
 - sentencepiece `>=0.1.99`
 - numpy `>=1.25.0`
 - fairseq `>=0.12.2`
