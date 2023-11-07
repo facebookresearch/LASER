@@ -181,7 +181,6 @@ class SentenceEncoder:
         return np.vstack(results)[np.argsort(indices, kind=self.sort_kind)]
 
 
-
 class LaserTransformerEncoder(TransformerEncoder):
     def __init__(self, state_dict, vocab_path):
         self.dictionary = Dictionary.load(vocab_path)
@@ -390,7 +389,9 @@ class LaserEncoderPipeline:
             lang=lang, model_dir=model_dir, spm=spm, laser=laser
         )
 
-    def encode_sentences(self, sentences: list, normalize_embeddings: bool = False) -> list:
+    def encode_sentences(
+        self, sentences: list, normalize_embeddings: bool = False
+    ) -> list:
         """
         Tokenizes and encodes a list of sentences.
 
