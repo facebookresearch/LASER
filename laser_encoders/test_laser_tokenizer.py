@@ -65,6 +65,19 @@ def test_tokenize(tokenizer, input_text: str):
     assert tokenizer.tokenize(input_text) == expected_output
 
 
+def test_tokenizer_call_method(tokenizer, input_text: str):
+    single_string = "This is a test sentence."
+    expected_output = "▁this ▁is ▁a ▁test ▁sent ence ."
+    assert tokenizer(single_string) == expected_output
+
+    list_of_strings = ["This is a test sentence.", "This is another test sentence."]
+    expected_output = [
+        "▁this ▁is ▁a ▁test ▁sent ence .",
+        "▁this ▁is ▁another ▁test ▁sent ence .",
+    ]
+    assert tokenizer(list_of_strings) == expected_output
+
+
 def test_normalization(tokenizer):
     test_data = "Hello!!! How are you??? I'm doing great."
     expected_output = "▁hel lo !!! ▁how ▁are ▁you ??? ▁i ' m ▁do ing ▁great ."

@@ -94,10 +94,12 @@ class SentenceEncoder:
         self.encoder.eval()
         self.sort_kind = sort_kind
 
-    def __call__(self, sentences):
+    def __call__(self, text_or_batch):
         if self.spm_model:
-            sentences = self.tokenizer(sentences)
-            return self.encode_sentences(sentences)
+            text_or_batch = self.tokenizer(text_or_batch)
+            if isinstance(text_or_batch, str):
+                text_or_batch = [text_or_batch]
+            return self.encode_sentences(text_or_batch)
         else:
             raise ValueError(
                 "Either initialize the encoder with an spm_model or pre-tokenize and use the encode_sentences method."
