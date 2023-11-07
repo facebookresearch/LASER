@@ -95,7 +95,6 @@ class LaserModelDownloader:
                 f"The 'get_language_code' function returned a list for lang='{lang}'. Please choose a specific script from the list: {result}"
             )
 
-        
         lang = result
         self.download(f"laser3-{lang}.v1.pt")
         if spm:
