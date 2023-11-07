@@ -88,7 +88,12 @@ class LaserModelDownloader:
         self.download("laser2.cvocab")
 
     def download_laser3(self, lang: str, spm: bool = False):
-        lang = self.get_language_code(LASER3_LANGUAGE, lang)
+        result = self.get_language_code(LASER3_LANGUAGE, lang)
+    
+        if isinstance(result, list):
+            raise ValueError(f"The 'get_language_code' function returned a list for lang='{lang}'. Please choose a specific script from the list: {result}")
+    
+        lang = result
         self.download(f"laser3-{lang}.v1.pt")
         if spm:
             if lang in SPM_LANGUAGE:
