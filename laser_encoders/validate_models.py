@@ -39,7 +39,7 @@ def test_validate_language_models_and_tokenize_laser2(lang):
         downloader = LaserModelDownloader(model_dir=tmp_dir)
         downloader.download_laser2()
 
-        encoder = initialize_encoder(lang, model_dir=tmp_dir, laser="laser2")
+        encoder = initialize_encoder(lang, model_dir=tmp_dir)
         tokenizer = initialize_tokenizer(lang, model_dir=tmp_dir)
 
         # Test tokenization with a sample sentence
@@ -108,7 +108,7 @@ def test_validate_language_models_and_tokenize_mock_laser2(lang):
     if err == True:
         raise pytest.error()
 
-    encoder = initialize_encoder(lang, model_dir=CACHE_DIR, laser="laser2")
+    encoder = initialize_encoder(lang, model_dir=CACHE_DIR)
     tokenizer = initialize_tokenizer(lang, model_dir=CACHE_DIR)
 
     tokenized = tokenizer.tokenize("This is a sample sentence.")
