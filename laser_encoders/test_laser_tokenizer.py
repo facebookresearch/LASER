@@ -246,3 +246,42 @@ def test_separate_initialization_and_encoding(
     assert isinstance(embeddings, np.ndarray)
     assert embeddings.shape == expected_embedding_shape
     assert np.allclose(expected_array, embeddings[:, :10], atol=1e-3)
+
+
+def test_encoder_normalization(tmp_path: Path, test_readme_params: dict):
+    lang = test_readme_params["lang"]
+    input_sentences = test_readme_params["input_sentences"]
+
+    encoder = LaserEncoderPipeline(model_dir=tmp_path, lang=lang)
+    normalized_embeddings = encoder.encode_sentences(
+        input_sentences, normalize_embeddings=True
+    )
+    norm = np.linalg.norm(normalized_embeddings[0])
+
+    assert np.allclose(norm, 1.0, atol=1e-3)
+
+
+def test_encoder_default_behaviour(tmp_path: Path, test_readme_params: dict):
+    lang = test_readme_params["lang"]
+    input_sentences = test_readme_params["input_sentences"]
+
+    encoder = LaserEncoderPipeline(model_dir=tmp_path, lang=lang)
+    default_embeddings = encoder.encode_sentences(input_sentences)
+    non_normalized_embeddings = encoder.encode_sentences(
+        input_sentences, normalize_embeddings=False
+    )
+
+    assert np.allclose(default_embeddings, non_normalized_embeddings)
+
+
+def test_encoder_non_normalization(tmp_path: Path, test_readme_params: dict):
+    lang = test_readme_params["lang"]
+    input_sentences = test_readme_params["input_sentences"]
+
+    encoder = LaserEncoderPipeline(model_dir=tmp_path, lang=lang)
+    non_normalized_embeddings = encoder.encode_sentences(
+        input_sentences, normalize_embeddings=False
+    )
+    norm = np.linalg.norm(non_normalized_embeddings[0])
+
+    assert not np.isclose(norm, 1)

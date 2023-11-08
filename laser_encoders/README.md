@@ -8,7 +8,7 @@ laser_encoders is the official Python package for the Facebook [LASER](https://g
 
 - Python `>= 3.8`
 - [PyTorch `>= 2.0`](http://pytorch.org/)
-- sacremoses `>=0.0.53`
+- sacremoses `>=0.1.0`
 - sentencepiece `>=0.1.99`
 - numpy `>=1.25.0`
 - fairseq `>=0.12.2`
@@ -37,6 +37,9 @@ encoder = LaserEncoderPipeline(lang="igbo")
 
 # Encode sentences into embeddings
 embeddings = encoder.encode_sentences(["nnọọ, kedu ka ị mere"])
+# If you want the output embeddings to be L2-normalized, set normalize_embeddings to True
+normalized_embeddings = encoder.encode_sentences(["nnọọ, kedu ka ị mere"], normalize_embeddings=True)
+
 ```
 
 If you prefer more control over the tokenization and encoding process, you can initialize the tokenizer and encoder separately:

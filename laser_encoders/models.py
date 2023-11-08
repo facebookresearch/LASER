@@ -169,12 +169,17 @@ class SentenceEncoder:
         if nsentences > 0:
             yield batch(batch_tokens, batch_lengths, batch_indices)
 
-    def encode_sentences(self, sentences):
+    def encode_sentences(self, sentences, normalize_embeddings=False):
         indices = []
         results = []
         for batch, batch_indices in self._make_batches(sentences):
             indices.extend(batch_indices)
-            results.append(self._process_batch(batch))
+            encoded_batch = self._process_batch(batch)
+            if normalize_embeddings:
+                # Perform L2 normalization on the embeddings
+                norms = np.linalg.norm(encoded_batch, axis=1, keepdims=True)
+                encoded_batch = encoded_batch / norms
+            results.append(encoded_batch)
         return np.vstack(results)[np.argsort(indices, kind=self.sort_kind)]
 
 
@@ -386,7 +391,9 @@ class LaserEncoderPipeline:
             lang=lang, model_dir=model_dir, spm=spm, laser=laser
         )
 
-    def encode_sentences(self, sentences: list) -> list:
+    def encode_sentences(
+        self, sentences: list, normalize_embeddings: bool = False
+    ) -> list:
         """
         Tokenizes and encodes a list of sentences.
 
@@ -399,4 +406,4 @@ class LaserEncoderPipeline:
         tokenized_sentences = [
             self.tokenizer.tokenize(sentence) for sentence in sentences
         ]
-        return self.encoder.encode_sentences(tokenized_sentences)
+        return self.encoder.encode_sentences(tokenized_sentences, normalize_embeddings)
