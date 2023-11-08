@@ -28,7 +28,7 @@ def test_validate_language_models_and_tokenize_laser3(lang):
             # Test tokenization with a sample sentence
             tokenized = tokenizer.tokenize("This is a sample sentence.")
 
-    print(f"{lang} language model validated and deleted successfully.")
+    print(f"{lang} model validated successfully")
 
 
 @pytest.mark.parametrize("lang", LASER2_LANGUAGE)
@@ -45,7 +45,7 @@ def test_validate_language_models_and_tokenize_laser2(lang):
         # Test tokenization with a sample sentence
         tokenized = tokenizer.tokenize("This is a sample sentence.")
 
-    print(f"{lang} language model validated and deleted successfully.")
+    print(f"{lang} model validated successfully")
 
 
 class MockLaserModelDownloader:
@@ -99,6 +99,8 @@ def test_validate_language_models_and_tokenize_mock_laser3(lang):
 
     tokenized = tokenizer.tokenize("This is a sample sentence.")
 
+    print(f"{lang} model validated successfully")
+
 
 # This uses the mock downloader
 @pytest.mark.parametrize("lang", LASER2_LANGUAGE)
@@ -112,3 +114,5 @@ def test_validate_language_models_and_tokenize_mock_laser2(lang):
     tokenizer = initialize_tokenizer(lang, model_dir=CACHE_DIR)
 
     tokenized = tokenizer.tokenize("This is a sample sentence.")
+
+    print(f"{lang} model validated successfully")
