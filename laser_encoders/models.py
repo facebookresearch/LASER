@@ -350,8 +350,8 @@ def initialize_encoder(
                 f"Unsupported laser model: {laser}. Choose either laser2 or laser3."
             )
     else:
-        lang = downloader.get_language_code(LASER3_LANGUAGE, lang)
         if lang in LASER3_LANGUAGE:
+            lang = downloader.get_language_code(LASER3_LANGUAGE, lang)
             downloader.download_laser3(lang=lang, spm=spm)
             file_path = f"laser3-{lang}.v1"
         elif lang in LASER2_LANGUAGE:
