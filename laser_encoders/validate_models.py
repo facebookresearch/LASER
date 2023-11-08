@@ -15,7 +15,7 @@ def test_validate_language_models_and_tokenize_laser3(lang):
         print(f"Created temporary directory for {lang}", tmp_dir)
 
         downloader = LaserModelDownloader(model_dir=tmp_dir)
-        if lang in ["Kashmiri", "kas", "central kanuri", "knc"]:
+        if lang in ["kashmiri", "kas", "central kanuri", "knc"]:
             with pytest.raises(ValueError) as excinfo:
                 downloader.download_laser3(lang)
             assert "ValueError" in str(excinfo.value)
