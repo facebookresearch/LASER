@@ -153,12 +153,14 @@ def initialize_tokenizer(lang: str = None, model_dir: str = None, laser: str = N
                 f"Unsupported laser model: {laser}. Choose either laser2 or laser3."
             )
     else:
-        if lang in LASER3_LANGUAGE or lang in LASER2_LANGUAGE:
+        if lang in LASER3_LANGUAGE:
             lang = downloader.get_language_code(LASER3_LANGUAGE, lang)
             if lang in SPM_LANGUAGE:
                 filename = f"laser3-{lang}.v1.spm"
             else:
                 filename = "laser2.spm"
+        elif lang in LASER2_LANGUAGE:
+            filename = "laser2.spm"
         else:
             raise ValueError(
                 f"Unsupported language name: {lang}. Please specify a supported language name."
