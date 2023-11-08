@@ -92,7 +92,7 @@ class LaserModelDownloader:
 
         if isinstance(result, list):
             raise ValueError(
-                f"The 'get_language_code' function returned a list for lang='{lang}'. Please choose a specific script from the list: {result}"
+                f"There are script-specific models available for {lang}. Please choose one from the following: {result}"
             )
 
         lang = result
