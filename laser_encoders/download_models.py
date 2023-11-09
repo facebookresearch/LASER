@@ -74,7 +74,7 @@ class LaserModelDownloader:
             if isinstance(lang_3_4, list):
                 options = ", ".join(f"'{opt}'" for opt in lang_3_4)
                 raise ValueError(
-                    f"Language '{lang_3_4}' has multiple options: {options}. Please specify using --lang."
+                    f"Language '{lang}' has multiple options: {options}. Please specify using the 'lang' argument."
                 )
             return lang_3_4
         except KeyError:
