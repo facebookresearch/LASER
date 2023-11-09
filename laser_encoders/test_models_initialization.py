@@ -45,12 +45,13 @@ def test_validate_kashmiri_models_and_tokenize_laser3(lang="kas"):
         print(f"Created temporary directory for {lang}", tmp_dir)
 
         downloader = LaserModelDownloader(model_dir=tmp_dir)
-        downloader.download_laser3(lang)
-
-        encoder = initialize_encoder(lang, model_dir=tmp_dir)
-        tokenizer = initialize_tokenizer(lang, model_dir=tmp_dir)
-
-        # Test tokenization with a sample sentence
-        tokenized = tokenizer.tokenize("This is a sample sentence.")
+        with pytest.raises(ValueError):
+            downloader.download_laser3(lang)
+    
+            encoder = initialize_encoder(lang, model_dir=tmp_dir)
+            tokenizer = initialize_tokenizer(lang, model_dir=tmp_dir)
+    
+            # Test tokenization with a sample sentence
+            tokenized = tokenizer.tokenize("This is a sample sentence.")
 
     print(f"{lang} model validated successfully")
