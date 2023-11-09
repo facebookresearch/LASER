@@ -46,7 +46,7 @@ def test_validate_kashmiri_models_and_tokenize_laser3(lang="kas"):
 
         downloader = LaserModelDownloader(model_dir=tmp_dir)
         downloader.download_laser3(lang)
-        
+
         encoder = initialize_encoder(lang, model_dir=tmp_dir)
         tokenizer = initialize_tokenizer(lang, model_dir=tmp_dir)
 
