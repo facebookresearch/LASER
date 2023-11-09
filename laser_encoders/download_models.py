@@ -71,7 +71,7 @@ class LaserModelDownloader:
     def get_language_code(self, language_list: dict, lang: str) -> str:
         try:
             lang_3_4 = language_list[lang]
-            if isinstance(lang_3_4, tuple):
+            if isinstance(lang_3_4, list):
                 options = ", ".join(f"'{opt}'" for opt in lang_3_4)
                 raise ValueError(
                     f"Language '{lang_3_4}' has multiple options: {options}. Please specify using --lang."
