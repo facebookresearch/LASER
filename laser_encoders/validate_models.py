@@ -9,6 +9,7 @@ from laser_encoders.laser_tokenizer import initialize_tokenizer
 from laser_encoders.models import initialize_encoder
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("lang", LASER3_LANGUAGE)
 def test_validate_language_models_and_tokenize_laser3(lang):
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -31,6 +32,7 @@ def test_validate_language_models_and_tokenize_laser3(lang):
     print(f"{lang} model validated successfully")
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("lang", LASER2_LANGUAGE)
 def test_validate_language_models_and_tokenize_laser2(lang):
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -87,6 +89,7 @@ class MockLaserModelDownloader:
 CACHE_DIR = "/home/user/.cache/models"  # Change this to the desired cache directory
 
 # This uses the mock downloader
+@pytest.mark.slow
 @pytest.mark.parametrize("lang", LASER3_LANGUAGE)
 def test_validate_language_models_and_tokenize_mock_laser3(lang):
     downloader = MockLaserModelDownloader(model_dir=CACHE_DIR)
@@ -103,6 +106,7 @@ def test_validate_language_models_and_tokenize_mock_laser3(lang):
 
 
 # This uses the mock downloader
+@pytest.mark.slow
 @pytest.mark.parametrize("lang", LASER2_LANGUAGE)
 def test_validate_language_models_and_tokenize_mock_laser2(lang):
     downloader = LaserModelDownloader(model_dir=CACHE_DIR)
@@ -114,5 +118,53 @@ def test_validate_language_models_and_tokenize_mock_laser2(lang):
     tokenizer = initialize_tokenizer(lang, model_dir=CACHE_DIR)
 
     tokenized = tokenizer.tokenize("This is a sample sentence.")
+
+    print(f"{lang} model validated successfully")
+
+def test_validate_achnese_models_and_tokenize_laser3(lang="acehnese"):
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        print(f"Created temporary directory for {lang}", tmp_dir)
+
+        downloader = LaserModelDownloader(model_dir=tmp_dir)
+        downloader.download_laser3(lang)
+        encoder = initialize_encoder(lang, model_dir=tmp_dir)
+        tokenizer = initialize_tokenizer(lang, model_dir=tmp_dir)
+
+        # Test tokenization with a sample sentence
+        tokenized = tokenizer.tokenize("This is a sample sentence.")
+
+    print(f"{lang} model validated successfully")
+
+
+def test_validate_english_models_and_tokenize_laser2(lang="english"):
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        print(f"Created temporary directory for {lang}", tmp_dir)
+
+        downloader = LaserModelDownloader(model_dir=tmp_dir)
+        downloader.download_laser2()
+
+        encoder = initialize_encoder(lang, model_dir=tmp_dir)
+        tokenizer = initialize_tokenizer(lang, model_dir=tmp_dir)
+
+        # Test tokenization with a sample sentence
+        tokenized = tokenizer.tokenize("This is a sample sentence.")
+
+    print(f"{lang} model validated successfully")
+
+
+def test_validate_kashmiri_models_and_tokenize_laser3(lang="kas"):
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        print(f"Created temporary directory for {lang}", tmp_dir)
+
+        downloader = LaserModelDownloader(model_dir=tmp_dir)
+        lang_codes = LASER3_LANGUAGE[lang]
+
+        for code in lang_codes:
+            downloader.download_laser3(code)
+            encoder = initialize_encoder(code, model_dir=tmp_dir)
+            tokenizer = initialize_tokenizer(code, model_dir=tmp_dir)
+
+            # Test tokenization with a sample sentence
+            tokenized = tokenizer.tokenize("This is a sample sentence.")
 
     print(f"{lang} model validated successfully")
