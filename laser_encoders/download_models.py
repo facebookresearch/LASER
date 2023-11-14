@@ -71,10 +71,10 @@ class LaserModelDownloader:
     def get_language_code(self, language_list: dict, lang: str) -> str:
         try:
             lang_3_4 = language_list[lang]
-            if isinstance(lang_3_4, tuple):
+            if isinstance(lang_3_4, list):
                 options = ", ".join(f"'{opt}'" for opt in lang_3_4)
                 raise ValueError(
-                    f"Language '{lang_3_4}' has multiple options: {options}. Please specify using --lang."
+                    f"Language '{lang}' has multiple options: {options}. Please specify using the 'lang' argument."
                 )
             return lang_3_4
         except KeyError:
@@ -88,7 +88,14 @@ class LaserModelDownloader:
         self.download("laser2.cvocab")
 
     def download_laser3(self, lang: str, spm: bool = False):
-        lang = self.get_language_code(LASER3_LANGUAGE, lang)
+        result = self.get_language_code(LASER3_LANGUAGE, lang)
+
+        if isinstance(result, list):
+            raise ValueError(
+                f"There are script-specific models available for {lang}. Please choose one from the following: {result}"
+            )
+
+        lang = result
         self.download(f"laser3-{lang}.v1.pt")
         if spm:
             if lang in SPM_LANGUAGE:
