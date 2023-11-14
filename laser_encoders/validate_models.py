@@ -94,7 +94,7 @@ def test_validate_language_models_and_tokenize_mock_laser3(lang):
         downloader.download_laser3(lang)
     except FileNotFoundError as e:
         raise pytest.error(str(e))
- 
+
     encoder = initialize_encoder(lang, model_dir=CACHE_DIR)
     tokenizer = initialize_tokenizer(lang, model_dir=CACHE_DIR)
 
