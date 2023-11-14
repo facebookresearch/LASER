@@ -89,12 +89,12 @@ CACHE_DIR = "/home/user/.cache/models"  # Change this to the desired cache direc
 @pytest.mark.parametrize("lang", LASER3_LANGUAGE)
 def test_validate_language_models_and_tokenize_mock_laser3(lang):
     downloader = MockLaserModelDownloader(model_dir=CACHE_DIR)
-    
+
     try:
         downloader.download_laser3(lang)
     except FileNotFoundError as e:
         raise pytest.error(str(e))
-        
+ 
     encoder = initialize_encoder(lang, model_dir=CACHE_DIR)
     tokenizer = initialize_tokenizer(lang, model_dir=CACHE_DIR)
 
