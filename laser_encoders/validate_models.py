@@ -80,10 +80,10 @@ class MockLaserModelDownloader:
         files = ["laser2.pt", "laser2.spm", "laser2.cvocab"]
         for file_name in files:
             file_path = os.path.join(self.model_dir, file_name)
-            if os.path.exists(file_path):
-                return False
-            else:
+            if not os.path.exists(file_path):
                 return True
+
+        return False
 
 
 CACHE_DIR = "/home/user/.cache/models"  # Change this to the desired cache directory
