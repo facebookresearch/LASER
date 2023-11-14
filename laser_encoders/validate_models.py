@@ -109,7 +109,7 @@ def test_validate_language_models_and_tokenize_mock_laser3(lang):
 @pytest.mark.slow
 @pytest.mark.parametrize("lang", LASER2_LANGUAGE)
 def test_validate_language_models_and_tokenize_mock_laser2(lang):
-    downloader = LaserModelDownloader(model_dir=CACHE_DIR)
+    downloader = MockLaserModelDownloader(model_dir=CACHE_DIR)
     err = downloader.download_laser2()
     if err == True:
         raise pytest.error()
