@@ -71,10 +71,7 @@ class MockLaserModelDownloader:
     def download_laser3(self, lang):
         lang = self.get_language_code(LASER3_LANGUAGE, lang)
         file_path = os.path.join(self.model_dir, f"laser3-{lang}.v1.pt")
-        if os.path.exists(file_path):
-            return False
-        else:
-            return True
+        return os.path.exists(file_path)
 
     def download_laser2(self):
         files = ["laser2.pt", "laser2.spm", "laser2.cvocab"]
