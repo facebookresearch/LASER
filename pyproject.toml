@@ -13,8 +13,8 @@ requires-python = ">=3.8"
 dependencies = [
     'sacremoses>=0.1.0',
     'sentencepiece>=0.1.99',
-    'numpy>=1.24',
-    'torch>=2.0.1',
+    'numpy>=1.21.3',
+    'torch>=1.10.0',
     'fairseq>=0.12.2',
 ]
 
