@@ -132,11 +132,11 @@ We expect all contributors to adhere to our [Code of Conduct](https://github.com
 The following people have contributed to this project:
 
 - [Victor Joseph](https://github.com/CaptainVee)
+- [Paul Okewunmi](https://github.com/Paulooh007)
+- [Siddharth Singh Rana](https://github.com/NIXBLACK11)
 - [David Dale](https://github.com/avidale/)
 - [Holger Schwenk](https://github.com/hoschwenk)
 - [Kevin Heffernan](https://github.com/heffernankevin)
-- [Paul Okewunmi](https://github.com/Paulooh007)
-- [Siddharth Singh Rana](https://github.com/NIXBLACK11)
 
 ### License
 
