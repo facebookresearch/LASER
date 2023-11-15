@@ -7,13 +7,13 @@ laser_encoders is the official Python package for the Facebook [LASER](https://g
 ## Dependencies
 
 - Python `>= 3.8`
-- [PyTorch `>= 2.0`](http://pytorch.org/)
+- [PyTorch `>= 1.10.0`](http://pytorch.org/)
 - sacremoses `>=0.1.0`
 - sentencepiece `>=0.1.99`
-- numpy `>=1.25.0`
+- numpy `>=1.21.3`
 - fairseq `>=0.12.2`
 
-You can find a full list of requirements [here](requirements.txt)
+You can find a full list of requirements [here](https://github.com/facebookresearch/LASER/blob/main/pyproject.toml)
 
 ## Installation
 
