@@ -37,6 +37,8 @@ The package can be installed simply with `pip install laser_encoders` and used a
 ```python
 from laser_encoders import LaserEncoderPipeline
 encoder = LaserEncoderPipeline(lang="eng_Latn")
+embeddings = encoder.encode_sentences(["Hi!", "This is a sentence encoder."])
+print(embeddings.shape)  # (2, 1024)
 ```
 
 The laser_encoders [readme file](laser_encoders) provides more examples of its installation and usage.
