@@ -3,7 +3,7 @@
 LASER is a library to calculate and use multilingual sentence embeddings.
 
 **NEWS**
-* 2023/11/16 Released [**laser_encoders**](laser_encoders), a compact pip-installable package supporting LASER-2 and LASER-3 models
+* 2023/11/16 Released [**laser_encoders**](laser_encoders), a pip-installable package supporting LASER-2 and LASER-3 models
 * 2023/06/26 [**xSIM++**](https://arxiv.org/abs/2306.12907) evaluation pipeline and data [**released**](tasks/xsimplusplus/README.md)
 * 2022/07/06 Updated LASER models with support for over 200 languages are [**now available**](nllb/README.md)
 * 2022/07/06 Multilingual similarity search (**xsim**) evaluation pipeline [**released**](tasks/xsim/README.md)
@@ -27,7 +27,7 @@ a language family which is covered by other languages.
 A detailed description of how the multilingual sentence embeddings are trained can
 be found [here](https://arxiv.org/abs/2205.12654), together with an experimental evaluation.
 
-## The core embedding package: `laser_encoders`
+## The core sentence embedding package: `laser_encoders`
 We provide a package `laser_encoders` with minimal dependencies. 
 It supports LASER-2 (an updated signle encoder for the languages listed [below](#supported-languages)) 
 and LASER-3 (147 language-specific encoders described [here](nllb/README.md)).
