@@ -10,3 +10,5 @@ tasks/xnli/XNLI-1.0*
 tasks/xnli/multinli_1.0*
 .??*swp
 .idea
+__pycache__
+nllb

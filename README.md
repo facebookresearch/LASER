@@ -3,6 +3,7 @@
 LASER is a library to calculate and use multilingual sentence embeddings.
 
 **NEWS**
+* 2023/11/16 Released [**laser_encoders**](laser_encoders), a compact pip-installable package supporting LASER-2 and LASER-3 models
 * 2023/06/26 [**xSIM++**](https://arxiv.org/abs/2306.12907) evaluation pipeline and data [**released**](tasks/xsimplusplus/README.md)
 * 2022/07/06 Updated LASER models with support for over 200 languages are [**now available**](nllb/README.md)
 * 2022/07/06 Multilingual similarity search (**xsim**) evaluation pipeline [**released**](tasks/xsim/README.md)
@@ -26,7 +27,25 @@ a language family which is covered by other languages.
 A detailed description of how the multilingual sentence embeddings are trained can
 be found [here](https://arxiv.org/abs/2205.12654), together with an experimental evaluation.
 
-## Dependencies
+## The core embedding package: `laser_encoders`
+We provide a package `laser_encoders` with minimal dependencies. 
+It supports LASER-2 (an updated signle encoder for the languages listed [below](#supported-languages)) 
+and LASER-3 (147 language-specific encoders described [here](nllb/README.md)).
+
+The package can be installed simply with `pip install laser_encoders` and used as below:
+
+```python
+from laser_encoders import LaserEncoderPipeline
+encoder = LaserEncoderPipeline(lang="eng_Latn")
+```
+
+The laser_encoders [readme file](laser_encoders) provides more examples of its installation and usage.
+
+## The full LASER kit
+Apart from the `laser_encoders`, we provide support for LASER-1 (the original multilingual encoder)
+and for various LASER applications listed below.
+
+### Dependencies
 * Python >= 3.7
 * [PyTorch 1.0](http://pytorch.org/)
 * [NumPy](http://www.numpy.org/), tested with 1.15.4
@@ -42,7 +61,8 @@ be found [here](https://arxiv.org/abs/2205.12654), together with an experimental
 * [pandas](https://pypi.org/project/pandas), data analysis toolkit (`pip install pandas`)
 * [Sentencepiece](https://github.com/google/sentencepiece), subword tokenization (installed automatically)
 
-## Installation
+### Installation
+* install the `laser_encoders` package by e.g. `pip install -e .` for installing it in the editable mode
 * set the environment variable 'LASER' to the root of the installation, e.g.
   `export LASER="${HOME}/projects/laser"`
 * download encoders from Amazon s3 by e.g. `bash ./nllb/download_models.sh` 
