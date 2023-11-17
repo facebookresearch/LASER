@@ -12,3 +12,4 @@ tasks/xnli/multinli_1.0*
 .idea
 __pycache__
 nllb
+dist

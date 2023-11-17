@@ -28,8 +28,8 @@ A detailed description of how the multilingual sentence embeddings are trained c
 be found [here](https://arxiv.org/abs/2205.12654), together with an experimental evaluation.
 
 ## The core sentence embedding package: `laser_encoders`
-We provide a package `laser_encoders` with minimal dependencies. 
-It supports LASER-2 (an updated signle encoder for the languages listed [below](#supported-languages)) 
+We provide a package `laser_encoders` with minimal dependencies.
+It supports LASER-2 (a single encoder for the languages listed [below](#supported-languages)) 
 and LASER-3 (147 language-specific encoders described [here](nllb/README.md)).
 
 The package can be installed simply with `pip install laser_encoders` and used as below:
