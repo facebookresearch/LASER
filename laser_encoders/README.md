@@ -17,10 +17,15 @@ You can find a full list of requirements [here](https://github.com/facebookresea
 
 ## Installation
 
-You can install laser_encoders using pip:
+You can install `laser_encoders` package from PyPI:
 
 ```sh
- pip install laser_encoders
+pip install laser_encoders
+```
+
+Alternatively, you can install it from a local clone of this repository, in editable mode:
+```sh
+pip install . -e
 ```
 
 ## Usage
