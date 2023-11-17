@@ -382,8 +382,18 @@ def initialize_encoder(
 
 class LaserEncoderPipeline:
     def __init__(
-        self, lang: str, model_dir: str = None, spm: bool = True, laser: str = None
+        self, lang: str = None, model_dir: str = None, spm: bool = True, laser: str = None
     ):
+
+        if laser == "laser2" and lang is not None:
+            print("Warning: The 'lang' parameter is optional when using 'laser2'. It will be ignored.")
+        
+        if laser == "laser3" and lang is None:
+            raise ValueError("For 'laser3', the 'lang' parameter is required.")
+
+        if laser is None and lang is None:
+            raise ValueError("Either 'laser' or 'lang' should be provided.")
+
         self.tokenizer = initialize_tokenizer(
             lang=lang, model_dir=model_dir, laser=laser
         )
