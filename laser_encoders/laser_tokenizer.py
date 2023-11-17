@@ -24,11 +24,13 @@ from typing import IO, List
 
 import sentencepiece as spm
 from sacremoses import MosesDetokenizer, MosesPunctNormalizer
+from unicategories import categories
 
 from laser_encoders.download_models import LaserModelDownloader
 from laser_encoders.language_list import LASER2_LANGUAGE, LASER3_LANGUAGE, SPM_LANGUAGE
 
 SPACE_NORMALIZER = re.compile(r"\s+")
+NON_PRINT_CHARS = set(c for c in categories["C"].characters())
 
 logging.basicConfig(
     stream=sys.stdout,
@@ -59,6 +61,9 @@ class LaserTokenizer:
 
         assert spm_model.exists(), f"spm model file: {spm_model} does not exist"
         self.moses_punct_normalizer = MosesPunctNormalizer(self.lang, perl_parity=True)
+        # add parity with MOSES release-4.0
+        self.moses_punct_normalizer.substitutions[21] = ("‘", r'"')
+        self.moses_punct_normalizer.substitutions[22] = ("‚", r'"')
         self.moses_detokenizer = MosesDetokenizer()
         self.spm_encoder = spm.SentencePieceProcessor(model_file=str(self.spm_model))
 
@@ -75,7 +80,7 @@ class LaserTokenizer:
 
     def tokenize(self, text: str) -> str:
         # Preprocessing
-        sentence_text = "".join(c for c in text if c.isprintable)
+        sentence_text = "".join([c if c not in NON_PRINT_CHARS else " " for c in text])
         if self.normalize_punct:
             sentence_text = self.moses_punct_normalizer.normalize(sentence_text)
         if self.descape:
