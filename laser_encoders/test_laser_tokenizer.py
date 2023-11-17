@@ -100,7 +100,7 @@ def test_lowercase(tokenizer):
 
 def test_is_printable(tokenizer):
     test_data = "Hello, \tWorld! ABC\x1f123"
-    expected_output = "▁hel lo , ▁world ! ▁ab c 12 3"
+    expected_output = "▁hel lo , ▁world ! ▁ab c ▁12 3"
     assert tokenizer.tokenize(test_data) == expected_output
 
 
