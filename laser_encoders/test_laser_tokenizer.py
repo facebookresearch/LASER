@@ -14,13 +14,13 @@
 # Tests for LaserTokenizer
 
 import os
+import warnings
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import List
 
 import numpy as np
 import pytest
-import warnings
 
 from laser_encoders import (
     LaserEncoderPipeline,
