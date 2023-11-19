@@ -17,6 +17,7 @@ import logging
 import os
 import re
 import sys
+import warnings
 from collections import namedtuple
 from pathlib import Path
 
@@ -390,9 +391,7 @@ class LaserEncoderPipeline:
     ):
 
         if laser == "laser2" and lang is not None:
-            print(
-                "Warning: The 'lang' parameter is optional when using 'laser2'. It will be ignored."
-            )
+            warnings.warn("Warning: The 'lang' parameter is optional when using 'laser2'. It will be ignored.")
 
         if laser == "laser3" and lang is None:
             raise ValueError("For 'laser3', the 'lang' parameter is required.")
