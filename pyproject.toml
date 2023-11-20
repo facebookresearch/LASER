@@ -11,7 +11,8 @@ readme = "laser_encoders/README.md"
 requires-python = ">=3.8"
 
 dependencies = [
-    'sacremoses>=0.1.0',
+    'sacremoses==0.1.0',
+    'unicategories>=0.1.2',
     'sentencepiece>=0.1.99',
     'numpy>=1.21.3',
     'torch>=1.10.0',
