@@ -5,7 +5,7 @@ import socket
 
 import numpy as np
 from flask import Flask, jsonify, request
-from laser_encoders import initialize_encoder, initialize_tokenizer
+from laser_encoders import LaserEncoderPipeline
 
 app = Flask(__name__)
 
@@ -20,25 +20,24 @@ def root():
 @app.route("/vectorize", methods=["GET"])
 def vectorize():
     content = request.args.get("q")
-    lang = request.args.get(
-        "lang", "en"
-    )  # Default to English if 'lang' is not provided
+    lang = request.args.get("lang", "en")  # Default to English if 'lang' is not provided
 
     if content is None:
-        return jsonify({"error": "Missing input content"})
+        return jsonify({"error": "Missing input content"}), 400
 
-    encoder = initialize_encoder(lang=lang)
-    tokenizer = initialize_tokenizer(lang=lang)
+    try:
+        encoder = LaserEncoderPipeline(lang=lang)
+        embeddings = encoder.encode_sentences([content])
+        embeddings_list = embeddings.tolist()
+        body = {"content": content, "embedding": embeddings_list}
+        return jsonify(body), 200
 
-    # Tokenize the input content
-    tokenized_sentence = tokenizer.tokenize(content)
-
-    # Encode the tokenized sentence
-    embeddings = encoder.encode_sentences([tokenized_sentence])
-    embeddings_list = embeddings.tolist()
-
-    body = {"content": content, "embedding": embeddings_list}
-    return jsonify(body)
+    except ValueError as e:
+        # Check if the exception is due to an unsupported language
+        if "unsupported language" in str(e).lower():
+            return jsonify({"error": f"Language '{lang}' is not supported."}), 400
+        else:
+            return jsonify({"error": str(e)}), 400
 
 
 if __name__ == "__main__":
