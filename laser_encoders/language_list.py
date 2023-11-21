@@ -32,7 +32,7 @@ def build_language_names_dict(language_list: list, language_names: dict) -> dict
             raise ValueError(
                 f"Language code '{lang_code}' not found in the provided language_names dictionary."
             )
-        
+
         names_list = language_names[lang_code]
 
         # Ensure names_list is always a list
