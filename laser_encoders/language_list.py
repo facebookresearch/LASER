@@ -14,24 +14,33 @@
 # Language mapping to handle different language codes and names
 
 
-def build_language_names_dict(language_list, language_names):
+def build_language_names_dict(language_list: list, language_names: dict) -> dict:
+    """
+    Build a dictionary mapping language names to their corresponding language codes.
+
+    Parameters:
+        - language_list (list): A list of language codes.
+        - language_names (dict): A dictionary mapping language codes to language names.
+
+    Returns:
+        - dict: A dictionary mapping language names to their corresponding language codes.
+    """
     result_dict = {}
 
     for lang_code in language_list:
-        if lang_code in language_names:
-            names_list = language_names[lang_code]
+        if lang_code not in language_names:
+            raise ValueError(f"Language code '{lang_code}' not found in the provided language_names dictionary.")
+        
+        names_list = language_names[lang_code]
 
-            # Check if the names_list is a list or a string
-            if isinstance(names_list, list):
-                for name in names_list:
-                    if name not in result_dict:
-                        result_dict[name] = []
-                    result_dict[name].append(lang_code)
-            else:
-                # Modified this part to handle a single element without creating a list
-                if names_list not in result_dict:
-                    result_dict[names_list] = []
-                result_dict[names_list].append(lang_code)
+        # Ensure names_list is always a list
+        if not isinstance(names_list, list):
+            names_list = [names_list]
+
+        for name in names_list:
+            if name not in result_dict:
+                result_dict[name] = []
+            result_dict[name].append(lang_code)
 
     # Remove single-element lists and convert them to the element itself
     for key in result_dict:
