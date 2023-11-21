@@ -2,6 +2,9 @@ FROM continuumio/miniconda3
 
 MAINTAINER Gilles Bodart <gillesbodart@users.noreply.github.com>
 
+# Define the argument for language
+ARG lang
+
 # Install build-essential (compiler and development tools)
 RUN apt-get update && \
     apt-get install -y build-essential && \
@@ -21,7 +24,10 @@ COPY pyproject.toml /app/
 RUN pip install --upgrade pip
 RUN pip install . --verbose
 
-#Open the port 80
+# Download language models based on the specified language
+RUN python -m laser_encoders.download_models --lang=$lang
+
+# Open the port 80
 EXPOSE 80
 
 COPY docker/app.py /app/app.py
