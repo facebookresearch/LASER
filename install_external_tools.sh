@@ -181,6 +181,10 @@ InstallMecab () {
 #
 ###################################################################
 
+echo "Installing the laser_encoders package in editable mode"
+
+pip install -e .
+
 echo "Installing external tools"
 
 InstallMosesTools

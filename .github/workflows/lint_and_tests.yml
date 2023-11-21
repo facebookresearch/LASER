@@ -1,0 +1,32 @@
+name: lint_and_tests
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    strategy:
+      max-parallel: 1
+      matrix:
+        platform: [ubuntu-latest]
+        python-version: [3.8]
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        python --version
+        python -m pip install --upgrade 'pip>=23.2.1'
+        python -m pip show pip
+        python -m pip install -e '.[dev]'
+        
+    - name: isort
+      run: cd laser_encoders && isort --check --diff .
+      
+    - name: black
+      run: cd laser_encoders && black --check --diff .
+
+    - name: pytest
+      run: pytest laser_encoders
