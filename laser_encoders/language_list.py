@@ -29,7 +29,9 @@ def build_language_names_dict(language_list: list, language_names: dict) -> dict
 
     for lang_code in language_list:
         if lang_code not in language_names:
-            raise ValueError(f"Language code '{lang_code}' not found in the provided language_names dictionary.")
+            raise ValueError(
+                f"Language code '{lang_code}' not found in the provided language_names dictionary."
+            )
         
         names_list = language_names[lang_code]
 
