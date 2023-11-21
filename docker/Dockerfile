@@ -14,13 +14,11 @@ ENV PATH /opt/conda/envs/env/bin:$PATH
 # Set the working directory to /app
 WORKDIR /app
 
-# Install any needed packages specified in requirements.txt
-COPY ./requirements.txt /app/requirements.txt
+# Copy the local laser-encoders repository
+COPY ../laser_encoders /app/laser_encoders
 
 RUN pip3 install --upgrade pip
-RUN pip3 install -r requirements.txt --verbose
-
-COPY ./encode.py /app/encode.py
+RUN pip install /app/laser_encoders --verbose
 
 #Open the port 80
 EXPOSE 80
