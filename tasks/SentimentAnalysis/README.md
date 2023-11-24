@@ -12,7 +12,7 @@ This project demonstrates the application of the Laser Encoder tool for creating
 - Run the Example Notebook:
     Execute the provided Jupyter notebook SentimentAnalysis.ipynb
 
-        jupyter notebook sentiment_analysis_example.ipynb
+        jupyter notebook SentimentAnalysis.ipynb
 
 
 ## Customization
