@@ -1,14 +1,11 @@
+sacremoses==0.1.0
+unicategories==0.1.2
+sentencepiece==0.1.99
+numpy==1.21.3
 fairseq==0.12.2
-numpy==1.25.0
+torch==1.10.0+cpu
+
+-f https://download.pytorch.org/whl/torch_stable.html
+Flask==2.3.3
 pytest==7.4.0
 Requests==2.31.0
-sacremoses==0.0.53
-sentencepiece==0.1.99
-tqdm==4.65.0
-Flask==2.3.3
-
---extra-index-url https://download.pytorch.org/whl/cpu
-torch
-
---extra-index-url https://test.pypi.org/simple/
-laser-encoders==0.0.3
