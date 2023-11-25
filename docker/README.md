@@ -6,7 +6,7 @@ This image provides a convenient way to run LASER in a Docker container.
 To build the image, run the following command from the root of the LASER directory:
 
 ```
-docker build --tag==laser -f docker/Dockerfile . 
+docker build --tag laser -f docker/Dockerfile .
 ```
 ### Specifying Languages with `langs` Argument
 
