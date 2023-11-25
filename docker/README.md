@@ -1,11 +1,22 @@
 ## LASER Docker Image
 
 This image provides a convenient way to run LASER in a Docker container.
+
+### Building the image
 To build the image, run the following command from the root of the LASER directory:
 
 ```
-docker build --tag=laser docker
+docker build --tag==laser -f docker/Dockerfile . 
 ```
+### Specifying Languages with `langs` Argument
+
+You can pre-download the encoders and tokenizers for specific languages by using the `langs` build argument. This argument accepts a space-separated list of language codes. For example, to build an image with models for English and French, use the following command:
+```
+docker build --build-arg langs="eng_Latn fra_Latn" -t laser -f docker/Dockerfile .
+```
+If you don't specify the `langs` argument, the image will be built with English `eng_Latn`, which is the default.
+
+### Running the Image
 Once the image is built, you can run it with the following command:
 
 ```
