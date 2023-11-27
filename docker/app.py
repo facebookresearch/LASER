@@ -20,7 +20,7 @@ def root():
 @app.route("/vectorize", methods=["GET"])
 def vectorize():
     content = request.args.get("q")
-    lang = request.args.get("lang", "en")  # Default to English if 'lang' is not provided
+    lang = request.args.get("lang", "eng")  # Default to English if 'lang' is not provided
 
     if content is None:
         return jsonify({"error": "Missing input content"}), 400
