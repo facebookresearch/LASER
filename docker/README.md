@@ -14,7 +14,8 @@ You can pre-download the encoders and tokenizers for specific languages by using
 ```
 docker build --build-arg langs="eng_Latn fra_Latn" -t laser -f docker/Dockerfile .
 ```
-If you don't specify the `langs` argument, the image will be built with English `eng_Latn`, which is the default.
+If the `langs` argument is not specified during the build process, the image will default to building with English (`eng_Latn`). It's important to note that in this default case where English is selected, the LASER2 model, which supports 92 languages, is used. For a comprehensive list of LASER2 supported languages, refer to `LASER2_LANGUAGES_LIST` in [`language_list.py`](https://github.com/facebookresearch/LASER/blob/main/laser_encoders/language_list.py).
+
 
 ### Running the Image
 Once the image is built, you can run it with the following command:
