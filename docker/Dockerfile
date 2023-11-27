@@ -16,10 +16,11 @@ WORKDIR /app
 
 # Copy the local laser-encoders repository
 COPY laser_encoders /app/laser_encoders
-COPY docker/requirements.txt /app/requirements.txt
+COPY pyproject.toml /app/pyproject.toml
 
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt --verbose
+RUN pip install -e .
+RUN pip install Flask==2.3.3 Requests==2.31.0
 
 # Define the argument for language
 ARG langs="eng_Latn"
