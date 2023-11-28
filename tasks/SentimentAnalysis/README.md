@@ -18,7 +18,7 @@ To run the notebook in Google Colab, simply click the "Open in Colab" button bel
 - Run the Example Notebook:
     Execute the provided Jupyter notebook SentimentAnalysis.ipynb
 
-        jupyter notebook sentiment_analysis_example.ipynb
+        jupyter notebook SentimentAnalysis.ipynb
 
 
 ## Customization
