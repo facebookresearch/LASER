@@ -4,6 +4,12 @@
 
 This project demonstrates the application of the Laser Encoder tool for creating sentence embeddings in the context of sentiment analysis. The Laser Encoder is used to encode text data, and a sentiment analysis model is trained to predict the sentiment of the text.
 
+## Getting Started
+
+To run the notebook in Google Colab, simply click the "Open in Colab" button below:
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/12gQUG7rPJvOVeWQkpMFzMiixqwDIdv4W?usp=sharing)
+
 ## Example Usage
 
 - Download Dataset:
