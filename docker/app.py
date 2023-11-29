@@ -6,12 +6,14 @@ import socket
 from flask import Flask, jsonify, request
 
 from laser_encoders import LaserEncoderPipeline
-from laser_encoders.language_list import LASER2_LANGUAGES_LIST
+from laser_encoders.language_list import LASER2_LANGUAGE, LASER3_LANGUAGE
 
 app = Flask(__name__)
 
 # Global cache for encoders
 encoder_cache = {}
+
+laser2_encoder = None
 
 
 @app.route("/")
@@ -32,24 +34,18 @@ def vectorize():
         return jsonify({"error": "Missing input content"}), 400
 
     try:
-        lang_prefix = lang[:3]
-
-        # Find if lang uses laser2 encoder and is already cached
-        cached_laser2_language = next(
-            (
-                l
-                for l in LASER2_LANGUAGES_LIST
-                if l.startswith(lang_prefix) and l in encoder_cache
-            ),
-            None,
-        )
-
-        if cached_laser2_language:
-            encoder = encoder_cache[cached_laser2_language]
+        global laser2_encoder
+        if lang in LASER2_LANGUAGE:  # Checks for both 3-letter code or 8-letter code
+            if not laser2_encoder:
+                laser2_encoder = LaserEncoderPipeline(lang=lang)
+            encoder = laser2_encoder
         else:
-            # Use the provided language code as is for the new encoder
-            encoder_cache[lang] = LaserEncoderPipeline(lang=lang)
-            encoder = encoder_cache[lang]
+            lang_code = LASER3_LANGUAGE.get(
+                lang, lang
+            )  # Use language code as key to prevent multiple entries for same language
+            if lang_code not in encoder_cache:
+                encoder_cache[lang_code] = LaserEncoderPipeline(lang=lang_code)
+            encoder = encoder_cache[lang_code]
 
         embeddings = encoder.encode_sentences([content])
         embeddings_list = embeddings.tolist()
