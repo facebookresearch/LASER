@@ -8,14 +8,21 @@ This project demonstrates the application of the Laser Encoder tool for creating
 
 To run the notebook in Google Colab, simply click the "Open in Colab" button below:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/12gQUG7rPJvOVeWQkpMFzMiixqwDIdv4W?usp=sharing)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NIXBLACK11/LASER-fork/blob/Sentiment-analysis-laser/tasks/SentimentAnalysis/SentimentAnalysis.ipynb)
 
 ## Example Usage
 
-- Download Dataset:
-    Download the sample dataset from the following link: [Sample Dataset](https://www.kaggle.com/datasets/abhi8923shriv/sentiment-analysis-dataset)
+1. Alternative Download Instructions:
+Manual Download and Extraction Steps:
+    - Download the sample dataset from the following link: [Sample Dataset](https://www.kaggle.com/datasets/abhi8923shriv/sentiment-analysis-dataset)
 
-- Run the Example Notebook:
+    - Once the dataset is downloaded, locate the downloaded zip file on your local machine.
+    Unzip the file using a suitable tool (e.g., WinRAR, 7-Zip, or the built-in extraction tools on your operating system).
+    - Access the Extracted Files:
+    Navigate into the extracted folder to access the contents of the dataset.
+    - Use the Train.csv File.
+
+2. Run the Example Notebook:
     Execute the provided Jupyter notebook SentimentAnalysis.ipynb
 
         jupyter notebook SentimentAnalysis.ipynb
