@@ -60,7 +60,7 @@ def _load_embeddings(infile: str, dim: int, fp16: bool = False) -> np.ndarray:
     return emb
 
 
-def _score_margin(
+def score_margin(
     Dxy: np.ndarray,
     Ixy: np.ndarray,
     Ax: np.ndarray,
@@ -103,7 +103,7 @@ def _score_knn(x: np.ndarray, y: np.ndarray, k: int, margin: str) -> np.ndarray:
         Avg_xy = Cos_xy.mean(axis=1)
         Avg_yx = Cos_yx.mean(axis=1)
 
-        scores = _score_margin(Cos_xy, Idx_xy, Avg_xy, Avg_yx, margin, k)
+        scores = score_margin(Cos_xy, Idx_xy, Avg_xy, Avg_yx, margin, k)
 
         # find best
         best = scores.argmax(axis=1)
