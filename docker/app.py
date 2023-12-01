@@ -1,78 +1,64 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from flask import Flask, request, jsonify
 import os
 import socket
-import tempfile
-from pathlib import Path
-import numpy as np
-from LASER.source.lib.text_processing import Token, BPEfastApply
-from LASER.source.embed import *
+
+from flask import Flask, jsonify, request
+
+from laser_encoders import LaserEncoderPipeline
+from laser_encoders.language_list import LASER2_LANGUAGE, LASER3_LANGUAGE
 
 app = Flask(__name__)
-app.config['JSON_AS_ASCII'] = False
+
+# Global cache for encoders
+encoder_cache = {}
+
+laser2_encoder = None
 
 
 @app.route("/")
 def root():
     print("/")
-    html = "<h3>Hello {name}!</h3>" \
-           "<b>Hostname:</b> {hostname}<br/>"
+    html = "<h3>Hello {name}!</h3>" "<b>Hostname:</b> {hostname}<br/>"
     return html.format(name=os.getenv("LASER", "world"), hostname=socket.gethostname())
 
 
-@app.route("/vectorize")
+@app.route("/vectorize", methods=["GET"])
 def vectorize():
-    content = request.args.get('q')
-    lang = request.args.get('lang')
-    embedding = ''
-    if lang is None or not lang:
-        lang = "en"
-    # encoder
-    model_dir = Path(__file__).parent / "LASER" / "models"
-    encoder_path = model_dir / "bilstm.93langs.2018-12-26.pt"
-    bpe_codes_path = model_dir / "93langs.fcodes"
-    print(f' - Encoder: loading {encoder_path}')
-    encoder = SentenceEncoder(encoder_path,
-                              max_sentences=None,
-                              max_tokens=12000,
-                              sort_kind='mergesort',
-                              cpu=True)
-    with tempfile.TemporaryDirectory() as tmp:
-        tmpdir = Path(tmp)
-        ifname = tmpdir / "content.txt"
-        bpe_fname = tmpdir / 'bpe'
-        bpe_oname = tmpdir / 'out.raw'
-        with ifname.open("w") as f:
-            f.write(content)
-        if lang != '--':
-            tok_fname = tmpdir / "tok"
-            Token(str(ifname),
-                  str(tok_fname),
-                  lang=lang,
-                  romanize=True if lang == 'el' else False,
-                  lower_case=True,
-                  gzip=False,
-                  verbose=True,
-                  over_write=False)
-            ifname = tok_fname
-        BPEfastApply(str(ifname),
-                     str(bpe_fname),
-                     str(bpe_codes_path),
-                     verbose=True, over_write=False)
-        ifname = bpe_fname
-        EncodeFile(encoder,
-                   str(ifname),
-                   str(bpe_oname),
-                   verbose=True,
-                   over_write=False,
-                   buffer_size=10000)
-        dim = 1024
-        X = np.fromfile(str(bpe_oname), dtype=np.float32, count=-1)
-        X.resize(X.shape[0] // dim, dim)
-        embedding = X
-    body = {'content': content, 'embedding': embedding.tolist()}
-    return jsonify(body)
+    content = request.args.get("q")
+    lang = request.args.get(
+        "lang", "eng"
+    )  # Default to English if 'lang' is not provided
+
+    if content is None:
+        return jsonify({"error": "Missing input content"}), 400
+
+    try:
+        global laser2_encoder
+        if lang in LASER2_LANGUAGE:  # Checks for both 3-letter code or 8-letter code
+            if not laser2_encoder:
+                laser2_encoder = LaserEncoderPipeline(lang=lang)
+            encoder = laser2_encoder
+        else:
+            lang_code = LASER3_LANGUAGE.get(
+                lang, lang
+            )  # Use language code as key to prevent multiple entries for same language
+            if lang_code not in encoder_cache:
+                encoder_cache[lang_code] = LaserEncoderPipeline(lang=lang_code)
+            encoder = encoder_cache[lang_code]
+
+        embeddings = encoder.encode_sentences([content])
+        embeddings_list = embeddings.tolist()
+        body = {"content": content, "embedding": embeddings_list}
+        return jsonify(body), 200
+
+    except ValueError as e:
+        # Check if the exception is due to an unsupported language
+        if "unsupported language" in str(e).lower():
+            return jsonify({"error": f"Language '{lang}' is not supported."}), 400
+        else:
+            return jsonify({"error": str(e)}), 400
+
 
 if __name__ == "__main__":
-    app.run(debug=True, port=80, host='0.0.0.0')
+    app.run(debug=True, port=80, host="0.0.0.0")
