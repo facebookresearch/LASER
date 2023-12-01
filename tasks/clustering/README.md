@@ -8,6 +8,6 @@ In this tutorial, we'll explore the power of Language-Agnostic SEntence Represen
 
 To run the notebook in Google Colab, simply click the "Open in Colab" button below:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Paulooh007/LASER-fork/blob/laser-clustering/tasks/clustering/LaserClusteringExample.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Paulooh007/LASER/blob/laser-clustering/tasks/clustering/LaserClusteringExample.ipynb)
 
 
