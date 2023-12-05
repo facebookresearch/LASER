@@ -12,17 +12,7 @@ To run the notebook in Google Colab, simply click the "Open in Colab" button bel
 
 ## Example Usage
 
-1. Alternative Download Instructions:
-Manual Download and Extraction Steps:
-    - Download the sample dataset from the following link: [Sample Dataset](https://www.kaggle.com/datasets/abhi8923shriv/sentiment-analysis-dataset)
-
-    - Once the dataset is downloaded, locate the downloaded zip file on your local machine.
-    Unzip the file using a suitable tool (e.g., WinRAR, 7-Zip, or the built-in extraction tools on your operating system).
-    - Access the Extracted Files:
-    Navigate into the extracted folder to access the contents of the dataset.
-    - Use the Train.csv File.
-
-2. Run the Example Notebook:
+Run the Example Notebook:
     Execute the provided Jupyter notebook SentimentAnalysis.ipynb
 
         jupyter notebook SentimentAnalysis.ipynb
