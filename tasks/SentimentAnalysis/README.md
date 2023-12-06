@@ -6,14 +6,19 @@ This project demonstrates the application of the Laser Encoder tool for creating
 
 ## Getting Started
 
-To run the notebook in Google Colab, simply click the "Open in Colab" button below:
+To run the notebook in Google Colab, click the "Open in Colab" button below:
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NIXBLACK11/LASER-fork/blob/Sentiment-analysis-laser/tasks/SentimentAnalysis/SentimentAnalysis.ipynb)
+
+Also, check out the hugging face space with the button below:
+
+[![Open In Hugging Face Space](https://img.shields.io/badge/Open%20In-Hugging%20Face%20Space-blue?logo=huggingface)](https://huggingface.co/spaces/NIXBLACK/SentimentAnalysis_LASER_)
+
 
 ## Example Usage
 
 Run the Example Notebook:
-    Execute the provided Jupyter notebook SentimentAnalysis.ipynb
+    Execute the provided Jupyter Notebook SentimentAnalysis.ipynb
 
         jupyter notebook SentimentAnalysis.ipynb
 
