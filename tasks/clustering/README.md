@@ -2,7 +2,7 @@
 
 ## Overview
 
-In this tutorial, we'll explore the power of Language-Agnostic SEntence Representations ([LASER](https://github.com/facebookresearch/LASER)) for generating multilingual embeddings. We'll then use these embeddings to perform clustering on the [MASSIVE](https://github.com/alexa/massive) dataset. Our goal was to show that LASER embeddings can effectively group texts not only by their thematic content but also across different languages. LASER can encode sentences from multiple languages into a shared embedding space, allowing for cross-lingual understanding and comparison. We'll see how this capability is useful for tasks like multilingual embeddings clustering.
+In this tutorial, we'll explore the power of Language-Agnostic SEntence Representations ([LASER](https://github.com/facebookresearch/LASER)) for generating multilingual embeddings. We'll then use these embeddings to perform clustering on the [MASSIVE](https://github.com/alexa/massive) dataset. Our goal was to show that LASER embeddings can effectively group texts not only by their semantic content but also across different languages. LASER can encode sentences from multiple languages into a shared embedding space, allowing for cross-lingual understanding and comparison. We'll see how this capability is useful for tasks like multilingual embeddings clustering.
 
 ## Getting Started
 
