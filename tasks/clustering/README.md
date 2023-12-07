@@ -10,4 +10,10 @@ To run the notebook in Google Colab, simply click the "Open in Colab" button bel
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Paulooh007/LASER/blob/laser-clustering/tasks/clustering/LaserClusteringExample.ipynb)
 
+## Simple interactive Demo
+To better understand this tutorial, you can checkout this interactive demo hosted on huggingface spaces.
+
+[![Open in Spaces](https://huggingface.co/datasets/huggingface/badges/raw/main/open-in-hf-spaces-lg.svg)](https://huggingface.co/spaces/paulokewunmi/laser_multilingual_embeddings_viz)
+
+
 
