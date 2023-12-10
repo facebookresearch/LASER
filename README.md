@@ -69,6 +69,7 @@ and for various LASER applications listed below.
 * set the environment variable 'LASER' to the root of the installation, e.g.
   `export LASER="${HOME}/projects/laser"`
 * download encoders from Amazon s3 by e.g. `bash ./nllb/download_models.sh` 
+* install Cython in your Python environment
 * download third party software by `bash ./install_external_tools.sh`
 * download the data used in the example tasks (see description for each task)
 

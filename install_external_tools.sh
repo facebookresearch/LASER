@@ -49,44 +49,54 @@ MKDIR $tools_ext
 ###################################################################
 
 InstallMosesTools () {
-  moses_git="https://raw.githubusercontent.com/moses-smt/mosesdecoder/RELEASE-4.0/scripts"
-  moses_files=("tokenizer/tokenizer.perl" "tokenizer/detokenizer.perl" \
-               "tokenizer/normalize-punctuation.perl" \
-               "tokenizer/remove-non-printing-char.perl" \
-               "tokenizer/deescape-special-chars.perl" \
-               "tokenizer/lowercase.perl" \
-               "tokenizer/basic-protected-patterns" \
-              )
-
   wdir="${tools_ext}/moses-tokenizer/tokenizer"
   MKDIR ${wdir}
-  cd ${wdir}
+  moses_tokenizer_root_url="https://raw.githubusercontent.com/moses-smt/mosesdecoder/RELEASE-4.0/scripts/tokenizer"
 
-  for f in ${moses_files[@]} ; do
-    if [ ! -f `basename ${f}` ] ; then
-      echo " - download ${f}"
-      wget -q ${moses_git}/${f}
-    fi
-  done
-  chmod 755 *perl
+  wget -P ${wdir} -nc -nd -nv \
+    "${moses_tokenizer_root_url}/tokenizer.perl" \
+    "${moses_tokenizer_root_url}/detokenizer.perl" \
+    "${moses_tokenizer_root_url}/normalize-punctuation.perl" \
+    "${moses_tokenizer_root_url}/remove-non-printing-char.perl" \
+    "${moses_tokenizer_root_url}/deescape-special-chars.perl" \
+    "${moses_tokenizer_root_url}/lowercase.perl" \
+    "${moses_tokenizer_root_url}/basic-protected-patterns"
+
+  chmod 755 ${wdir}/*perl
 
   # download non-breaking prefixes per language
-  moses_non_breakings="share/nonbreaking_prefixes/nonbreaking_prefix"
-  moses_non_breaking_langs=( \
-      "ca" "cs" "de" "el" "en" "es" "fi" "fr" "ga" "hu" "is" \
-      "it" "lt" "lv" "nl" "pl" "pt" "ro" "ru" "sk" "sl" "sv" \
-      "ta" "yue" "zh" )
+
   wdir="${tools_ext}/moses-tokenizer/share/nonbreaking_prefixes"
   MKDIR ${wdir}
-  cd ${wdir}
+  moses_nonbreaking_prefixes_root_url="https://raw.githubusercontent.com/moses-smt/mosesdecoder/RELEASE-4.0/scripts/share/nonbreaking_prefixes/nonbreaking_prefix"
 
-  for l in ${moses_non_breaking_langs[@]} ; do
-    f="${moses_non_breakings}.${l}"
-    if [ ! -f `basename ${f}` ] ; then
-      echo " - download ${f}"
-      wget -q ${moses_git}/${f} 
-    fi
-  done
+  wget -P ${wdir} -nc -nd -nv \
+    "${moses_nonbreaking_prefixes_root_url}.ca" \
+    "${moses_nonbreaking_prefixes_root_url}.cs" \
+    "${moses_nonbreaking_prefixes_root_url}.de" \
+    "${moses_nonbreaking_prefixes_root_url}.el" \
+    "${moses_nonbreaking_prefixes_root_url}.en" \
+    "${moses_nonbreaking_prefixes_root_url}.es" \
+    "${moses_nonbreaking_prefixes_root_url}.fi" \
+    "${moses_nonbreaking_prefixes_root_url}.fr" \
+    "${moses_nonbreaking_prefixes_root_url}.ga" \
+    "${moses_nonbreaking_prefixes_root_url}.hu" \
+    "${moses_nonbreaking_prefixes_root_url}.is" \
+    "${moses_nonbreaking_prefixes_root_url}.it" \
+    "${moses_nonbreaking_prefixes_root_url}.lt" \
+    "${moses_nonbreaking_prefixes_root_url}.lv" \
+    "${moses_nonbreaking_prefixes_root_url}.nl" \
+    "${moses_nonbreaking_prefixes_root_url}.pl" \
+    "${moses_nonbreaking_prefixes_root_url}.pt" \
+    "${moses_nonbreaking_prefixes_root_url}.ro" \
+    "${moses_nonbreaking_prefixes_root_url}.ru" \
+    "${moses_nonbreaking_prefixes_root_url}.sk" \
+    "${moses_nonbreaking_prefixes_root_url}.sl" \
+    "${moses_nonbreaking_prefixes_root_url}.sv" \
+    "${moses_nonbreaking_prefixes_root_url}.ta" \
+    "${moses_nonbreaking_prefixes_root_url}.yue" \
+    "${moses_nonbreaking_prefixes_root_url}.zh"
+
 }
 
 
@@ -100,10 +110,10 @@ InstallFastBPE () {
   cd ${tools_ext}
   if [ ! -x fastBPE/fast ] ; then
     echo " - download fastBPE software from github"
-    wget https://github.com/glample/fastBPE/archive/master.zip
-    unzip master.zip
-    /bin/rm master.zip
-    mv fastBPE-master fastBPE
+    wget https://github.com/glample/fastBPE/archive/1fd33189c126dae356b9e187d93d93302fa45cef.zip
+    unzip 1fd33189c126dae356b9e187d93d93302fa45cef.zip
+    /bin/rm 1fd33189c126dae356b9e187d93d93302fa45cef.zip
+    mv fastBPE-1fd33189c126dae356b9e187d93d93302fa45cef fastBPE
     cd fastBPE
     echo " - compiling"
     g++ -std=c++11 -pthread -O3 fastBPE/main.cc -IfastBPE -o fast
@@ -150,12 +160,12 @@ InstallMecab () {
   cd ${tools_ext}
   if [ ! -x mecab/mecab/bin/mecab ] ; then
     echo " - download mecab from github"
-    wget https://github.com/taku910/mecab/archive/master.zip
-    unzip master.zip 
+    wget https://github.com/taku910/mecab/archive/3a07c4eefaffb4e7a0690a7f4e5e0263d3ddb8a3.zip
+    unzip 3a07c4eefaffb4e7a0690a7f4e5e0263d3ddb8a3.zip
     #/bin/rm master.zip
     if [ ! -s mecab/bin/mecab ] ; then
       mkdir mecab
-      cd mecab-master/mecab
+      cd mecab-3a07c4eefaffb4e7a0690a7f4e5e0263d3ddb8a3/mecab
       echo " - installing code"
       ./configure --prefix ${tools_ext}/mecab && make && make install 
       if [ $? -q 1 ] ; then
@@ -163,7 +173,7 @@ InstallMecab () {
       fi
     fi
     if [ ! -d mecab/lib/mecab/dic/ipadic ] ; then
-      cd ${tools_ext}/mecab-master/mecab-ipadic
+      cd ${tools_ext}/mecab-3a07c4eefaffb4e7a0690a7f4e5e0263d3ddb8a3/mecab-ipadic
       echo " - installing dictionaries"
       ./configure --prefix ${tools_ext}/mecab --with-mecab-config=${tools_ext}/mecab/bin/mecab-config \
         && make && make install 
